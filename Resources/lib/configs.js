@@ -68,7 +68,7 @@ function isSimulator () {
     }
 };
 var android = (Ti.Platform.osname !== "android") ? false : true;
-var logMode = 'info';
+var logMode = 'debug';
 exports.isSimulator = isSimulator;
 exports.log = log;
 exports.colours = colours;

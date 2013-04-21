@@ -211,6 +211,7 @@ function addNewWindow() {
 		title: 'Day',
 		width: '30%',
 		height: 44,
+		code: 'am',
 		left: 0
 	});
 
@@ -218,6 +219,7 @@ function addNewWindow() {
 		title: 'Night',
 		width: '30%',
 		height: 44,
+		code: 'pm',
 		center: {x: '50%', y: '50%'}
 	});
 
@@ -225,13 +227,18 @@ function addNewWindow() {
 		title: 'Either',
 		width: '30%',
 		height: 44,
+		code: '',
 		right: 0
 	});
 
 	timeButtonViews.add(dayButton);
 	timeButtonViews.add(nightButton);
 	timeButtonViews.add(eitherButton);
-	
+	var timeOfDay;
+	timeButtonViews.addEventListener('click', function(e){
+		Ti.API.warn(JSON.stringify(e, null, 2));
+		timeOfDay = e.source.code;
+	});
 
 	var cloudLevelView = Ti.UI.createView({
 		width: '90%',
@@ -319,7 +326,12 @@ function addNewWindow() {
 	cancelButton.addEventListener('click', function(e){
 		addWindow.close();
 		spaceHome();
-	})
+	});
+
+	function sendAlertData(e){
+		alert(searchBox.value + ' ' + cloudSlider.value + " " + timeOfDay + " ACS: " + Ti.App.Properties.getString('acsUserID'));
+	}
+	saveButton.addEventListener('click', sendAlertData);
 
 	addWindow.add(timeButtonViews);
 	addWindow.add(cloudLevelView);
@@ -473,7 +485,8 @@ function activatePush() {
 			ACS.subscribeToPush({
 				channel: Ti.App.Properties.getString('appmode'),
 				success: function (e) {
-					alert("success, push is now setup: put your method here")
+					// alert("success, push is now setup: put your method here")
+					Ti.API.warn(JSON.stringify(e, null, 2));
 				},
 				error: acsErrorManager
 			});
