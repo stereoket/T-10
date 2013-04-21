@@ -259,7 +259,7 @@ function addNewWindow() {
 			fontWeight: 'bold'
 		},
 		textAlign: 'right',
-		right: 5,
+		left: 5,
 		top: 20
 	});
 
@@ -272,7 +272,7 @@ function addNewWindow() {
 			fontWeight: 'bold'
 		},
 		textAlign: 'right',
-		left: 5,
+		right: 5,
 		top: 20
 	});
 
@@ -291,8 +291,43 @@ function addNewWindow() {
 	cloudLevelView.add(cloudSlider);
 
 
+	var settingView = Ti.UI.createView({
+		top: 280,
+		left: 10,
+		bottom: 10,
+		width: '45%',
+		borderRadius: 12,
+		backgroundColor: colours.highlight
+	});
+
+	var cancelButton = Ti.UI.createButton({
+		right: 10,
+		bottom: 70,
+		title: 'CANCEL',
+		width: '45%',
+		height: 55
+	});
+
+	var saveButton = Ti.UI.createButton({
+		right: 10,
+		bottom: 10,
+		title: 'SET ALERT',
+		width: '45%',
+		height: 55
+	});
+
+	cancelButton.addEventListener('click', function(e){
+		addWindow.close();
+		spaceHome();
+	})
+
 	addWindow.add(timeButtonViews);
 	addWindow.add(cloudLevelView);
+
+	addWindow.add(settingView);
+	addWindow.add(cancelButton);
+	addWindow.add(saveButton);
+
 
 	addWindow.open({
 		animate: true
