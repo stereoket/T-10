@@ -5,6 +5,11 @@ function controller() {
 
 };
 
+function background() {
+
+
+}
+
 function tabgroup() {
 	// this sets the background color of the master UIView (when there are no windows/tab groups on it)
 	Titanium.UI.setBackgroundColor('#000');
@@ -189,10 +194,106 @@ function addNewWindow() {
 	});
 
 	send.addEventListener('click', function (e) {
-		Ti.API.warn()
+		Ti.API.warn("send clicked");
 	});
 
 	addWindow.add(searchBox);
+
+
+
+	var timeButtonViews = Ti.UI.createView({
+		top: 120,
+		width: '90%',
+		height: Ti.UI.SIZE
+	});
+
+	var dayButton = Ti.UI.createButton({
+		title: 'Day',
+		width: '30%',
+		height: 44,
+		left: 0
+	});
+
+	var nightButton = Ti.UI.createButton({
+		title: 'Night',
+		width: '30%',
+		height: 44,
+		center: {x: '50%', y: '50%'}
+	});
+
+	var eitherButton = Ti.UI.createButton({
+		title: 'Either',
+		width: '30%',
+		height: 44,
+		right: 0
+	});
+
+	timeButtonViews.add(dayButton);
+	timeButtonViews.add(nightButton);
+	timeButtonViews.add(eitherButton);
+	
+
+	var cloudLevelView = Ti.UI.createView({
+		width: '90%',
+		height: Ti.UI.SIZE,
+		top: 170
+	});
+
+	var cloudHeading = Ti.UI.createLabel({
+		text: 'Cloud Level Allowed',
+		width: '90%',
+		height: Ti.UI.SIZE,
+		font: {
+			fontSize: 16
+		},
+		textAlign: 'center',
+		top: 5
+	});
+
+	var cloudZero = Ti.UI.createLabel({
+		text: '0%',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		font: {
+			fontSize: 32,
+			fontWeight: 'bold'
+		},
+		textAlign: 'right',
+		right: 5,
+		top: 20
+	});
+
+	var cloud50 = Ti.UI.createLabel({
+		text: '50%',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		font: {
+			fontSize: 32,
+			fontWeight: 'bold'
+		},
+		textAlign: 'right',
+		left: 5,
+		top: 20
+	});
+
+	var cloudSlider = Ti.UI.createSlider({
+		width: '100%',
+		max: 1,
+		min: 0.5,
+		value: 0.75,
+		top: 60
+	});
+
+	cloudLevelView.add(cloudHeading);
+	cloudLevelView.add(cloudZero);
+	cloudLevelView.add(cloud50);
+
+	cloudLevelView.add(cloudSlider);
+
+
+	addWindow.add(timeButtonViews);
+	addWindow.add(cloudLevelView);
+
 	addWindow.open({
 		animate: true
 	});
@@ -444,5 +545,6 @@ function open() {
 
 
 }
+exports.background = background;
 exports.controller = controller;
 exports.open = open;
