@@ -12,83 +12,17 @@ function background() {
 
 function tabgroup() {
 	// this sets the background color of the master UIView (when there are no windows/tab groups on it)
-	Titanium.UI.setBackgroundColor('#000');
+	Titanium.UI.setBackgroundImage('/images/background.png');
 
-	// create tab group
-	var tabGroup = Titanium.UI.createTabGroup();
-
-
-	//
-	// create base UI tab and root window
-	//
-	var win1 = UI.createWindow({
-		title: 'Tab 1',
-		backgroundColor: '#fff'
-	});
-	var tab1 = Titanium.UI.createTab({
-		icon: 'KS_nav_views.png',
-		title: 'Tab 1',
-		window: win1
-	});
-
-	var label1 = Titanium.UI.createLabel({
-		color: '#999',
-		text: 'I am Window 1',
-		font: {
-			fontSize: 20,
-			fontFamily: 'Helvetica Neue'
-		},
-		textAlign: 'center',
-		width: 'auto'
-	});
-
-	win1.add(label1);
-
-	//
-	// create controls tab and root window
-	//
-	var win2 = Titanium.UI.createWindow({
-		title: 'Tab 2',
-		backgroundColor: '#fff'
-	});
-	var tab2 = Titanium.UI.createTab({
-		icon: 'KS_nav_ui.png',
-		title: 'Tab 2',
-		window: win2
-	});
-
-	var label2 = Titanium.UI.createLabel({
-		color: '#999',
-		text: 'I am Window 2',
-		font: {
-			fontSize: 20,
-			fontFamily: 'Helvetica Neue'
-		},
-		textAlign: 'center',
-		width: 'auto'
-	});
-
-	win2.add(label2);
-
-
-
-	//
-	//  add tabs
-	//
-	tabGroup.addTab(tab1);
-	tabGroup.addTab(tab2);
-
-
-	// open tab group
-	return tabGroup
 
 };
 
 
 function spaceHome() {
+	Titanium.UI.setBackgroundImage('/images/background.png');
 	var spaceHomeWindow = Ti.UI.createWindow({
 		title: 'Space Home',
-		backgroundColor: colours.mainBg
+		backgroundImage: '/images/background.png'
 	});
 
 	var buttonLayer = Ti.UI.createView({
@@ -108,7 +42,11 @@ function spaceHome() {
 
 	var addNewLabel = Ti.UI.createLabel({
 		text: 'ADD',
-		color: '#000'
+		color: '#fff',
+		font: {
+			fontFamily: 'Ostrich Sans',
+			fontSize: 33
+		}
 	});
 
 	addNewButton.add(addNewLabel);
@@ -122,7 +60,11 @@ function spaceHome() {
 
 	var trackedLabel = Ti.UI.createLabel({
 		text: 'TRACKED',
-		color: '#000'
+		color: '#fff',
+		font: {
+			fontFamily: 'Ostrich Sans',
+			fontSize: 33
+		}
 	});
 
 	trackedButton.add(trackedLabel);
@@ -146,15 +88,17 @@ function addNewWindow() {
 
 	var addWindow = Ti.UI.createWindow({
 		title: 'New Window',
-		backgroundColor: colours.mainBg
+		backgroundImage: '/images/background.png'
 	});
 
 	var topTitle = Ti.UI.createLabel({
 		text: 'Location you want to Photograph',
 		width: '90%',
+		color: '#fff',
 		height: Ti.UI.SIZE,
 		font: {
-			fontSize: 16
+			fontFamily: 'Ostrich Sans',
+			fontSize: 23
 		},
 		textAlign: 'center',
 		top: 5
@@ -180,11 +124,17 @@ function addNewWindow() {
 
 	var searchBox = Ti.UI.createTextField({
 		borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-		hintText: 'Focus to see keyboard with toolbar',
+		hintText: 'Type in a city name',
 		keyboardToolbar: [cancel, flexSpace, flexSpace, flexSpace, send],
 		keyboardToolbarColor: '#999',
 		keyboardToolbarHeight: 40,
 		top: 60,
+
+		font: {
+			fontFamily: 'Ostrich Sans',
+			fontWeight: 'bold',
+			fontSize: 23
+		},
 		width: '90%',
 		height: 44
 	});
@@ -211,7 +161,13 @@ function addNewWindow() {
 		title: 'Day',
 		width: '30%',
 		height: 44,
-		code: 'am',
+
+		font: {
+			fontFamily: 'Ostrich Sans',
+			fontWeight: 'bold',
+			fontSize: 23
+		},
+		code: 'day',
 		left: 0
 	});
 
@@ -219,15 +175,30 @@ function addNewWindow() {
 		title: 'Night',
 		width: '30%',
 		height: 44,
-		code: 'pm',
-		center: {x: '50%', y: '50%'}
+
+		font: {
+			fontFamily: 'Ostrich Sans',
+			fontWeight: 'bold',
+			fontSize: 23
+		},
+		code: 'night',
+		center: {
+			x: '50%',
+			y: '50%'
+		}
 	});
 
 	var eitherButton = Ti.UI.createButton({
 		title: 'Either',
 		width: '30%',
+
+		font: {
+			fontFamily: 'Ostrich Sans',
+			fontWeight: 'bold',
+			fontSize: 23
+		},
 		height: 44,
-		code: '',
+		code: 'either',
 		right: 0
 	});
 
@@ -235,7 +206,7 @@ function addNewWindow() {
 	timeButtonViews.add(nightButton);
 	timeButtonViews.add(eitherButton);
 	var timeOfDay;
-	timeButtonViews.addEventListener('click', function(e){
+	timeButtonViews.addEventListener('click', function (e) {
 		Ti.API.warn(JSON.stringify(e, null, 2));
 		timeOfDay = e.source.code;
 	});
@@ -249,9 +220,11 @@ function addNewWindow() {
 	var cloudHeading = Ti.UI.createLabel({
 		text: 'Cloud Level Allowed',
 		width: '90%',
+		color: '#fff',
 		height: Ti.UI.SIZE,
 		font: {
-			fontSize: 16
+			fontFamily: 'Ostrich Sans',
+			fontSize: 23
 		},
 		textAlign: 'center',
 		top: 5
@@ -261,9 +234,11 @@ function addNewWindow() {
 		text: '0%',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		color: '#fff',
 		font: {
-			fontSize: 32,
-			fontWeight: 'bold'
+			fontFamily: 'Ostrich Sans',
+			fontWeight: 'bold',
+			fontSize: 53
 		},
 		textAlign: 'right',
 		left: 5,
@@ -274,9 +249,11 @@ function addNewWindow() {
 		text: '50%',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		color: '#fff',
 		font: {
-			fontSize: 32,
-			fontWeight: 'bold'
+			fontFamily: 'Ostrich Sans',
+			fontWeight: 'bold',
+			fontSize: 53
 		},
 		textAlign: 'right',
 		right: 5,
@@ -298,38 +275,98 @@ function addNewWindow() {
 	cloudLevelView.add(cloudSlider);
 
 
-	var settingView = Ti.UI.createView({
+	var settingView = Ti.UI.createImageView({
+		top: 280,
+		width: 338,
+		height: 130,
+		// borderRadius: 12,
+		// backgroundColor: 'transparent',
+		image : '/images/monkey_balls.png'
+	});
+
+	var cancelButton = Ti.UI.createView({
 		top: 280,
 		left: 10,
-		bottom: 10,
-		width: '45%',
-		borderRadius: 12,
-		backgroundColor: colours.highlight
-	});
-
-	var cancelButton = Ti.UI.createButton({
-		right: 10,
-		bottom: 70,
+		height: 130,
 		title: 'CANCEL',
-		width: '45%',
-		height: 55
+		backgroundColor: 'transparent',
+		font: {
+			fontFamily: 'Ostrich Sans',
+			fontWeight: 'bold',
+			fontSize: 33
+		},
+		width: '35%'
 	});
 
-	var saveButton = Ti.UI.createButton({
+	var saveButton = Ti.UI.createView({
 		right: 10,
-		bottom: 10,
+		top: 280,
 		title: 'SET ALERT',
-		width: '45%',
-		height: 55
+		backgroundColor: 'transparent',
+
+		font: {
+			fontFamily: 'Ostrich Sans',
+			fontWeight: 'bold',
+			fontSize: 33
+		},
+		width: '35%',
+		height: 130
 	});
 
-	cancelButton.addEventListener('click', function(e){
+	cancelButton.addEventListener('click', function (e) {
 		addWindow.close();
 		spaceHome();
 	});
 
-	function sendAlertData(e){
-		alert(searchBox.value + ' ' + cloudSlider.value + " " + timeOfDay + " ACS: " + Ti.App.Properties.getString('acsUserID'));
+	function sendAlertData(e) {
+
+		if (searchBox.value === undefined) {
+			alert('Error, missing location');
+			return false;
+		}
+
+		if (cloudSlider.value === undefined) {
+			alert('Error, missing cloud');
+			return false;
+		}
+
+		var url = 'http://192.168.157.184:8000/add_event/' + searchBox.value + '/' + cloudSlider.value + "/" + timeOfDay + "/" + Ti.App.Properties.getString('acsUserID');
+		// var url = 'http://scifilondontv.com/api/channel/list/otr';
+		// alert(url);
+
+		Ti.API.warn(url);
+
+
+		var c = Ti.Network.createHTTPClient();
+		c.setTimeout(25000);
+		c.onload = function (e) {
+			Ti.API.warn(e.response);
+			Ti.API.info(JSON.stringify(e, null, 2));
+			Ti.API.warn(this.status);
+			Ti.API.warn(this.responseText);
+			var returnData = JSON.parse(this.responseText);
+
+			// returnData = JSON.parse(returnData);
+
+			if (returnData === null || returnData.length < 1) {
+				alert('No PASSES');
+			}
+
+			var newAlert = Ti.UI.createAlertDialog({
+				title: 'T-10 Response',
+				buttonNames: ['OK', 'Cancel'],
+				cancel: 1,
+				message: returnData.length + " Passes scheduled, \n ISS over " + returnData[0].location + " next: \n" + returnData[0].time_str
+			});
+			newAlert.show();
+		}
+		c.onerror = function (e) {
+			Ti.API.error('ERROR:' + JSON.stringify(this.responseText, null, 2));
+		}
+		c.open('POST', url);
+		c.send();
+
+
 	}
 	saveButton.addEventListener('click', sendAlertData);
 
@@ -348,8 +385,8 @@ function addNewWindow() {
 }
 
 function viewTrackedAlert(e) {
-	spaceHomeWindow.close();
-	alert('A new Window');
+	// spaceHomeWindow.close();
+	alert('You would see a list of active alerts here');
 
 }
 
@@ -365,7 +402,7 @@ function firstWindow() {
 
 	var mainWin = Ti.UI.createWindow({
 		title: 'T-10',
-		backgroundColor: colours.mainBg
+		backgroundImage: '/images/earth_space.png'
 	});
 
 	var titleLayer = Ti.UI.createView({
@@ -410,24 +447,24 @@ function firstWindow() {
 
 	var earthButton = Ti.UI.createView({
 		width: '80%',
-		top: 30,
-		height: 44,
-		backgroundColor: colours.earthButton,
-		borderRadius: 12
+		bottom: 0,
+		height: '50%',
+		backgroundColor: 'transparent',
+		// borderRadius: 12
 	});
 
 	var earthLabel = Ti.UI.createLabel({
 		text: 'EARTH',
-		color: '#000'
+		color: '#fff'
 	});
 
-	earthButton.add(earthLabel);
+	// earthButton.add(earthLabel);
 	var spaceButton = Ti.UI.createView({
 		width: '80%',
-		bottom: 30,
-		height: 44,
-		backgroundColor: colours.spaceButton,
-		borderRadius: 12
+		top: 0,
+		height: '50%',
+		backgroundColor: 'transparent',
+		// borderRadius: 12
 	});
 
 	var spaceLabel = Ti.UI.createLabel({
@@ -437,13 +474,13 @@ function firstWindow() {
 
 	spaceButton.add(spaceLabel);
 
-	titleLayer.add(mainTitle);
-	titleLayer.add(questionLabel);
+	// titleLayer.add(mainTitle);
+	// titleLayer.add(questionLabel);
 
 	buttonLayer.add(earthButton);
 	buttonLayer.add(spaceButton);
 
-	mainWin.add(titleLayer);
+	// mainWin.add(titleLayer);
 	mainWin.add(buttonLayer);
 
 
