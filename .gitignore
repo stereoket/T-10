@@ -1,6 +1,6 @@
-build
-build.log
-tmp
-._*
 .DS_Store
-.svn/
+build.log
+build
+npm-debug.log
+tmp
+.map
