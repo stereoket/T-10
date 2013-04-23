@@ -19,53 +19,15 @@ function tabgroup() {
 
 
 function spaceHome() {
-	Titanium.UI.setBackgroundImage('/images/background.png');
-	var spaceHomeWindow = Ti.UI.createWindow({
-		title: 'Space Home',
-		backgroundImage: '/images/background.png'
-	});
 
-	var buttonLayer = Ti.UI.createView({
-		height: '100%',
-		width: '100%',
-		top: 0,
-		zIndex: 2
-	});
+	var space = require('/controller/space');
+	
 
-	var addNewButton = Ti.UI.createView({
-		width: '80%',
-		top: 100,
-		height: 88,
-		backgroundColor: colours.earthButton,
-		borderRadius: 12
-	});
+	
+	space.getWindow();
 
-	var addNewLabel = Ti.UI.createLabel({
-		text: 'ADD',
-		color: '#fff',
-		font: {
-			fontFamily: 'Ostrich Sans',
-			fontSize: 33
-		}
-	});
 
-	addNewButton.add(addNewLabel);
-	var trackedButton = Ti.UI.createView({
-		width: '80%',
-		bottom: 100,
-		height: 88,
-		backgroundColor: colours.spaceButton,
-		borderRadius: 12
-	});
-
-	var trackedLabel = Ti.UI.createLabel({
-		text: 'TRACKED',
-		color: '#fff',
-		font: {
-			fontFamily: 'Ostrich Sans',
-			fontSize: 33
-		}
-	});
+	
 
 	trackedButton.add(trackedLabel);
 	buttonLayer.add(addNewButton);
@@ -391,119 +353,14 @@ function viewTrackedAlert(e) {
 }
 
 /**
- * The opening screen of the app, should have a convenient space/earth background
- * @return {[type]} [description]
+ * The index screen of the app, should have a convenient space/earth background
+ * @return {Object} Titanium Window
  */
 
 function firstWindow() {
 
-	var colours = require('/lib/configs').colours();
-	// Load Inital screen offering here:
-
-	var mainWin = Ti.UI.createWindow({
-		title: 'T-10',
-		backgroundImage: '/images/earth_space.png'
-	});
-
-	var titleLayer = Ti.UI.createView({
-		height: '100%',
-		width: '100%',
-		top: 0
-	})
-	var mainTitle = Ti.UI.createLabel({
-		text: 'T-10',
-		font: {
-			fontSize: 84,
-			fontWeight: 'bold'
-		},
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		center: {
-			x: '50%',
-			y: '50%'
-		},
-		// backgroundColor: 'red'
-	});
-
-	var questionLabel = Ti.UI.createLabel({
-		text: 'Where are you ?',
-		font: {
-			fontSize: 20,
-			fontWeight: 'normal'
-		},
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		center: {
-			x: '50%',
-			y: '65%'
-		},
-	});
-	var buttonLayer = Ti.UI.createView({
-		height: '100%',
-		width: '100%',
-		top: 0,
-		zIndex: 2
-	});
-
-	var earthButton = Ti.UI.createView({
-		width: '80%',
-		bottom: 0,
-		height: '50%',
-		backgroundColor: 'transparent',
-		// borderRadius: 12
-	});
-
-	var earthLabel = Ti.UI.createLabel({
-		text: 'EARTH',
-		color: '#fff'
-	});
-
-	// earthButton.add(earthLabel);
-	var spaceButton = Ti.UI.createView({
-		width: '80%',
-		top: 0,
-		height: '50%',
-		backgroundColor: 'transparent',
-		// borderRadius: 12
-	});
-
-	var spaceLabel = Ti.UI.createLabel({
-		text: 'SPACE',
-		color: '#000'
-	});
-
-	spaceButton.add(spaceLabel);
-
-	// titleLayer.add(mainTitle);
-	// titleLayer.add(questionLabel);
-
-	buttonLayer.add(earthButton);
-	buttonLayer.add(spaceButton);
-
-	// mainWin.add(titleLayer);
-	mainWin.add(buttonLayer);
-
-
-	// Setup Event Listeners on each button
-	// 
-	// 
-
-	earthButton.addEventListener('click', function (e) {
-		Ti.App.Properties.setString('appmode', 'earth');
-		var alertDialog = Ti.UI.createAlertDialog({
-			title: 'Earth Utility',
-			message: 'The Earth utiity section will be created soon',
-			buttonNames: ['OK']
-		}).show();
-	});
-
-
-	spaceButton.addEventListener('click', function (e) {
-		Ti.App.Properties.setString('appmode', 'space');
-		// var appTabgroup = tabgroup();
-		spaceHome();
-	});
-
+	var index= require('/controller/index');
+	var mainWin = index.getWindow({spaceCallback: spaceHome});
 	mainWin.open();
 	// var thisTabgroup = tabgroup();
 	// thisTabgroup.open();
