@@ -1,8 +1,21 @@
 ".container": {
-	backgroundColor:"white"
+	backgroundImage: Alloy.CFG.splashBackgroundImage
 },
-"Label": {
-	width: Ti.UI.SIZE,
-	height: Ti.UI.SIZE,
-	color: "#000"
-} 
+"#bb_containerBackground": {
+	width: "100%",
+	height: "100%",
+	image: Alloy.CFG.splashBackgroundImage
+},
+".indexButtons" : {
+	height: "28%",
+	width: "80%",
+	//opacity: 0.3
+	background: "transparent"
+},
+"#space": {
+	top: '10%'
+},
+
+"#earth": {
+	bottom: '10%'		
+}

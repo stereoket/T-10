@@ -1,0 +1,14 @@
+<Alloy>
+	<Window id="space">
+		<!-- Maybe Add Buttons instead of background Graphic -->
+		<!-- <ImageView id="bb_containerBackground" /> -->
+		<View id="titleView" top="80">
+			<ImageView class="tripleISS" image="/images/triple.png" opacity="0.06">
+			<Label id="winTitle">T-10 in SPACE</Label>
+		</View>
+		<View onClick="addEvent" class="bigButton" id="addEvent">
+			<Label class="largeText">Add Event</Label>
+		</View>
+		
+	</Window>
+</Alloy>

@@ -1,0 +1,38 @@
+<Alloy>
+	<Window id="spaceAddEvent">
+		<!-- Maybe Add Buttons instead of background Graphic -->
+		<!-- <ImageView id="bb_containerBackground" /> -->
+		
+		<Label id="cityLabel" class="labelText">Add a location to photograph:</Label>
+		<TextField id="cityTextField" />
+		<ImageView image="/images/magnify.png" id="magnify" />
+		<View id="buttonView">
+			<View class="timeButtonView">
+				<Button class="timeButton" id="day"/>
+				<Label class="timeButtonLabel">Daytime</Label>
+			</View>
+			<View class="timeButtonView">
+				<Button  class="timeButton" id="night"/>
+				<Label class="timeButtonLabel">Nightime</Label>
+			</View>
+			<View class="timeButtonView">
+				<Button class="timeButton" id="either"/>
+				<Label class="timeButtonLabel">Either</Label>
+			</View>
+		</View>
+		<View id="pickerView">
+			<Label class="labelText">Minimum Visibility Required</Label>
+			<Label>0%</Label>
+			<Picker />
+			<Label>100%</Label>
+		</View>
+		<View id="actionButtons">
+			<Button />
+			<Label class="labelText">Settings</Label>
+
+			<Button />
+			<Label class="labelText">Save</Label>
+		</View>
+		
+	</Window>
+</Alloy>

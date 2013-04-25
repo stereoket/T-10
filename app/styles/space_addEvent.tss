@@ -1,0 +1,61 @@
+"#spaceAddEvent": {
+	backgroundImage: Alloy.CFG.backgroundImage,
+	bubbleParent: false
+},
+"Label":{
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 30},
+	textAlign: 'center',
+	color: "#fff"
+},
+"#cityLabel": {
+	top: 64,
+	left:100,
+	textAlign: "left",
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 44}
+},
+"#cityTextField": {
+	left: 80,
+	right: 80,
+	height: 60,
+	top: 140,
+	hintText: 'Search for a City',
+	font: {fontFamily: "OstrichSans-Black", fontSize: 34},
+	borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+	keyboardType: Titanium.UI.KEYBOARD_ASCII,
+	paddingLeft: 60,
+	zIndex: 100
+},
+"#magnify":{
+	top: 146,
+	left: 86,
+	width: 50,
+	height: 50,
+	zIndex: 101
+},
+"#buttonView":{
+	top: 250,
+	left: 80,
+	right: 80,
+	height: 140,
+	layout: 'horizontal',
+	zIndex: 100,
+	cancelBubble: true
+},
+".timeButtonView":{
+	height: 100,
+	width: '33%',
+	bubbleParent: false
+},
+".timeButton":{
+	left: 10,
+	right: 10,
+	height: 100,
+	width: Ti.UI.FILL,
+	borderRadius: 12,
+	backgroundImage: "/images/timeButtons.png",
+	bubbleParent: false
+},
+".timeButtonLabel":{
+	font: {fontFamily: "OstrichSans-Black", fontSize: 34},
+	touchEnabled: false
+}

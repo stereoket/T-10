@@ -1,5 +1,10 @@
 <Alloy>
 	<Window class="container">
-		<Label id="label" onClick="doClick">Hello, World</Label>
+		<!-- Maybe Add Buttons instead of background Graphic -->
+		<!-- <ImageView id="bb_containerBackground" /> -->
+
+
+		<View id="space" onClick= "launchSpaceApp" class="indexButtons"/>
+		<View id="earth" onClick= "launchEarthApp" class="indexButtons"/>
 	</Window>
 </Alloy>
