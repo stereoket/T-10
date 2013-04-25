@@ -1,9 +1,9 @@
-#appname: T-10
-#appid: com.stereoartist.t-10
-#type: mobile
-#guid: b11f1bae-85ce-473e-b1f6-1040291123fe
-#version: 1.0
-#publisher: not specified
-#url: not specified
-#image: appicon.png
-#desc: not specified
+#appname:T-10
+#appid:com.TeeMinusTen.t10v1
+#type:ipad
+#guid:b11f1bae-85ce-473e-b1f6-1040291123fe
+#version:1.0
+#publisher:Team Flipside
+#url:http://www.TeeMinusTen.com
+#image:appicon.png
+#desc:International Space Apps Challenge Winning Team from London
