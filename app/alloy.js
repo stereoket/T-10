@@ -16,8 +16,13 @@ var IPHONE = Helper.IPHONE;
 var IPAD = Helper.IPAD;
 var BLACKBERRY = Helper.BLACKBERRY;
 Ti.API.warn(" Device: " + Helper.device);
+Ti.API.warn(" Device: " + Helper.ANDROID);
+Ti.API.warn(" Device: " + Helper.IPHONE);
+Ti.API.warn(" Device: " + Helper.IPAD);
+Ti.API.warn(" Device: " + Helper.BLACKBERRY);
 
 
+var splashBackgroundImage;
 var backgroundImage;
 var bigButtonHeight;
 var bigButtonWidth;
@@ -36,11 +41,14 @@ if (IPHONE) {
 	bigButtonWidth = '80%';
 }
 
-if (IPAD) {
+if (Helper.IPAD === true) {
+
 	splashBackgroundImage = 'earth_space_ipad.png';
 	backgroundImage = "background_ipad.png";
 	bigButtonHeight = 130;
 	bigButtonWidth = 408
+
+
 }
 
 if (BLACKBERRY) {
@@ -48,11 +56,16 @@ if (BLACKBERRY) {
 	backgroundImage = "background_blackberry.png";
 }
 
+	Ti.API.warn("iPad images being selecgted chosen background image !!! " + splashBackgroundImage);
+
+
 Alloy.CFG.splashBackground = '/images/'+ splashBackgroundImage;
 Alloy.CFG.backgroundImage = '/images/'+ backgroundImage;
 
 Alloy.CFG.bigButtonHeight = bigButtonHeight;
 Alloy.CFG.bigButtonWidth = bigButtonWidth;
+
+Ti.API.warn(Alloy.CFG.splashBackground + " chosen background image");
 
 /**
  * Colours

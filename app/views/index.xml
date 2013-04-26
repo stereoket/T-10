@@ -1,5 +1,5 @@
 <Alloy>
-	<Window class="container">
+	<Window class="container" formFactor="tablet">
 		<!-- Maybe Add Buttons instead of background Graphic -->
 		<!-- <ImageView id="bb_containerBackground" /> -->
 
@@ -7,4 +7,12 @@
 		<View id="space" onClick= "launchSpaceApp" class="indexButtons"/>
 		<View id="earth" onClick= "launchEarthApp" class="indexButtons"/>
 	</Window>
+
+	<Window class="containeriPhone" platform="ios" formFactor="handheld">
+		<!-- Maybe Add Buttons instead of background Graphic -->
+		<!-- <ImageView id="bb_containerBackground" /> -->
+
+	</Window>
+
+
 </Alloy>

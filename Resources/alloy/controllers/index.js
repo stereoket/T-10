@@ -28,46 +28,53 @@ function Controller() {
     var $ = this;
     var exports = {};
     var __defers = {};
-    $.__views.index = Ti.UI.createWindow({
-        backgroundImage: Alloy.CFG.splashBackgroundImage,
-        id: "index"
-    });
-    $.__views.index && $.addTopLevelView($.__views.index);
-    $.__views.space = Ti.UI.createView({
-        height: "28%",
-        width: "80%",
-        background: "transparent",
-        top: "10%",
-        id: "space"
-    });
-    $.__views.index.add($.__views.space);
-    launchSpaceApp ? $.__views.space.addEventListener("click", launchSpaceApp) : __defers["$.__views.space!click!launchSpaceApp"] = true;
-    $.__views.earth = Ti.UI.createView({
-        height: "28%",
-        width: "80%",
-        background: "transparent",
-        bottom: "10%",
-        id: "earth"
-    });
-    $.__views.index.add($.__views.earth);
-    launchEarthApp ? $.__views.earth.addEventListener("click", launchEarthApp) : __defers["$.__views.earth!click!launchEarthApp"] = true;
+    if (Alloy.isTablet) {
+        $.__views.index = Ti.UI.createWindow({
+            backgroundImage: Alloy.CFG.splashBackground,
+            id: "index"
+        });
+        $.__views.index && $.addTopLevelView($.__views.index);
+        $.__views.space = Ti.UI.createView({
+            height: "28%",
+            width: "80%",
+            background: "transparent",
+            top: "10%",
+            id: "space"
+        });
+        $.__views.index.add($.__views.space);
+        launchSpaceApp ? $.__views.space.addEventListener("click", launchSpaceApp) : __defers["$.__views.space!click!launchSpaceApp"] = true;
+        $.__views.earth = Ti.UI.createView({
+            height: "28%",
+            width: "80%",
+            background: "transparent",
+            bottom: "10%",
+            id: "earth"
+        });
+        $.__views.index.add($.__views.earth);
+        launchEarthApp ? $.__views.earth.addEventListener("click", launchEarthApp) : __defers["$.__views.earth!click!launchEarthApp"] = true;
+    }
+    if (true && !Alloy.isTablet) {
+        $.__views.__alloyId2 = Ti.UI.createWindow({
+            id: "__alloyId2"
+        });
+        $.__views.__alloyId2 && $.addTopLevelView($.__views.__alloyId2);
+    }
     exports.destroy = function() {};
     _.extend($, $.__views);
     var Helper = require("Helper");
     var log = Helper.log;
     var push = require("push_notification");
     Ti.App.Properties.setBool("allowPush", true);
-    if (Ti.App.Properties.getInt("appLaunchCount") > 3) {
-        var firstWin;
-        switch (Ti.App.Properties.getString("appmode")) {
+    setTimeout(function() {
+        if (Ti.App.Properties.getInt("appLaunchCount") > 3) switch (Ti.App.Properties.getString("appmode")) {
           case "space":
             launchSpaceApp();
             break;
 
           case "earth":
             launchEarthApp();
-        }
-    } else $.index.open();
+        } else $.index.open();
+    }, 1500);
     __defers["$.__views.space!click!launchSpaceApp"] && $.__views.space.addEventListener("click", launchSpaceApp);
     __defers["$.__views.earth!click!launchEarthApp"] && $.__views.earth.addEventListener("click", launchEarthApp);
     _.extend($, exports);

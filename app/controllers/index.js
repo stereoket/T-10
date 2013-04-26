@@ -4,10 +4,6 @@ var push = require('push_notification');
 
 Ti.App.Properties.setBool('allowPush', true);
 
-function doClick(e) {
-	alert($.label.text);
-}
-
 function incrementAppLaunchCount() {
 	var spCount = Ti.App.Properties.getInt('appLaunchCount');
 
@@ -22,10 +18,10 @@ function checkSplashLaunch() {
 	/**
 	 * Only activate push notice sequence and login if not on sim (testing only)
 	 */
-	if(!Helper.isSimulator){
+	if (!Helper.isSimulator) {
 		push.activatePush();
 	}
-	
+
 
 
 }
@@ -50,18 +46,23 @@ function launchEarthApp() {
 
 }
 
-// Check index launch value
-if(Ti.App.Properties.getInt('appLaunchCount') > 3){
-	var firstWin;
-	switch(Ti.App.Properties.getString('appmode')){
-		case 'space':
-			launchSpaceApp();
-		break;
+// Check index launch value, leave a small gap before launching the main window - so splash screen has some visibility
+setTimeout(function () {
+	if (Ti.App.Properties.getInt('appLaunchCount') > 3) {
+		var firstWin;
+		switch (Ti.App.Properties.getString('appmode')) {
+			case 'space':
+				launchSpaceApp();
+				break;
 
-		case 'earth':
-			launchEarthApp();
-		break;
+			case 'earth':
+				launchEarthApp();
+				break;
+		}
+	} else {
+
+		$.index.open();
+
+
 	}
-} else {
-	$.index.open();
-}
+}, 1500);

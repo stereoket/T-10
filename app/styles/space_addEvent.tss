@@ -7,11 +7,13 @@
 	textAlign: 'center',
 	color: "#fff"
 },
+".labelText":{
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 44}
+},
 "#cityLabel": {
 	top: 64,
 	left:100,
 	textAlign: "left",
-	font: {fontFamily: "OstrichSans-Medium", fontSize: 44}
 },
 "#cityTextField": {
 	left: 80,
@@ -22,15 +24,13 @@
 	font: {fontFamily: "OstrichSans-Black", fontSize: 34},
 	borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 	keyboardType: Titanium.UI.KEYBOARD_ASCII,
-	paddingLeft: 60,
-	zIndex: 100
+	paddingLeft: 60
 },
 "#magnify":{
 	top: 146,
 	left: 86,
 	width: 50,
-	height: 50,
-	zIndex: 101
+	height: 50
 },
 "#buttonView":{
 	top: 250,
@@ -38,7 +38,6 @@
 	right: 80,
 	height: 140,
 	layout: 'horizontal',
-	zIndex: 100,
 	cancelBubble: true
 },
 ".timeButtonView":{
@@ -58,4 +57,67 @@
 ".timeButtonLabel":{
 	font: {fontFamily: "OstrichSans-Black", fontSize: 34},
 	touchEnabled: false
+},
+"#sliderView":{
+	top: 400,
+	width: '100%',
+	height: Ti.UI.SIZE,
+	layout: 'vertical',
+},
+"#cloudSliderView":{
+	width: '100%',
+	left: 0,
+	top: 5,
+	height: Ti.UI.SIZE
+},
+"#cloudSlider":{
+	width: '60%',
+	left: '20%',
+	height: 20,
+	top: 20
+},
+"#pickStartLabel":{
+	top: 10,
+	left: 4,
+	width: '20%',
+	height: Ti.UI.SIZE
+},
+"#pickEndLabel":{
+	top: 10,
+	right: 4,
+	width: '20%',
+	height: Ti.UI.SIZE
+},
+".superLargetext":{
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 84},
+},
+"#actionButtonView":{
+	top: 20,
+	left: 0,
+	width: '100%',
+	height: Ti.UI.SIZE
+},
+".actionButton":{
+	width: 184,
+	height: 170
+},
+"#leftAction":{
+	left: 66,
+	top: 0,
+	height: Ti.UI.SIZE,
+	width: Ti.UI.SIZE,
+	layout: 'vertical'
+},
+"#rightAction":{
+	right: 66,
+	top: 0,
+	height: Ti.UI.SIZE,
+	width: Ti.UI.SIZE,
+	layout: 'vertical'
+},
+"#settingsBtn":{
+	backgroundImage: "/images/settingsBtn.png"
+},
+"#saveBtn":{
+	backgroundImage: "/images/saveBtn.png"
 }

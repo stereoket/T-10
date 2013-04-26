@@ -1,5 +1,5 @@
 <Alloy>
-	<Window id="space">
+	<Window id="space" platform="ios" formFactor="tablet">
 		<!-- Maybe Add Buttons instead of background Graphic -->
 		<!-- <ImageView id="bb_containerBackground" /> -->
 		<View id="titleView" top="80">
@@ -11,4 +11,18 @@
 		</View>
 		
 	</Window>
+
+	<Window id="space" platform="ios" formFactor="handheld">
+		<Label>An iPhone</Label>
+	</Window>
+
+	<Window id="space" platform="android" formFactor="handheld">
+		<Label>An Android Handset</Label>
+	</Window>
+
+	<Window id="space" platform="android" formFactor="tablet">
+		<Label>An Android Tablet</Label>
+	</Window>
+
+
 </Alloy>

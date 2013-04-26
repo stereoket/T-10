@@ -1,38 +1,53 @@
 <Alloy>
-	<Window id="spaceAddEvent">
+	<Window id="spaceAddEvent" platform="ios" formFactor="tablet">
 		<!-- Maybe Add Buttons instead of background Graphic -->
 		<!-- <ImageView id="bb_containerBackground" /> -->
 		
 		<Label id="cityLabel" class="labelText">Add a location to photograph:</Label>
 		<TextField id="cityTextField" />
 		<ImageView image="/images/magnify.png" id="magnify" />
-		<View id="buttonView">
+		<View id="buttonView" timeOfDay="either">
 			<View class="timeButtonView">
-				<Button class="timeButton" id="day"/>
+				<Button onClick="setTimeOfDay" class="timeButton" id="day"/>
 				<Label class="timeButtonLabel">Daytime</Label>
 			</View>
 			<View class="timeButtonView">
-				<Button  class="timeButton" id="night"/>
+				<Button onClick="setTimeOfDay" class="timeButton" id="night"/>
 				<Label class="timeButtonLabel">Nightime</Label>
 			</View>
 			<View class="timeButtonView">
-				<Button class="timeButton" id="either"/>
+				<Button onClick="setTimeOfDay" class="timeButton" id="either" selected="true" />
 				<Label class="timeButtonLabel">Either</Label>
 			</View>
 		</View>
-		<View id="pickerView">
-			<Label class="labelText">Minimum Visibility Required</Label>
-			<Label>0%</Label>
-			<Picker />
-			<Label>100%</Label>
-		</View>
-		<View id="actionButtons">
-			<Button />
-			<Label class="labelText">Settings</Label>
+		<View id="sliderView">
+			<Label class="labelText" textAlign="left">Minimum Visibility Required:</Label>
+			<View id="cloudSliderView" >
+				<Label id="pickStartLabel" class="superLargetext">0%</Label>
+				<Slider id="cloudSlider" max="1" min="0" value="0.5" />
+				<Label id="pickEndLabel" class="superLargetext">100%</Label>
+			</View>
 
-			<Button />
-			<Label class="labelText">Save</Label>
+			<View id="actionButtonView">
+				<View id="leftAction">
+					<Button  top="3" class="actionButton" id="settingsBtn"/>
+					<Label top="10" class="labelText">Settings</Label>
+				</View>
+				<View id="rightAction">
+					<Button top="3" onClick="sendAlertData" class="actionButton" id="saveBtn"/>
+					<Label top="10" class="labelText">Save</Label>
+				</View>
+			</View>
+
+
 		</View>
 		
+		
 	</Window>
+
+	<Window id="spaceAddEvent" formFactor="handheld">
+		<Label id="cityLabel_hh" class="labelText_hh">Add a location to photograph:</Label>
+	</Window>
+
+
 </Alloy>
