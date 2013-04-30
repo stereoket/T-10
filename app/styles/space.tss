@@ -11,6 +11,12 @@
 	color: "#fff",
 	backgroundImage: "/images/blueButton.png"
 },
+"#listEvent": {
+	top: 656,
+	//backgroundColor: Alloy.CFG.addButton,
+	color: "#fff",
+	backgroundImage: "/images/redButton.png"
+},
 "#titleView": {
 	height: Ti.UI.SIZE,
 	width: Ti.UI.SIZE	

@@ -8,6 +8,7 @@ function Controller() {
         addSapceEvent.open();
         $.space.close();
     }
+    function listEvents() {}
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
@@ -39,7 +40,7 @@ function Controller() {
                 fontFamily: "OstrichSans-Medium"
             },
             color: "#fff",
-            text: "T-10 in SPACE",
+            text: "T-10 SPACE",
             id: "winTitle"
         });
         $.__views.titleView.add($.__views.winTitle);
@@ -71,10 +72,42 @@ function Controller() {
                 x: 2,
                 y: 1
             },
-            text: "Add Event",
+            text: "Add Location",
             id: "__alloyId4"
         });
         $.__views.addEvent.add($.__views.__alloyId4);
+        $.__views.listEvent = Ti.UI.createView({
+            width: Alloy.CFG.bigButtonWidth,
+            height: Alloy.CFG.bigButtonHeight,
+            borderRadius: 8,
+            top: 656,
+            color: "#fff",
+            backgroundImage: "/images/redButton.png",
+            id: "listEvent"
+        });
+        $.__views.space.add($.__views.listEvent);
+        listEvents ? $.__views.listEvent.addEventListener("click", listEvents) : __defers["$.__views.listEvent!click!listEvents"] = true;
+        $.__views.__alloyId5 = Ti.UI.createLabel({
+            font: {
+                fontSize: 76,
+                fontFamily: "OstrichSans-Black"
+            },
+            color: "#fff",
+            width: Ti.UI.SIZE,
+            textAlign: "center",
+            center: {
+                x: "50%",
+                y: "50%"
+            },
+            shadowColor: "#000",
+            shadowOffset: {
+                x: 2,
+                y: 1
+            },
+            text: "List Events",
+            id: "__alloyId5"
+        });
+        $.__views.listEvent.add($.__views.__alloyId5);
     }
     if (true && !Alloy.isTablet) {
         $.__views.space = Ti.UI.createWindow({
@@ -82,15 +115,15 @@ function Controller() {
             id: "space"
         });
         $.__views.space && $.addTopLevelView($.__views.space);
-        $.__views.__alloyId5 = Ti.UI.createLabel({
+        $.__views.__alloyId6 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Medium"
             },
             color: "#fff",
             text: "An iPhone",
-            id: "__alloyId5"
+            id: "__alloyId6"
         });
-        $.__views.space.add($.__views.__alloyId5);
+        $.__views.space.add($.__views.__alloyId6);
     }
     exports.destroy = function() {};
     _.extend($, $.__views);
@@ -98,6 +131,7 @@ function Controller() {
     var log = Helper.log;
     exports.open = open;
     __defers["$.__views.addEvent!click!addEvent"] && $.__views.addEvent.addEventListener("click", addEvent);
+    __defers["$.__views.listEvent!click!listEvents"] && $.__views.listEvent.addEventListener("click", listEvents);
     _.extend($, exports);
 }
 

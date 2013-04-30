@@ -21,7 +21,7 @@
 			</View>
 		</View>
 		<View id="sliderView">
-			<Label class="labelText" textAlign="left">Minimum Visibility Required:</Label>
+			<Label class="labelText" textAlign="left">Visibility Required:</Label>
 			<View id="cloudSliderView" >
 				<Label id="pickStartLabel" class="superLargetext">0%</Label>
 				<Slider id="cloudSlider" max="1" min="0" value="0.5" />
@@ -30,7 +30,7 @@
 
 			<View id="actionButtonView">
 				<View id="leftAction">
-					<Button  top="3" class="actionButton" id="settingsBtn"/>
+					<Button  top="3" class="actionButton" onClick="settingsPage" id="settingsBtn"/>
 					<Label top="10" class="labelText">Settings</Label>
 				</View>
 				<View id="rightAction">

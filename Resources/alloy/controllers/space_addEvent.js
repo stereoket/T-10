@@ -46,7 +46,7 @@ function Controller() {
             alert("Error, missing cloud");
             return false;
         }
-        var url = "http://192.168.3.18:8000/add_event/" + $.cityTextField.value + "/" + $.cloudSlider.value + "/" + $.buttonView.timeOfDay + "/" + Ti.App.Properties.getString("acsUserID");
+        var url = "http://localhost:8000/add_event/" + $.cityTextField.value + "/" + (1 - $.cloudSlider.value) + "/" + $.buttonView.timeOfDay + "/" + Ti.App.Properties.getString("acsUserID");
         Ti.API.warn(url);
         var c = Ti.Network.createHTTPClient();
         c.setTimeout(25e3);
@@ -73,6 +73,55 @@ function Controller() {
         };
         c.open("POST", url);
         c.send();
+    }
+    function settingsPage() {
+        var prefs = require("tiprefs");
+        prefs.init("T-10 Settings");
+        prefs.addSwitch({
+            id: "SAVE_ON_QUIT",
+            caption: "Alarm"
+        });
+        prefs.addSwitch({
+            id: "HIDE_ALERTS",
+            caption: "Push Alerts"
+        });
+        prefs.addChoice({
+            id: "DAY_OF_WEEK",
+            caption: "Day of Week",
+            choices: [ {
+                title: "Every Monday",
+                value: 1
+            }, {
+                title: "Every Tuesday",
+                value: 2
+            }, {
+                title: "Every Wednesday",
+                value: 3
+            }, {
+                title: "Every Thursday",
+                value: 4
+            }, {
+                title: "Every Friday",
+                value: 5
+            }, {
+                title: "Every Saturday",
+                value: 6
+            }, {
+                title: "Every Sunday",
+                value: 7
+            } ]
+        });
+        prefs.addTextInput({
+            id: "USERNAME",
+            caption: "username",
+            value: "myuser"
+        });
+        prefs.addTextInput({
+            id: "API_KEY",
+            caption: "API Key",
+            value: "1234"
+        });
+        prefs.open();
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
@@ -136,13 +185,13 @@ function Controller() {
             timeOfDay: "either"
         });
         $.__views.spaceAddEvent.add($.__views.buttonView);
-        $.__views.__alloyId8 = Ti.UI.createView({
+        $.__views.__alloyId9 = Ti.UI.createView({
             height: 100,
             width: "33%",
             bubbleParent: false,
-            id: "__alloyId8"
+            id: "__alloyId9"
         });
-        $.__views.buttonView.add($.__views.__alloyId8);
+        $.__views.buttonView.add($.__views.__alloyId9);
         $.__views.day = Ti.UI.createButton({
             left: 10,
             right: 10,
@@ -153,9 +202,9 @@ function Controller() {
             bubbleParent: false,
             id: "day"
         });
-        $.__views.__alloyId8.add($.__views.day);
+        $.__views.__alloyId9.add($.__views.day);
         setTimeOfDay ? $.__views.day.addEventListener("click", setTimeOfDay) : __defers["$.__views.day!click!setTimeOfDay"] = true;
-        $.__views.__alloyId9 = Ti.UI.createLabel({
+        $.__views.__alloyId10 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Black",
                 fontSize: 34
@@ -164,16 +213,16 @@ function Controller() {
             color: "#fff",
             touchEnabled: false,
             text: "Daytime",
-            id: "__alloyId9"
+            id: "__alloyId10"
         });
-        $.__views.__alloyId8.add($.__views.__alloyId9);
-        $.__views.__alloyId10 = Ti.UI.createView({
+        $.__views.__alloyId9.add($.__views.__alloyId10);
+        $.__views.__alloyId11 = Ti.UI.createView({
             height: 100,
             width: "33%",
             bubbleParent: false,
-            id: "__alloyId10"
+            id: "__alloyId11"
         });
-        $.__views.buttonView.add($.__views.__alloyId10);
+        $.__views.buttonView.add($.__views.__alloyId11);
         $.__views.night = Ti.UI.createButton({
             left: 10,
             right: 10,
@@ -184,9 +233,9 @@ function Controller() {
             bubbleParent: false,
             id: "night"
         });
-        $.__views.__alloyId10.add($.__views.night);
+        $.__views.__alloyId11.add($.__views.night);
         setTimeOfDay ? $.__views.night.addEventListener("click", setTimeOfDay) : __defers["$.__views.night!click!setTimeOfDay"] = true;
-        $.__views.__alloyId11 = Ti.UI.createLabel({
+        $.__views.__alloyId12 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Black",
                 fontSize: 34
@@ -195,16 +244,16 @@ function Controller() {
             color: "#fff",
             touchEnabled: false,
             text: "Nightime",
-            id: "__alloyId11"
+            id: "__alloyId12"
         });
-        $.__views.__alloyId10.add($.__views.__alloyId11);
-        $.__views.__alloyId12 = Ti.UI.createView({
+        $.__views.__alloyId11.add($.__views.__alloyId12);
+        $.__views.__alloyId13 = Ti.UI.createView({
             height: 100,
             width: "33%",
             bubbleParent: false,
-            id: "__alloyId12"
+            id: "__alloyId13"
         });
-        $.__views.buttonView.add($.__views.__alloyId12);
+        $.__views.buttonView.add($.__views.__alloyId13);
         $.__views.either = Ti.UI.createButton({
             left: 10,
             right: 10,
@@ -216,9 +265,9 @@ function Controller() {
             id: "either",
             selected: "true"
         });
-        $.__views.__alloyId12.add($.__views.either);
+        $.__views.__alloyId13.add($.__views.either);
         setTimeOfDay ? $.__views.either.addEventListener("click", setTimeOfDay) : __defers["$.__views.either!click!setTimeOfDay"] = true;
-        $.__views.__alloyId13 = Ti.UI.createLabel({
+        $.__views.__alloyId14 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Black",
                 fontSize: 34
@@ -227,9 +276,9 @@ function Controller() {
             color: "#fff",
             touchEnabled: false,
             text: "Either",
-            id: "__alloyId13"
+            id: "__alloyId14"
         });
-        $.__views.__alloyId12.add($.__views.__alloyId13);
+        $.__views.__alloyId13.add($.__views.__alloyId14);
         $.__views.sliderView = Ti.UI.createView({
             top: 400,
             width: "100%",
@@ -238,17 +287,17 @@ function Controller() {
             id: "sliderView"
         });
         $.__views.spaceAddEvent.add($.__views.sliderView);
-        $.__views.__alloyId14 = Ti.UI.createLabel({
+        $.__views.__alloyId15 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Medium",
                 fontSize: 44
             },
             textAlign: "left",
             color: "#fff",
-            text: "Minimum Visibility Required:",
-            id: "__alloyId14"
+            text: "Visibility Required:",
+            id: "__alloyId15"
         });
-        $.__views.sliderView.add($.__views.__alloyId14);
+        $.__views.sliderView.add($.__views.__alloyId15);
         $.__views.cloudSliderView = Ti.UI.createView({
             width: "100%",
             left: 0,
@@ -323,7 +372,8 @@ function Controller() {
             id: "settingsBtn"
         });
         $.__views.leftAction.add($.__views.settingsBtn);
-        $.__views.__alloyId15 = Ti.UI.createLabel({
+        settingsPage ? $.__views.settingsBtn.addEventListener("click", settingsPage) : __defers["$.__views.settingsBtn!click!settingsPage"] = true;
+        $.__views.__alloyId16 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Medium",
                 fontSize: 44
@@ -332,9 +382,9 @@ function Controller() {
             color: "#fff",
             text: "Settings",
             top: "10",
-            id: "__alloyId15"
+            id: "__alloyId16"
         });
-        $.__views.leftAction.add($.__views.__alloyId15);
+        $.__views.leftAction.add($.__views.__alloyId16);
         $.__views.rightAction = Ti.UI.createView({
             right: 66,
             top: 0,
@@ -353,7 +403,7 @@ function Controller() {
         });
         $.__views.rightAction.add($.__views.saveBtn);
         sendAlertData ? $.__views.saveBtn.addEventListener("click", sendAlertData) : __defers["$.__views.saveBtn!click!sendAlertData"] = true;
-        $.__views.__alloyId16 = Ti.UI.createLabel({
+        $.__views.__alloyId17 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Medium",
                 fontSize: 44
@@ -362,9 +412,9 @@ function Controller() {
             color: "#fff",
             text: "Save",
             top: "10",
-            id: "__alloyId16"
+            id: "__alloyId17"
         });
-        $.__views.rightAction.add($.__views.__alloyId16);
+        $.__views.rightAction.add($.__views.__alloyId17);
     }
     if (!Alloy.isTablet) {
         $.__views.spaceAddEvent = Ti.UI.createWindow({
@@ -391,6 +441,7 @@ function Controller() {
     __defers["$.__views.day!click!setTimeOfDay"] && $.__views.day.addEventListener("click", setTimeOfDay);
     __defers["$.__views.night!click!setTimeOfDay"] && $.__views.night.addEventListener("click", setTimeOfDay);
     __defers["$.__views.either!click!setTimeOfDay"] && $.__views.either.addEventListener("click", setTimeOfDay);
+    __defers["$.__views.settingsBtn!click!settingsPage"] && $.__views.settingsBtn.addEventListener("click", settingsPage);
     __defers["$.__views.saveBtn!click!sendAlertData"] && $.__views.saveBtn.addEventListener("click", sendAlertData);
     _.extend($, exports);
 }

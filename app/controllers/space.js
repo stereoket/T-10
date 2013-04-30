@@ -21,5 +21,8 @@ function addEvent(){
 	$.space.close();
 }
 
+function listEvents(){
+
+}
 
 exports.open = open;
