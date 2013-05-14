@@ -1,0 +1,15 @@
+"#locationsListView": {
+	top: 130,
+	left: 64,
+	right: 64,
+	height: 460,
+	backgroundColor: "none"
+},
+"Label":{
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 30},
+	textAlign: 'center',
+	color: "#fff"
+},
+".labelText":{
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 44}
+},

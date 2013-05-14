@@ -3,15 +3,37 @@
  * @return {[type]} [description]
  */
 
+var apiURL = "http://" + Ti.App.Properties.getString('Settings_API_DOMAIN') + ":" + Ti.App.Properties.getString('Settings_API_PORT');
+var editLocation = null;
+var editIndex = null;
+
+$.spaceAddEvent.addEventListener('blur', resetLocation);
+
+function resetLocation() {
+	editLocation = null;
+	editIndex = null;
+	editTimeOfDay = null;
+	editSlider = null;
+}
+
+function setEditData(e) {
+	Ti.API.info("editLocation(e)");
+	Ti.API.info(JSON.stringify(e, null, 2));
+	editLocation = e.location;
+	editIndex = e.index;
+	editTimeOfDay = e.time_of_day;
+	editSlider = 1 - e.max_cloud_cover;
+}
+
 function open() {
 	$.spaceAddEvent.open();
 	$.spaceAddEvent.addEventListener("swipe", function (e) {
-		Ti.API.info(JSON.stringify(e, null, 2));
+		// Ti.API.info(JSON.stringify(e, null, 2));
 
 		if (e.direction === "right" && e.source.id === "spaceAddEvent" && e.y < 90) {
-			spaceWin = Alloy.createController('space');
+			var nextPasses = Alloy.createController('next_passes');
 			setTimeout(function () {
-				spaceWin.open();
+				nextPasses.open();
 				$.spaceAddEvent.close();
 			}, 50);
 		}
@@ -28,7 +50,20 @@ function open() {
 		$.either.backgroundImage = '/images/timeButtonSelected.png';
 	}
 
+	$.cloudSlider.value = 0.75;
 
+	if (editLocation !== null) {
+		Ti.API.warn("editing location");
+		$.cityTextField.value = editLocation.city + ", " + editLocation.country;
+		setTimeOfDay({
+			source: {
+				id: editTimeOfDay
+			}
+		});
+		Ti.API.warn("set slider value to : " + editSlider);
+		$.cloudSlider.value = editSlider;
+		Ti.API.warn("slider value to : " + $.cloudSlider.value);
+	}
 }
 
 function setTimeOfDay(e) {
@@ -52,134 +87,100 @@ function setTimeOfDay(e) {
 		case 'either':
 			$.either.backgroundImage = '/images/timeButtonSelected.png';
 			break;
-
 	}
-
-
-};
+}
 
 function sendAlertData(e) {
 	var that = this;
+	var locationManager = require('locationManager');
+	var Helper = require('Helper');
 
 	function errorCheck() {
 
 	}
 
-	Ti.API.warn(JSON.stringify($.cityTextField, ["value"], 2));
+	// Ti.API.warn(JSON.stringify($.cityTextField, ["value"], 2));
 
 	if (!$.cityTextField.value) {
 		alert('Error, missing location');
 		return false;
 	}
 
-	Ti.API.warn(JSON.stringify($.cloudSlider, null, 2));
+	// Ti.API.warn(JSON.stringify($.cloudSlider, null, 2));
 	if ($.cloudSlider.value === undefined) {
 		alert('Error, missing cloud');
 		return false;
 	}
 
-	var url = 'http://localhost:8000/add_event/' + $.cityTextField.value + '/' + (1 - $.cloudSlider.value )+ "/" + $.buttonView.timeOfDay + "/" + Ti.App.Properties.getString('acsUserID');
+	var bodyData = {
+		location: {
+			city: $.cityTextField.value
+		},
+		max_cloud_cover: (1 - $.cloudSlider.value),
+		time_of_day: $.buttonView.timeOfDay,
+		device_id: "foo"
+	};
+
+
+
+	Ti.API.warn("JSON BODY DATA");
+
+	var dataJSON = JSON.stringify(bodyData);
+	Ti.API.warn(dataJSON);
+	var url = apiURL + '/alerts';
+	// var urlParams = ["city="+$.cityTextField.value, ]
 	// var url = 'http://scifilondontv.com/api/channel/list/otr';
 	// alert(url);
 
 	Ti.API.warn(url);
+	var options = {
+		contentType: "application/json",
+		ttl: 5
+	};
+	var XHR = require("xhr");
+	var xhr = new XHR();
+	xhr.put(apiURL + "/alerts", dataJSON, onSuccessCallback, onErrorCallback, options);
 
-	var XHR = require("/lib/xhr");
-var xhr = new XHR();
-xhr.get("http://freegeoip.net/json/", onSuccessCallback, onErrorCallback, options);
-
-
-	var c = Ti.Network.createHTTPClient();
-	c.setTimeout(25000);
-	c.onload = function (e) {
-		Ti.API.warn(e.response);
-		Ti.API.info(JSON.stringify(e, null, 2));
-		Ti.API.warn(this.status);
-		Ti.API.warn(this.responseText);
-		var returnData = JSON.parse(this.responseText);
-
-		// returnData = JSON.parse(returnData);
-
-		if (returnData.length === 0) {
-			alert('No PASSES scheduled');
+	function onSuccessCallback(e) {
+		Ti.API.warn("Successful API Call");
+		var data = JSON.parse(e.data);
+		var response = data.response;
+		if(response[0] === undefined){
+			alert("No scheduled passes for your parameters");
 			return;
 		}
+		Ti.API.warn(response);
+		var responseData = {
+			data: response
+		}
+		var responseJSON = JSON.stringify(responseData);
 
-		var newAlert = Ti.UI.createAlertDialog({
-			title: 'T-10 Response',
-			buttonNames: ['OK', 'Cancel'],
-			cancel: 1,
-			message: returnData.length + " Passes scheduled, \n ISS over " + returnData[0].location + " next: \n" + returnData[0].time_str
-		});
-		newAlert.show();
+		Helper.writeToAppDataDirectory('cityData', response[0].location.city, responseJSON, bodyData, $.buttonView.timeOfDay);
+
+
+		// Ti.API.warn(JSON.stringify(response, null, 2));
+
+
+		// we Have city data - now store this on filesystem for call back later
+
+		// Merge this individual city data block into a master alllaerts object for the passes screen.
+		// 
+		// Load up the tracked locations screen
+		
+		var trackedLocations = Alloy.createController("tracked_locations");
+		trackedLocations.open();
+
 	}
-	c.onerror = function (e) {
-		Ti.API.error('ERROR:' + JSON.stringify(this.responseText, null, 2));
+
+	function onErrorCallback(e) {
+		Ti.API.error("Error in API Call");
+		Ti.API.error(JSON.stringify(e));
 	}
-	c.open('POST', url);
-	c.send();
-
-
 }
 
-function settingsPage(e) {
-	var prefs = require("tiprefs");
-
-	// open the view
-
-	prefs.init("T-10 Settings");
-
-	prefs.addSwitch({
-		id: "SAVE_ON_QUIT",
-		caption: "Alarm"
-	});
-
-	prefs.addSwitch({
-		id: "HIDE_ALERTS",
-		caption: "Push Alerts"
-	}); 
-
-	prefs.addChoice({
-		id: "DAY_OF_WEEK",
-		caption: "Day of Week",
-		choices: [{
-			title: 'Every Monday',
-			value: 1
-		}, {
-			title: 'Every Tuesday',
-			value: 2
-		}, {
-			title: 'Every Wednesday',
-			value: 3
-		}, {
-			title: 'Every Thursday',
-			value: 4
-		}, {
-			title: 'Every Friday',
-			value: 5
-		}, {
-			title: 'Every Saturday',
-			value: 6
-		}, {
-			title: 'Every Sunday',
-			value: 7
-		}]
-	});
-
-	prefs.addTextInput({
-		id: "USERNAME",
-		caption: "username",
-		value: "myuser"
-	});
-
-	prefs.addTextInput({
-		id: "API_KEY",
-		caption: "API Key",
-		value: "1234"
-
-	});
-
-	prefs.open();
+function settings(e){
+	var appPreferences = require('appPrefs');
+	appPreferences.open();
 }
-
+exports.setEditData = setEditData;
 exports.open = open;

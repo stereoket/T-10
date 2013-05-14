@@ -1,0 +1,214 @@
+var Alloy = require('alloy'),
+	_ = require("alloy/underscore")._;
+/**
+ * Retrieve and return all of the locations currently stored
+ * @return {object} response object with a summary count and data Array of all the locations in memory
+ */
+
+function getAllLocations() {
+	var locations, check;
+	// check for existing property
+
+	check = Ti.App.Properties.hasProperty('T10_Locations');
+	if (!check) {
+		return {
+			count: 0
+		};
+	} else {
+		locations = Ti.App.Properties.getList('T10_Locations');
+		var response = {
+			count: locations.length,
+			data: locations
+		}
+	}
+	return response;
+}
+
+function getMergedLocations(count){
+	var count =  count || 15;
+	var filePath = 'cityData' + Ti.Filesystem.separator +  'MergedCities.json';
+		Ti.API.info("getMergedLocations(): " + filePath);
+		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filePath);
+		if(!file.exists()){
+			return [];
+		}
+		var rawData = file.read();
+		var dataJSON = JSON.parse(rawData);
+		var returnArray = [];
+		for (var i = 0; i < count; i++) {
+			returnArray.push(dataJSON[i]); 
+		};
+
+		return returnArray;
+}
+/**
+ * Adds a new location created through the app and all parameters into stored memory
+ * @param {object} params data for the location to be added
+ * @param {string} params.city Name of the City
+ * @param {float} params.cloud_cover percentage of max cloud cover
+ * @param {float} params.lat latitiude for given city
+ * @param {float} params.lon longitude for given city
+ * @param {string} params.time_of_day time of the day for alert [day|night|either]
+ */
+
+function addNewLocation(params) {
+	Ti.API.info("addNewLocation(params):");
+	var locations;
+
+	locations = getAllLocations();
+
+	var locationData = locations.data || [];
+
+	// check against existing locations
+
+	locationData.push(params);
+	Ti.API.info(JSON.stringify(locationData, null, 2));
+	// append new location to the existing list
+
+
+	_saveLocation(locationData);
+}
+
+/**
+ * Save the array of locations into the new pers Memory list
+ * @param  {[type]} locationArray [description]
+ * @return {[type]}               [description]
+ */
+
+function _saveLocation(locationArray) {
+	Ti.API.info("_saveLocation");
+	//ensure all fields exist as required for the location list (error management)
+	// add list to pers Memory
+	try {
+		Ti.App.Properties.setList('T10_Locations', locationArray);
+		createNextPassArray();
+	} catch (err) {
+		Ti.API.error("Problem saving the location entry:" + err.message);
+	}
+}
+
+/**
+ * Each city has its own array of next passes, this method will ensure it is upto date and current
+ * @param  {[type]} cityPasses [description]
+ * @return {[type]}            [description]
+ */
+
+function updateCityPasses(cityPasses) {
+
+}
+
+function deleteCity(e) {
+	Ti.API.info("Location Managert deleting city");
+	Ti.API.info(JSON.stringify(e));
+	var curCities = getAllLocations(), newCities=[];
+	for (var i = 0; i < curCities.count; i++) {
+		if(curCities.data[i].location.city === e.location.city){
+			Ti.API.info("deleting city: " + e.location.city);
+
+		
+		var filePath = 'cityData' + Ti.Filesystem.separator + e.location.city + '.json';
+		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filePath);
+		var dataDelete = file.deleteFile();
+		if(!dataDelete){
+			Ti.API.error("Problems deletingthe file: " + filePath);
+		} else {
+			Ti.API.info("File deleted ok");
+		}
+			continue;
+		}
+		Ti.API.info("Storing city: " +curCities.data[i].location.city);
+		newCities.push(curCities.data[i]);
+	};
+	_saveLocation(newCities);
+}
+
+/**
+ * Merge all city arrays together, used when adding a new city for a current list
+ * @return {[type]} [description]
+ */
+function createNextPassArray() {
+	Ti.API.info("createNextPassArray():");
+	var locations = getAllLocations();
+	if (locations.count > 0) {
+		Ti.API.info("More than 1 entry, stuff to merge");
+		Ti.API.info(JSON.stringify(locations.data, ["filePath", "alertParams"], 2));
+		var merged = [];
+		for (var i = 0; i < locations.count; i++) {
+			// read file for this city into memory
+			var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, locations.data[i].filePath);
+			var data = file.read();
+			var cityJSON = JSON.parse(data);
+			Ti.API.info("**** Reading DATA ****");
+			var cLen = cityJSON.data.length;
+			for (var j = cLen - 1; j >= 0; j--) {
+				Ti.API.info(JSON.stringify(cityJSON.data[j], null, 2));
+				merged.push(cityJSON.data[j]);
+			};
+
+			Ti.API.warn("current merge count: " + merged.length);
+
+		}
+		Ti.API.warn("FINAL merge count: " + merged.length);
+		var orderedPass = _.sortBy(merged, function (obj) {
+			return obj.time;
+		});
+
+		// Ti.API.warn("FINAL sorted array: " + JSON.stringify(orderedPass, null, 2));
+		var mergedCityJSON = JSON.stringify(orderedPass);
+
+		var filePath = 'cityData' + Ti.Filesystem.separator +  'MergedCities.json';
+		Ti.API.info("_writeDataToFile(): " + filePath);
+		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filePath);
+		var dataWrite = file.write(mergedCityJSON);
+		if(!dataWrite){
+			Ti.API.error("Problems writing the data to the file: " + filePath);k		} else {
+			Ti.API.warn("Merged Data Written");
+		}
+	}
+}
+
+/**
+ * Performs a check against a cityName, looking for an entry in persistent Memory. This check is to ensure duplicates are not stored.
+ * @param  {string}   cityName
+ * @param  {Function} callback decides whether or not to add this city into the storedLocations array
+ * @return {boolean}            boolean value in the callback
+ */
+
+function checkCity(cityName, callback) {
+	Ti.API.info("checkCity():");
+	try {
+		var locations = getAllLocations();
+
+		function storeCity() {
+			callback({
+				exists: false
+			});
+			return true;
+		}
+		if (locations.count > 0) {
+			for (var x in locations.data) {
+				Ti.API.warn(JSON.stringify(locations.data[x], ["location"], 2));
+				Ti.API.warn(locations.data[x].location.city);
+				if (locations.data[x].location.city === cityName) {
+					Ti.API.warn("Match Found - ignore");
+					callback({
+						exists: true
+					});
+					return true;
+					break;
+				}
+			}
+			storeCity();
+		} else {
+			storeCity();
+		}
+	} catch (err) {
+		Ti.API.error("Problem checking city: " + err.message);
+	}
+}
+exports.getMergedLocations = getMergedLocations;
+exports.deleteCity = deleteCity;
+exports.getAllLocations = getAllLocations;
+exports.addNewLocation = addNewLocation;
+exports.checkCity = checkCity;
+exports.createNextPassArray = createNextPassArray;

@@ -1,0 +1,51 @@
+"#backgroundView": {
+	backgroundColor: Alloy.CFG.bgBlue,
+	opacity: 0.08,
+	zIndex: 0,	
+},
+"#listItem": {
+	height: 50,
+	backgroundColor: "none",
+	left: 0,
+	zIndex: 1,
+},
+"#locationData": {
+	left: 14,
+	font: {fontFamily: "OstrichSans-Black", fontSize: 24},
+	textAlign: 'left',
+	width: Ti.UI.FILL,
+	color: "#fff",
+	zIndex: 1,
+},
+"#weatherIcon":{
+	right: 14,
+	top: 10,
+	bottom: 10,
+	width: 48,
+	zIndex: 1,
+},
+"Label":{
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 30},
+	textAlign: 'left',
+	color: "#fff"
+},
+"#headerLabel": {
+	textAlign: 'left',
+	font: {fontFamily: "OstrichSans-Black", fontSize: 30},
+	left: 14
+},
+".locationButtons":{
+	width: 48,
+	height: 28,
+	borderRadius: 6,
+	font:{fontSize: 14, fontWeight: 'Bold'},
+	textAlign: 'center'
+},
+"#editBtn": {
+	right: 64,
+	backgroundImage: '/images/blueBg.png'
+},
+"#deleteBtn": {
+	right: 10,
+	backgroundImage: '/images/redBg.png'
+}

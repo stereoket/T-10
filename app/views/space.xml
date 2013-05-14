@@ -10,9 +10,9 @@
 			<Label class="largeText">Add Location</Label>
 		</View>
 		
-		<View onClick="listEvents" class="bigButton" id="listEvent">
+<!-- 		<View onClick="listEvents" class="bigButton" id="listEvent">
 			<Label class="largeText">List Events</Label>
-		</View>
+		</View> -->
 
 	</Window>
 

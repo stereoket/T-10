@@ -3,7 +3,7 @@
 		<!-- Maybe Add Buttons instead of background Graphic -->
 		<!-- <ImageView id="bb_containerBackground" /> -->
 		
-		<Label id="cityLabel" class="labelText">Add a location to photograph:</Label>
+		<Label id="cityLabel" class="labelText">Add a location:</Label>
 		<TextField id="cityTextField" />
 		<ImageView image="/images/magnify.png" id="magnify" />
 		<View id="buttonView" timeOfDay="either">
@@ -21,16 +21,16 @@
 			</View>
 		</View>
 		<View id="sliderView">
-			<Label class="labelText" textAlign="left">Visibility Required:</Label>
+			<Label class="labelText" left="80" textAlign="left" width="Ti.UI.FILL" >Maximum Cloud Cover:</Label>
 			<View id="cloudSliderView" >
-				<Label id="pickStartLabel" class="superLargetext">0%</Label>
-				<Slider id="cloudSlider" max="1" min="0" value="0.5" />
-				<Label id="pickEndLabel" class="superLargetext">100%</Label>
+				<Label id="pickStartLabel" class="superLargetext">50%</Label>
+				<Slider id="cloudSlider" max="1" min="0.5"  />
+				<Label id="pickEndLabel" class="superLargetext">0%</Label>
 			</View>
 
 			<View id="actionButtonView">
 				<View id="leftAction">
-					<Button  top="3" class="actionButton" onClick="settingsPage" id="settingsBtn"/>
+					<Button  top="3" class="actionButton" onClick="settings" id="settingsBtn"/>
 					<Label top="10" class="labelText">Settings</Label>
 				</View>
 				<View id="rightAction">

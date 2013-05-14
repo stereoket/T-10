@@ -1,0 +1,69 @@
+"#nextPasses": {
+	backgroundImage: Alloy.CFG.backgroundImage
+},
+"Label":{
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 30},
+	textAlign: 'center',
+	color: "#fff"
+},
+".labelText":{
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 44}
+},
+".buttonLabel":{
+	font: {fontFamily: "OstrichSans-Black", fontSize: 20},
+	textAlign: 'center',
+	top: 187
+}
+"#windowTitle": {
+	top: 64,
+	left:78,
+	textAlign: "left",
+},
+"#passListView": {
+	top: 130,
+	left: 78,
+	right: 78,
+	height: 460,
+	backgroundColor: "none"
+},
+"ListSection": {
+	height: 40,
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 30},
+},
+"#actionButtonView":{
+	top: 724,
+	left: 0,
+	width: '100%',
+	height: Ti.UI.SIZE
+},
+".actionButton":{
+	width: 172,
+	height: 172,
+	top: 0
+},
+"#leftAction":{
+	left: 72,
+	top: 0,
+	width: 172,
+	height: Ti.UI.SIZE
+},
+"#rightAction":{
+	right: 72,
+	top: 0,
+	width: 172,
+	height: Ti.UI.SIZE
+},
+"#middleAction":{
+	top: 0,
+	width: 172,
+	height: Ti.UI.SIZE	
+},
+"#settingsBtn":{
+	backgroundImage: "/images/buttons/settings.png"
+},
+"#editLocationBtn":{
+	backgroundImage: "/images/buttons/locations.png"
+},
+"#addLocationBtn":{
+	backgroundImage: "/images/buttons/add_location.png"
+}

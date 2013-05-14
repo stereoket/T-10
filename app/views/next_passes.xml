@@ -1,0 +1,30 @@
+<Alloy>
+	<Window id="nextPasses" platform="ios" formFactor="tablet">
+		<!-- Maybe Add Buttons instead of background Graphic -->
+		<!-- <ImageView id="bb_containerBackground" /> -->
+		
+		<Label id="windowTitle" class="labelText">Next Passes:</Label>
+		<View>
+			<Require type="widget" src="to.t10.nextPass" id="nextPassesList"/>
+		</View>
+
+		<View id="actionButtonView">
+				<View id="leftAction">
+					<Button   class="actionButton" onClick="settings" id="settingsBtn"/>
+					<Label class="buttonLabel">Settings</Label>
+				</View>
+				<View id="middleAction">
+					<Button  onClick="viewLocations" class="actionButton" id="editLocationBtn"/>
+					<Label  class="buttonLabel">Locations</Label>
+				</View>
+				<View id="rightAction">
+					<Button  onClick="addLocation" class="actionButton" id="addLocationBtn"/>
+					<Label  class="buttonLabel">Add Location</Label>
+				</View>
+		</View>
+
+		
+		
+	</Window>
+
+</Alloy>

@@ -1,0 +1,10 @@
+<Alloy>
+		<View id="headerView" visible="false">
+			<Label id="headerLabel" />
+		</View>
+		<View id="passItem">
+			<View id="backgroundView" />
+			<Label id="locationData"></Label> 
+			<ImageView id="weatherIcon"></ImageView>
+		</View>
+</Alloy>

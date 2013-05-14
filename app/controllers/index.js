@@ -3,6 +3,11 @@ var log = Helper.log;
 var push = require('push_notification');
 
 Ti.App.Properties.setBool('allowPush', true);
+if(!Ti.App.Properties.hasProperty('Settings_API_DOMAIN')){
+	Ti.App.Properties.setString('Settings_API_DOMAIN', "localhost");
+	Ti.App.Properties.setString('Settings_API_PORT', "8000");
+}
+Ti.API.warn("API server being used: " + Ti.App.Properties.getString('Settings_API_DOMAIN') + ":" +  Ti.App.Properties.getString('Settings_API_PORT'));
 
 function incrementAppLaunchCount() {
 	var spCount = Ti.App.Properties.getInt('appLaunchCount');
@@ -30,8 +35,8 @@ function launchSpaceApp() {
 	log("INFO", "Launching Space App");
 	Ti.App.Properties.setString('appmode', 'space');
 	checkSplashLaunch();
-	spaceWin = Alloy.createController('space');
-	spaceWin.open();
+	nextPasses = Alloy.createController('next_passes');
+	nextPasses.open();
 
 	// SETUP SWIPE GESTURES
 	// 
@@ -48,21 +53,22 @@ function launchEarthApp() {
 
 // Check index launch value, leave a small gap before launching the main window - so splash screen has some visibility
 setTimeout(function () {
-	if (Ti.App.Properties.getInt('appLaunchCount') > 3) {
-		var firstWin;
-		switch (Ti.App.Properties.getString('appmode')) {
-			case 'space':
-				launchSpaceApp();
-				break;
+	$.index.open();
+	// if (Ti.App.Properties.getInt('appLaunchCount') > 3) {
+	// 	var firstWin;
+	// 	switch (Ti.App.Properties.getString('appmode')) {
+	// 		case 'space':
+	// 			launchSpaceApp();
+	// 			break;
 
-			case 'earth':
-				launchEarthApp();
-				break;
-		}
-	} else {
+	// 		case 'earth':
+	// 			launchEarthApp();
+	// 			break;
+	// 	}
+	// } else {
 
-		$.index.open();
+	// 	$.index.open();
 
 
-	}
+	// }
 }, 1500);

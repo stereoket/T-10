@@ -1,0 +1,25 @@
+<Alloy>
+	<Window id="trackedLocations" platform="ios" formFactor="tablet">
+		<!-- Maybe Add Buttons instead of background Graphic -->
+		<!-- <ImageView id="bb_containerBackground" /> -->
+		<Label id="windowTitle" class="labelText">Tracked Locations:</Label>
+		<View id="locationsList">
+			<Require type="widget" src="to.t10.listLocations" id="listWidget"/>
+		</View>
+
+		<View id="actionButtonView">
+				<View id="leftAction">
+					<Button   class="actionButton" onClick="home" id="homeBtn"/>
+					<Label class="buttonLabel">Home</Label>
+				</View>
+
+				<View id="rightAction">
+					<Button  onClick="addLocation" class="actionButton" id="addLocationBtn"/>
+					<Label  class="buttonLabel">Add Location</Label>
+				</View>
+		</View>
+
+	</Window>
+
+
+</Alloy>

@@ -71,5 +71,8 @@ Ti.API.warn(Alloy.CFG.splashBackground + " chosen background image");
  * Colours
  */
 Alloy.CFG.addButton = "#0060C0";
+Alloy.CFG.bgBlue = "#0060C0";
 
+Alloy.CFG.nextPassListPadding = 20;
+Alloy.CFG.locationsListPadding = 14;
 
