@@ -24,22 +24,22 @@ function getAllLocations() {
 	return response;
 }
 
-function getMergedLocations(count){
-	var count =  count || 15;
-	var filePath = 'cityData' + Ti.Filesystem.separator +  'MergedCities.json';
-		Ti.API.info("getMergedLocations(): " + filePath);
-		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filePath);
-		if(!file.exists()){
-			return [];
-		}
-		var rawData = file.read();
-		var dataJSON = JSON.parse(rawData);
-		var returnArray = [];
-		for (var i = 0; i < count; i++) {
-			returnArray.push(dataJSON[i]); 
-		};
+function getMergedLocations(count) {
+	var count = count || 15;
+	var filePath = 'cityData' + Ti.Filesystem.separator + 'MergedCities.json';
+	Ti.API.info("getMergedLocations(): " + filePath);
+	var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filePath);
+	if (!file.exists()) {
+		return [];
+	}
+	var rawData = file.read();
+	var dataJSON = JSON.parse(rawData);
+	var returnArray = [];
+	for (var i = 0; i < count; i++) {
+		returnArray.push(dataJSON[i]);
+	};
 
-		return returnArray;
+	return returnArray;
 }
 /**
  * Adds a new location created through the app and all parameters into stored memory
@@ -100,23 +100,24 @@ function updateCityPasses(cityPasses) {
 function deleteCity(e) {
 	Ti.API.info("Location Managert deleting city");
 	Ti.API.info(JSON.stringify(e));
-	var curCities = getAllLocations(), newCities=[];
+	var curCities = getAllLocations(),
+		newCities = [];
 	for (var i = 0; i < curCities.count; i++) {
-		if(curCities.data[i].location.city === e.location.city){
+		if (curCities.data[i].location.city === e.location.city) {
 			Ti.API.info("deleting city: " + e.location.city);
 
-		
-		var filePath = 'cityData' + Ti.Filesystem.separator + e.location.city + '.json';
-		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filePath);
-		var dataDelete = file.deleteFile();
-		if(!dataDelete){
-			Ti.API.error("Problems deletingthe file: " + filePath);
-		} else {
-			Ti.API.info("File deleted ok");
-		}
+
+			var filePath = 'cityData' + Ti.Filesystem.separator + e.location.city + '.json';
+			var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filePath);
+			var dataDelete = file.deleteFile();
+			if (!dataDelete) {
+				Ti.API.error("Problems deletingthe file: " + filePath);
+			} else {
+				Ti.API.info("File deleted ok");
+			}
 			continue;
 		}
-		Ti.API.info("Storing city: " +curCities.data[i].location.city);
+		Ti.API.info("Storing city: " + curCities.data[i].location.city);
 		newCities.push(curCities.data[i]);
 	};
 	_saveLocation(newCities);
@@ -126,9 +127,12 @@ function deleteCity(e) {
  * Merge all city arrays together, used when adding a new city for a current list
  * @return {[type]} [description]
  */
+
 function createNextPassArray() {
 	Ti.API.info("createNextPassArray():");
 	var locations = getAllLocations();
+	var mergeFilePath = 'cityData' + Ti.Filesystem.separator + 'MergedCities.json';
+	var mergeFile = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, mergeFilePath);
 	if (locations.count > 0) {
 		Ti.API.info("More than 1 entry, stuff to merge");
 		Ti.API.info(JSON.stringify(locations.data, ["filePath", "alertParams"], 2));
@@ -156,13 +160,19 @@ function createNextPassArray() {
 		// Ti.API.warn("FINAL sorted array: " + JSON.stringify(orderedPass, null, 2));
 		var mergedCityJSON = JSON.stringify(orderedPass);
 
-		var filePath = 'cityData' + Ti.Filesystem.separator +  'MergedCities.json';
-		Ti.API.info("_writeDataToFile(): " + filePath);
-		var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filePath);
-		var dataWrite = file.write(mergedCityJSON);
-		if(!dataWrite){
-			Ti.API.error("Problems writing the data to the file: " + filePath);k		} else {
+
+		Ti.API.info("_writeDataToFile(): " + mergeFilePath);
+		
+		var dataWrite = mergeFile.write(mergedCityJSON);
+		if (!dataWrite) {
+			Ti.API.error("Problems writing the data to the file: " + mergeFilePath);
+		} else {
 			Ti.API.warn("Merged Data Written");
+		}
+	} else {
+		if(mergeFile.exists()){
+			Ti.API.warn("Deleting Merged File as there are no more cities stored");
+			mergeFile.deleteFile();
 		}
 	}
 }

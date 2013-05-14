@@ -1,12 +1,25 @@
 function Controller() {
+    function resetLocation() {
+        editLocation = null;
+        editIndex = null;
+        editTimeOfDay = null;
+        editSlider = null;
+    }
+    function setEditData(e) {
+        Ti.API.info("editLocation(e)");
+        Ti.API.info(JSON.stringify(e, null, 2));
+        editLocation = e.location;
+        editIndex = e.index;
+        editTimeOfDay = e.time_of_day;
+        editSlider = 1 - e.max_cloud_cover;
+    }
     function open() {
         $.spaceAddEvent.open();
         $.spaceAddEvent.addEventListener("swipe", function(e) {
-            Ti.API.info(JSON.stringify(e, null, 2));
-            if ("right" === e.direction && "spaceAddEvent" === e.source.id && 50 > e.y) {
-                spaceWin = Alloy.createController("space");
+            if ("right" === e.direction && "spaceAddEvent" === e.source.id && 90 > e.y) {
+                var nextPasses = Alloy.createController("next_passes");
                 setTimeout(function() {
-                    spaceWin.open();
+                    nextPasses.open();
                     $.spaceAddEvent.close();
                 }, 50);
             }
@@ -14,6 +27,19 @@ function Controller() {
         $.day.selected && ($.day.backgroundImage = "/images/timeButtonSelected.png");
         $.night.selected && ($.night.backgroundImage = "/images/timeButtonSelected.png");
         $.either.selected && ($.either.backgroundImage = "/images/timeButtonSelected.png");
+        $.cloudSlider.value = .75;
+        if (null !== editLocation) {
+            Ti.API.warn("editing location");
+            $.cityTextField.value = editLocation.city + ", " + editLocation.country;
+            setTimeOfDay({
+                source: {
+                    id: editTimeOfDay
+                }
+            });
+            Ti.API.warn("set slider value to : " + editSlider);
+            $.cloudSlider.value = editSlider;
+            Ti.API.warn("slider value to : " + $.cloudSlider.value);
+        }
     }
     function setTimeOfDay(e) {
         Ti.API.warn("Setting Time of day for lookup to: " + e.source.id);
@@ -36,96 +62,66 @@ function Controller() {
         }
     }
     function sendAlertData() {
-        Ti.API.warn(JSON.stringify($.cityTextField, [ "value" ], 2));
+        function onSuccessCallback(e) {
+            Ti.API.warn("Successful API Call");
+            var data = JSON.parse(e.data);
+            var response = data.response;
+            if (void 0 === response[0]) {
+                alert("No scheduled passes for your parameters");
+                return;
+            }
+            Ti.API.warn(response);
+            var responseData = {
+                data: response
+            };
+            var responseJSON = JSON.stringify(responseData);
+            Helper.writeToAppDataDirectory("cityData", response[0].location.city, responseJSON, bodyData, $.buttonView.timeOfDay);
+            var trackedLocations = Alloy.createController("tracked_locations");
+            trackedLocations.open();
+        }
+        function onErrorCallback(e) {
+            Ti.API.error("Error in API Call");
+            Ti.API.error(JSON.stringify(e));
+        }
+        require("locationManager");
+        var Helper = require("Helper");
         if (!$.cityTextField.value) {
             alert("Error, missing location");
             return false;
         }
-        Ti.API.warn(JSON.stringify($.cloudSlider, null, 2));
         if (void 0 === $.cloudSlider.value) {
             alert("Error, missing cloud");
             return false;
         }
-        var url = "http://localhost:8000/add_event/" + $.cityTextField.value + "/" + (1 - $.cloudSlider.value) + "/" + $.buttonView.timeOfDay + "/" + Ti.App.Properties.getString("acsUserID");
+        var bodyData = {
+            location: {
+                city: $.cityTextField.value
+            },
+            max_cloud_cover: 1 - $.cloudSlider.value,
+            time_of_day: $.buttonView.timeOfDay,
+            device_id: "foo"
+        };
+        Ti.API.warn("JSON BODY DATA");
+        var dataJSON = JSON.stringify(bodyData);
+        Ti.API.warn(dataJSON);
+        var url = apiURL + "/alerts";
         Ti.API.warn(url);
-        var c = Ti.Network.createHTTPClient();
-        c.setTimeout(25e3);
-        c.onload = function(e) {
-            Ti.API.warn(e.response);
-            Ti.API.info(JSON.stringify(e, null, 2));
-            Ti.API.warn(this.status);
-            Ti.API.warn(this.responseText);
-            var returnData = JSON.parse(this.responseText);
-            if (0 === returnData.length) {
-                alert("No PASSES scheduled");
-                return;
-            }
-            var newAlert = Ti.UI.createAlertDialog({
-                title: "T-10 Response",
-                buttonNames: [ "OK", "Cancel" ],
-                cancel: 1,
-                message: returnData.length + " Passes scheduled, \n ISS over " + returnData[0].location + " next: \n" + returnData[0].time_str
-            });
-            newAlert.show();
+        var options = {
+            contentType: "application/json",
+            ttl: 5
         };
-        c.onerror = function() {
-            Ti.API.error("ERROR:" + JSON.stringify(this.responseText, null, 2));
-        };
-        c.open("POST", url);
-        c.send();
+        var XHR = require("xhr");
+        var xhr = new XHR();
+        xhr.put(apiURL + "/alerts", dataJSON, onSuccessCallback, onErrorCallback, options);
     }
-    function settingsPage() {
-        var prefs = require("tiprefs");
-        prefs.init("T-10 Settings");
-        prefs.addSwitch({
-            id: "SAVE_ON_QUIT",
-            caption: "Alarm"
-        });
-        prefs.addSwitch({
-            id: "HIDE_ALERTS",
-            caption: "Push Alerts"
-        });
-        prefs.addChoice({
-            id: "DAY_OF_WEEK",
-            caption: "Day of Week",
-            choices: [ {
-                title: "Every Monday",
-                value: 1
-            }, {
-                title: "Every Tuesday",
-                value: 2
-            }, {
-                title: "Every Wednesday",
-                value: 3
-            }, {
-                title: "Every Thursday",
-                value: 4
-            }, {
-                title: "Every Friday",
-                value: 5
-            }, {
-                title: "Every Saturday",
-                value: 6
-            }, {
-                title: "Every Sunday",
-                value: 7
-            } ]
-        });
-        prefs.addTextInput({
-            id: "USERNAME",
-            caption: "username",
-            value: "myuser"
-        });
-        prefs.addTextInput({
-            id: "API_KEY",
-            caption: "API Key",
-            value: "1234"
-        });
-        prefs.open();
+    function settings() {
+        var appPreferences = require("appPrefs");
+        appPreferences.open();
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
+    arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
     var __defers = {};
@@ -145,7 +141,7 @@ function Controller() {
             color: "#fff",
             top: 64,
             left: 100,
-            text: "Add a location to photograph:",
+            text: "Add a location:",
             id: "cityLabel"
         });
         $.__views.spaceAddEvent.add($.__views.cityLabel);
@@ -185,13 +181,13 @@ function Controller() {
             timeOfDay: "either"
         });
         $.__views.spaceAddEvent.add($.__views.buttonView);
-        $.__views.__alloyId9 = Ti.UI.createView({
+        $.__views.__alloyId12 = Ti.UI.createView({
             height: 100,
             width: "33%",
             bubbleParent: false,
-            id: "__alloyId9"
+            id: "__alloyId12"
         });
-        $.__views.buttonView.add($.__views.__alloyId9);
+        $.__views.buttonView.add($.__views.__alloyId12);
         $.__views.day = Ti.UI.createButton({
             left: 10,
             right: 10,
@@ -202,9 +198,9 @@ function Controller() {
             bubbleParent: false,
             id: "day"
         });
-        $.__views.__alloyId9.add($.__views.day);
+        $.__views.__alloyId12.add($.__views.day);
         setTimeOfDay ? $.__views.day.addEventListener("click", setTimeOfDay) : __defers["$.__views.day!click!setTimeOfDay"] = true;
-        $.__views.__alloyId10 = Ti.UI.createLabel({
+        $.__views.__alloyId13 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Black",
                 fontSize: 34
@@ -213,16 +209,16 @@ function Controller() {
             color: "#fff",
             touchEnabled: false,
             text: "Daytime",
-            id: "__alloyId10"
+            id: "__alloyId13"
         });
-        $.__views.__alloyId9.add($.__views.__alloyId10);
-        $.__views.__alloyId11 = Ti.UI.createView({
+        $.__views.__alloyId12.add($.__views.__alloyId13);
+        $.__views.__alloyId14 = Ti.UI.createView({
             height: 100,
             width: "33%",
             bubbleParent: false,
-            id: "__alloyId11"
+            id: "__alloyId14"
         });
-        $.__views.buttonView.add($.__views.__alloyId11);
+        $.__views.buttonView.add($.__views.__alloyId14);
         $.__views.night = Ti.UI.createButton({
             left: 10,
             right: 10,
@@ -233,9 +229,9 @@ function Controller() {
             bubbleParent: false,
             id: "night"
         });
-        $.__views.__alloyId11.add($.__views.night);
+        $.__views.__alloyId14.add($.__views.night);
         setTimeOfDay ? $.__views.night.addEventListener("click", setTimeOfDay) : __defers["$.__views.night!click!setTimeOfDay"] = true;
-        $.__views.__alloyId12 = Ti.UI.createLabel({
+        $.__views.__alloyId15 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Black",
                 fontSize: 34
@@ -244,16 +240,16 @@ function Controller() {
             color: "#fff",
             touchEnabled: false,
             text: "Nightime",
-            id: "__alloyId12"
+            id: "__alloyId15"
         });
-        $.__views.__alloyId11.add($.__views.__alloyId12);
-        $.__views.__alloyId13 = Ti.UI.createView({
+        $.__views.__alloyId14.add($.__views.__alloyId15);
+        $.__views.__alloyId16 = Ti.UI.createView({
             height: 100,
             width: "33%",
             bubbleParent: false,
-            id: "__alloyId13"
+            id: "__alloyId16"
         });
-        $.__views.buttonView.add($.__views.__alloyId13);
+        $.__views.buttonView.add($.__views.__alloyId16);
         $.__views.either = Ti.UI.createButton({
             left: 10,
             right: 10,
@@ -265,9 +261,9 @@ function Controller() {
             id: "either",
             selected: "true"
         });
-        $.__views.__alloyId13.add($.__views.either);
+        $.__views.__alloyId16.add($.__views.either);
         setTimeOfDay ? $.__views.either.addEventListener("click", setTimeOfDay) : __defers["$.__views.either!click!setTimeOfDay"] = true;
-        $.__views.__alloyId14 = Ti.UI.createLabel({
+        $.__views.__alloyId17 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Black",
                 fontSize: 34
@@ -276,9 +272,9 @@ function Controller() {
             color: "#fff",
             touchEnabled: false,
             text: "Either",
-            id: "__alloyId14"
+            id: "__alloyId17"
         });
-        $.__views.__alloyId13.add($.__views.__alloyId14);
+        $.__views.__alloyId16.add($.__views.__alloyId17);
         $.__views.sliderView = Ti.UI.createView({
             top: 400,
             width: "100%",
@@ -287,17 +283,19 @@ function Controller() {
             id: "sliderView"
         });
         $.__views.spaceAddEvent.add($.__views.sliderView);
-        $.__views.__alloyId15 = Ti.UI.createLabel({
+        $.__views.__alloyId18 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Medium",
                 fontSize: 44
             },
             textAlign: "left",
             color: "#fff",
-            text: "Visibility Required:",
-            id: "__alloyId15"
+            text: "Maximum Cloud Cover:",
+            left: "80",
+            width: Ti.UI.FILL,
+            id: "__alloyId18"
         });
-        $.__views.sliderView.add($.__views.__alloyId15);
+        $.__views.sliderView.add($.__views.__alloyId18);
         $.__views.cloudSliderView = Ti.UI.createView({
             width: "100%",
             left: 0,
@@ -317,7 +315,7 @@ function Controller() {
             left: 4,
             width: "20%",
             height: Ti.UI.SIZE,
-            text: "0%",
+            text: "50%",
             id: "pickStartLabel"
         });
         $.__views.cloudSliderView.add($.__views.pickStartLabel);
@@ -328,8 +326,7 @@ function Controller() {
             top: 20,
             id: "cloudSlider",
             max: "1",
-            min: "0",
-            value: "0.5"
+            min: "0.5"
         });
         $.__views.cloudSliderView.add($.__views.cloudSlider);
         $.__views.pickEndLabel = Ti.UI.createLabel({
@@ -343,7 +340,7 @@ function Controller() {
             right: 4,
             width: "20%",
             height: Ti.UI.SIZE,
-            text: "100%",
+            text: "0%",
             id: "pickEndLabel"
         });
         $.__views.cloudSliderView.add($.__views.pickEndLabel);
@@ -372,8 +369,8 @@ function Controller() {
             id: "settingsBtn"
         });
         $.__views.leftAction.add($.__views.settingsBtn);
-        settingsPage ? $.__views.settingsBtn.addEventListener("click", settingsPage) : __defers["$.__views.settingsBtn!click!settingsPage"] = true;
-        $.__views.__alloyId16 = Ti.UI.createLabel({
+        settings ? $.__views.settingsBtn.addEventListener("click", settings) : __defers["$.__views.settingsBtn!click!settings"] = true;
+        $.__views.__alloyId19 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Medium",
                 fontSize: 44
@@ -382,9 +379,9 @@ function Controller() {
             color: "#fff",
             text: "Settings",
             top: "10",
-            id: "__alloyId16"
+            id: "__alloyId19"
         });
-        $.__views.leftAction.add($.__views.__alloyId16);
+        $.__views.leftAction.add($.__views.__alloyId19);
         $.__views.rightAction = Ti.UI.createView({
             right: 66,
             top: 0,
@@ -403,7 +400,7 @@ function Controller() {
         });
         $.__views.rightAction.add($.__views.saveBtn);
         sendAlertData ? $.__views.saveBtn.addEventListener("click", sendAlertData) : __defers["$.__views.saveBtn!click!sendAlertData"] = true;
-        $.__views.__alloyId17 = Ti.UI.createLabel({
+        $.__views.__alloyId20 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Medium",
                 fontSize: 44
@@ -412,9 +409,9 @@ function Controller() {
             color: "#fff",
             text: "Save",
             top: "10",
-            id: "__alloyId17"
+            id: "__alloyId20"
         });
-        $.__views.rightAction.add($.__views.__alloyId17);
+        $.__views.rightAction.add($.__views.__alloyId20);
     }
     if (!Alloy.isTablet) {
         $.__views.spaceAddEvent = Ti.UI.createWindow({
@@ -437,11 +434,16 @@ function Controller() {
     }
     exports.destroy = function() {};
     _.extend($, $.__views);
+    var apiURL = "http://" + Ti.App.Properties.getString("Settings_API_DOMAIN") + ":" + Ti.App.Properties.getString("Settings_API_PORT");
+    var editLocation = null;
+    var editIndex = null;
+    $.spaceAddEvent.addEventListener("blur", resetLocation);
+    exports.setEditData = setEditData;
     exports.open = open;
     __defers["$.__views.day!click!setTimeOfDay"] && $.__views.day.addEventListener("click", setTimeOfDay);
     __defers["$.__views.night!click!setTimeOfDay"] && $.__views.night.addEventListener("click", setTimeOfDay);
     __defers["$.__views.either!click!setTimeOfDay"] && $.__views.either.addEventListener("click", setTimeOfDay);
-    __defers["$.__views.settingsBtn!click!settingsPage"] && $.__views.settingsBtn.addEventListener("click", settingsPage);
+    __defers["$.__views.settingsBtn!click!settings"] && $.__views.settingsBtn.addEventListener("click", settings);
     __defers["$.__views.saveBtn!click!sendAlertData"] && $.__views.saveBtn.addEventListener("click", sendAlertData);
     _.extend($, exports);
 }

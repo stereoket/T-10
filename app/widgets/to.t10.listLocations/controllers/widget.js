@@ -13,6 +13,7 @@ for (i = 0; i < cities.count; i++) {
 	var listController = Widget.createController("listItem");
 	var listItem = listController.getView("listItem");
 	var locationData = listController.getView("locationData");
+	var weatherIcon = listController.getView("todIcon");
 
 	listItem.top = topPointer + Alloy.CFG.locationsListPadding;
 	locationData.index = i;
@@ -21,6 +22,10 @@ for (i = 0; i < cities.count; i++) {
 	locationData.max_cloud_cover = cities.data[i].alertParams.max_cloud_cover;
 	locationData.text = cities.data[i].location.city;
 	locationData.text += " (" + cities.data[i].location.country + ") ";
+
+	weatherIcon.image = "/images/weather/tod-" + cities.data[i].alertParams.time_of_day + '.png'
+
+
 	$.locationsListView.add(listItem);
 	topPointer += (listItem.height + Alloy.CFG.locationsListPadding);
 	// Ti.API.warn("LOOP END - topPointer:" + topPointer);

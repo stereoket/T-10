@@ -4,5 +4,6 @@
 			<Label id="locationData"></Label>
 			<Button id="editBtn" zIndex="3" class="locationButtons"  visible="false">Edit</Button>
 			<Button id="deleteBtn" zIndex="3" class="locationButtons" visible="false">Delete</Button>
+			<ImageView id="todIcon" left="180" />
 		</View>
 </Alloy>

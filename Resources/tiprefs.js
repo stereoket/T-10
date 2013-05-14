@@ -19,8 +19,14 @@ function addRow(controls) {
     }
     row.add(controls.label);
     row.add(controls.value);
-    rows.push(row);
-    return row;
+    if (void 0 === controls.section) {
+        rows.push(row);
+        return row;
+    }
+    if (controls.section) {
+        section.add(row);
+        return row;
+    }
 }
 
 function createLabel(caption) {
@@ -49,6 +55,8 @@ exports.getString = function(name, property) {
 };
 
 exports.init = function(title) {
+    sections = [];
+    section = null;
     rows = [];
     name = title || "Settings";
 };
@@ -65,12 +73,13 @@ exports.addTextInput = function(opts) {
     });
     row = addRow({
         label: label,
-        value: value
+        value: value,
+        section: true
     });
     row.addEventListener("click", function() {
         var rows = [];
         var editWin = Ti.UI.createWindow({
-            title: "edit",
+            title: "Edit",
             Hidden: false,
             backgroundColor: "#fff"
         });
@@ -134,7 +143,8 @@ exports.addChoice = function(opts) {
     });
     row = addRow({
         label: label,
-        value: value
+        value: value,
+        section: true
     });
     row.hasChild = true;
     row.addEventListener("click", function() {
@@ -207,16 +217,30 @@ exports.addSwitch = function(opts) {
         text: opts.caption
     });
     var toggle = Ti.UI.createSwitch({
-        value: Ti.App.Properties.getBool(name + "_" + opts.caption, false)
+        value: Ti.App.Properties.getBool(name + "_" + opts.id, false)
     });
     toggle.addEventListener("change", function(e) {
-        Ti.App.Properties.setBool(name + "_" + (opts.id || opts.caption), e.value);
+        Ti.App.Properties.setBool(name + "_" + opts.id, e.value);
         opts.onChange && opts.onChange(toggle.value);
     });
     addRow({
         label: label,
-        value: toggle
+        value: toggle,
+        section: true
     });
+};
+
+exports.addSection = function(opts) {
+    null !== section && sections.push(section);
+    var title = void 0 !== opts && void 0 !== opts.title ? opts.title : "Section " + (sections.length + 1);
+    section = Ti.UI.createTableViewSection({
+        headerTitle: title
+    });
+    return section;
+};
+
+exports.closeSection = function() {
+    sections.push(section);
 };
 
 exports.open = function(tabGroup) {
@@ -226,7 +250,7 @@ exports.open = function(tabGroup) {
     var table = Titanium.UI.createTableView({
         style: Titanium.UI.iPhone.TableViewStyle.GROUPED
     });
-    table.data = rows;
+    table.data = sections;
     prefsWin.add(table);
     if (tabGroup) {
         nav = tabGroup.activeTab;
@@ -241,7 +265,6 @@ exports.open = function(tabGroup) {
             window: prefsWin
         });
         var rootWin = Ti.UI.createWindow();
-        rootWin.add(nav);
         var closeButton = Ti.UI.createButton({
             title: "Close",
             width: 50,
@@ -256,6 +279,7 @@ exports.open = function(tabGroup) {
             rootWin = null;
             prefsWin = null;
         });
+        rootWin.add(nav);
         rootWin.open();
     }
 };

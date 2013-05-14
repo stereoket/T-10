@@ -13,8 +13,8 @@ function Controller() {
         log("INFO", "Launching Space App");
         Ti.App.Properties.setString("appmode", "space");
         checkSplashLaunch();
-        spaceWin = Alloy.createController("space");
-        spaceWin.open();
+        nextPasses = Alloy.createController("next_passes");
+        nextPasses.open();
     }
     function launchEarthApp() {
         log("INFO", "Launching Earth App");
@@ -25,6 +25,7 @@ function Controller() {
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
+    arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
     var __defers = {};
@@ -65,15 +66,13 @@ function Controller() {
     var log = Helper.log;
     var push = require("push_notification");
     Ti.App.Properties.setBool("allowPush", true);
+    if (!Ti.App.Properties.hasProperty("Settings_API_DOMAIN")) {
+        Ti.App.Properties.setString("Settings_API_DOMAIN", "localhost");
+        Ti.App.Properties.setString("Settings_API_PORT", "8000");
+    }
+    Ti.API.warn("API server being used: " + Ti.App.Properties.getString("Settings_API_DOMAIN") + ":" + Ti.App.Properties.getString("Settings_API_PORT"));
     setTimeout(function() {
-        if (Ti.App.Properties.getInt("appLaunchCount") > 3) switch (Ti.App.Properties.getString("appmode")) {
-          case "space":
-            launchSpaceApp();
-            break;
-
-          case "earth":
-            launchEarthApp();
-        } else $.index.open();
+        $.index.open();
     }, 1500);
     __defers["$.__views.space!click!launchSpaceApp"] && $.__views.space.addEventListener("click", launchSpaceApp);
     __defers["$.__views.earth!click!launchEarthApp"] && $.__views.earth.addEventListener("click", launchEarthApp);

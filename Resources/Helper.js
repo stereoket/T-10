@@ -36,6 +36,59 @@ function isSimulator() {
     return false;
 }
 
+function writeToAppDataDirectory(folder, filename, data, alertParams) {
+    function _checkFolder(folder) {
+        Ti.API.warn("_checkFolder(): " + folder);
+        var dir = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, folder);
+        if (dir.exists()) return true;
+        var newDir = dir.createDirectory();
+        if (newDir) {
+            Ti.API.warn("New folder '" + folder + "'' created in App Data Dir");
+            return true;
+        }
+        Ti.API.error("Error creating folder for data in AppData Directory");
+        return false;
+    }
+    function _writeDataToFile(data) {
+        Ti.API.warn("writing this data:");
+        Ti.API.warn(data);
+        var filePath = folder + Ti.Filesystem.separator + filename + ".json";
+        Ti.API.info("_writeDataToFile(): " + filePath);
+        var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, filePath);
+        var dataWrite = file.write(data);
+        if (dataWrite) {
+            var data = JSON.parse(data);
+            var len = data.data.length - 1;
+            return {
+                location: data.data[0].location,
+                filePath: filePath,
+                lastTimeEntry: data.data[len].time
+            };
+        }
+        Ti.API.error("Problems writing the data to the file: " + filePath);
+    }
+    function locationCheck(e) {
+        Ti.API.info("locationCheck() <- callback");
+        Ti.API.info(JSON.stringify(e));
+        if (e.exists) Ti.API.warn("entry already exists, don't need to duplicate"); else {
+            locationManager.addNewLocation({
+                location: fileData.location,
+                filePath: fileData.filePath,
+                alertParams: alertParams,
+                lastTimeEntry: fileData.lastTimeEntry
+            });
+            locationManager.createNextPassArray();
+        }
+    }
+    Ti.API.info("Helper method - writeToAppDataDirectory()");
+    _checkFolder(folder);
+    Ti.API.info("time_of_day: " + alertParams.time_of_day);
+    data.timeOfDay = alertParams.time_of_day;
+    var fileData = _writeDataToFile(data);
+    var locationManager = require("locationManager");
+    locationManager.checkCity(fileData.cityName, locationCheck);
+}
+
 var ANDROID = "android" === Ti.Platform.osname ? true : false;
 
 var IPHONE = "iphone" === Ti.Platform.osname ? true : false;
@@ -61,3 +114,5 @@ exports.IPHONE = IPHONE;
 exports.IPAD = IPAD;
 
 exports.BLACKBERRY = BLACKBERRY;
+
+exports.writeToAppDataDirectory = writeToAppDataDirectory;

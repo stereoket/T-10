@@ -248,6 +248,10 @@ function installDatabase(config) {
     var dbName = config.adapter.db_name = match[2];
     Ti.API.debug('Installing sql database "' + dbFile + '" with name "' + dbName + '"');
     var db = Ti.Database.install(dbFile, dbName);
+    if (false === config.adapter.remoteBackup && true) {
+        Ti.API.debug('iCloud "do not backup" flag set for database "' + dbFile + '"');
+        db.file.setRemoteBackup(false);
+    }
     var rs = db.execute('pragma table_info("' + table + '");');
     var columns = {};
     while (rs.isValidRow()) {
