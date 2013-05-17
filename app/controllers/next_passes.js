@@ -70,7 +70,7 @@ function open() {
 		azimuth: 5.447075366973877
 	}];
 
-	var nextData = locationManager.getMergedLocations(10);
+	var nextData = locationManager.getMergedLocations(20);
 	// Ti.API.warn(nextData);
 	var nextPassView = $.nextPassesList.init({
 		data: nextData

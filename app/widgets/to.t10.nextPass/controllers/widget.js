@@ -43,11 +43,13 @@ function showData(data) {
 		var locationData = passController.getView("locationData");
 		var weatherIcon = passController.getView("weatherIcon");
 		var passItem = passController.getView("passItem");
+		var today = new Date();
 
 		var issDateTime = parseInt(data[i].time);
 		var issStartTime = new Date(issDateTime * 1000);
 		var issEndTime = new Date((issDateTime + data[i].duration) * 1000);
 
+		
 		var startDate = strftimeUTC("%d/%m/%Y", issStartTime);
 
 

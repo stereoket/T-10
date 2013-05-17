@@ -35,7 +35,17 @@ function getMergedLocations(count) {
 	var rawData = file.read();
 	var dataJSON = JSON.parse(rawData);
 	var returnArray = [];
+	var todayTimestamp = new Date().getTime()/ 1000;
 	for (var i = 0; i < count; i++) {
+		if(dataJSON[i] === undefined){
+			break;
+		}
+		Ti.API.warn("date checks: today:" + todayTimestamp + " -- and ISS: " + dataJSON[i].time);
+		if(todayTimestamp > dataJSON[i].time){
+			count++;
+			Ti.API.warn("** EVENT in PAST - MOVE to next record! **");
+			continue;
+		}
 		returnArray.push(dataJSON[i]);
 	};
 

@@ -3,45 +3,41 @@
 		<!-- Maybe Add Buttons instead of background Graphic -->
 		<!-- <ImageView id="bb_containerBackground" /> -->
 		
-		<Label id="cityLabel" class="labelText">Add a location:</Label>
+		<Label id="windowTitle" class="labelText">Add a location:</Label>
 		<TextField id="cityTextField" />
 		<ImageView image="/images/magnify.png" id="magnify" />
 		<View id="buttonView" timeOfDay="either">
 			<View class="timeButtonView">
 				<Button onClick="setTimeOfDay" class="timeButton" id="day"/>
-				<Label class="timeButtonLabel">Daytime</Label>
+				<Label class="timeButtonLabel" id="dayLabel">Daytime</Label>
 			</View>
 			<View class="timeButtonView">
 				<Button onClick="setTimeOfDay" class="timeButton" id="night"/>
-				<Label class="timeButtonLabel">Nightime</Label>
+				<Label class="timeButtonLabel" id="nightLabel">Nightime</Label>
 			</View>
 			<View class="timeButtonView">
 				<Button onClick="setTimeOfDay" class="timeButton" id="either" selected="true" />
-				<Label class="timeButtonLabel">Either</Label>
+				<Label class="timeButtonLabel" id="eitherLabel">Either</Label>
 			</View>
 		</View>
 		<View id="sliderView">
-			<Label class="labelText" left="80" textAlign="left" width="Ti.UI.FILL" >Maximum Cloud Cover:</Label>
+			<Label class="labelText" id="cloudSliderTitle" >Maximum Cloud Cover:</Label>
 			<View id="cloudSliderView" >
-				<Label id="pickStartLabel" class="superLargetext">50%</Label>
+				<Label id="pickStartLabel" class="smalltext">50%</Label>
 				<Slider id="cloudSlider" max="1" min="0.5"  />
-				<Label id="pickEndLabel" class="superLargetext">0%</Label>
+				<Label id="pickEndLabel" class="smalltext">0%</Label>
 			</View>
-
-			<View id="actionButtonView">
+		</View>
+		<View id="actionButtonView">
 				<View id="leftAction">
-					<Button  top="3" class="actionButton" onClick="settings" id="settingsBtn"/>
-					<Label top="10" class="labelText">Settings</Label>
+					<Button  top="3" class="actionButton" onClick="settings" id="alarmSettingsBtn"/>
+					<Label class="buttonLabel">Alarm Settings</Label>
 				</View>
 				<View id="rightAction">
 					<Button top="3" onClick="sendAlertData" class="actionButton" id="saveBtn"/>
-					<Label top="10" class="labelText">Save</Label>
+					<Label class="buttonLabel">Add Location</Label>
 				</View>
-			</View>
-
-
-		</View>
-		
+			</View>	
 		
 	</Window>
 

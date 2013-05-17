@@ -45,9 +45,10 @@ function launchSpaceApp() {
 
 function launchEarthApp() {
 	log("INFO", "Launching Earth App");
-	Ti.App.Properties.setString('appmode', 'earth');
-	checkSplashLaunch();
-	firstWin = Alloy.createController('earth');
+	alert("This app was Designed to work in\nS P A C E !");
+	// Ti.App.Properties.setString('appmode', 'earth');
+	// checkSplashLaunch();
+	// firstWin = Alloy.createController('earth');
 
 }
 

@@ -38,16 +38,24 @@ function open() {
 			}, 50);
 		}
 	});
+
+	$.dayLabel.color = '#ccc';
+	$.nightLabel.color = '#ccc';
+	$.eitherLabel.color = '#ccc';
+
 	if ($.day.selected) {
 		$.day.backgroundImage = '/images/timeButtonSelected.png';
+		$.dayLabel.color = '#000';
 	}
 
 	if ($.night.selected) {
 		$.night.backgroundImage = '/images/timeButtonSelected.png';
+		$.nightLabel.color = '#000';
 	}
 
 	if ($.either.selected) {
 		$.either.backgroundImage = '/images/timeButtonSelected.png';
+		$.eitherLabel.color = '#000';
 	}
 
 	$.cloudSlider.value = 0.75;
@@ -75,17 +83,24 @@ function setTimeOfDay(e) {
 	$.night.backgroundImage = tbg;
 	$.either.backgroundImage = tbg;
 
+	$.dayLabel.color = '#ccc';
+	$.nightLabel.color = '#ccc';
+	$.eitherLabel.color = '#ccc';
+
 	switch (e.source.id) {
 		case 'day':
 			$.day.backgroundImage = '/images/timeButtonSelected.png';
+			$.dayLabel.color = '#000';
 			break;
 
 		case 'night':
 			$.night.backgroundImage = '/images/timeButtonSelected.png';
+			$.nightLabel.color = '#000';
 			break;
 
 		case 'either':
 			$.either.backgroundImage = '/images/timeButtonSelected.png';
+			$.eitherLabel.color = '#000';
 			break;
 	}
 }
