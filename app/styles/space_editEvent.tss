@@ -1,4 +1,4 @@
-"#spaceAddEvent": {
+"#spaceEditEvent": {
 	backgroundImage: Alloy.CFG.backgroundImage,
 	bubbleParent: false
 },
@@ -9,6 +9,9 @@
 },
 ".labelText":{
 	font: {fontFamily: "OstrichSans-Medium", fontSize: 44}
+},
+".labelTextStrong":{
+	font: {fontFamily: "OstrichSans-Black", fontSize: 40}
 },
 ".smalltext":{
 	font: {fontFamily: "OstrichSans-Black", fontSize: 22}
@@ -37,11 +40,24 @@
 	keyboardType: Titanium.UI.KEYBOARD_ASCII,
 	paddingLeft: 60
 },
-"#magnify":{
+"#cityLabel":{
+	left: 210,
+	top: 66,
+	height: Ti.UI.SIZE,
+	textAlign: 'left'
+},
+"#newLocationButtonView":{
 	top: 150,
 	left: 74,
-	width: 30,
-	height: 30
+	width: Ti.UI.SIZE,
+	height: Ti.UI.SIZE
+},
+"#newLocation":{
+	width: 250,
+	height: 64,
+	borderRadius: 8,
+	backgroundImage: "/images/blueButton.png",
+	bubbleParent: false
 },
 "#buttonView":{
 	top: 240,
@@ -144,5 +160,5 @@
 	backgroundImage: "/images/buttons/alarm_settings.png"
 },
 "#saveBtn":{
-	backgroundImage: "/images/buttons/add_location.png"
+	backgroundImage: "/images/buttons/save.png"
 }

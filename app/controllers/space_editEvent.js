@@ -2,12 +2,12 @@
  * Open the Space / Add Event windoe
  * @return {[type]} [description]
  */
-
+var notify = require('bencoding.localnotify');
 var apiURL = "http://" + Ti.App.Properties.getString('Settings_API_DOMAIN') + ":" + Ti.App.Properties.getString('Settings_API_PORT');
 var editLocation = null;
 var editIndex = null;
 
-$.spaceAddEvent.addEventListener('blur', resetLocation);
+$.spaceEditEvent.addEventListener('blur', resetLocation);
 
 function resetLocation() {
 	editLocation = null;
@@ -26,15 +26,18 @@ function setEditData(e) {
 }
 
 function open() {
-	$.spaceAddEvent.open();
-	$.spaceAddEvent.addEventListener("swipe", function (e) {
+
+	var trackedLocations = Alloy.createController('tracked_locations');
+
+	$.spaceEditEvent.open();
+	$.spaceEditEvent.addEventListener("swipe", function (e) {
 		// Ti.API.info(JSON.stringify(e, null, 2));
 
-		if (e.direction === "right" && e.source.id === "spaceAddEvent" && e.y < 90) {
-			var nextPasses = Alloy.createController('next_passes');
+		if (e.direction === "right" && e.source.id === "spaceEditEvent" && e.y < 90) {
+
 			setTimeout(function () {
-				nextPasses.open();
-				$.spaceAddEvent.close();
+				trackedLocations.open();
+				$.spaceEditEvent.close();
 			}, 50);
 		}
 	});
@@ -55,7 +58,7 @@ function open() {
 
 	if (editLocation !== null) {
 		Ti.API.warn("editing location");
-		$.cityTextField.value = editLocation.city + ", " + editLocation.country;
+		$.cityLabel.text = editLocation.city + ", " + editLocation.country;
 		setTimeOfDay({
 			source: {
 				id: editTimeOfDay
@@ -77,7 +80,6 @@ function setTimeOfDay(e) {
 	$.either.backgroundImage = tbg;
 
 
-
 	switch (e.source.id) {
 		case 'day':
 			$.day.backgroundImage = '/images/redButton.png';
@@ -93,11 +95,25 @@ function setTimeOfDay(e) {
 	}
 }
 
-function sendAlertData(e) {
+function saveData(e) {
+	Ti.API.warn("Update EVENT data only - post new settings to SERVER");
+	//TODO - new endpoint on server to update a location
+
+	 //Call this method to return a collection with information on your scheduled notifications
+    var results = notify.returnScheduledNotifications();
+    Ti.API.info("Let's how many local notifications we have scheduled'");
+    Ti.API.info("Scheduled LocalNotification = " + results.scheduledCount); 
+    alert("You have " +  results.scheduledCount + " Scheduled LocalNotification");
+    var test = JSON.stringify(results, null, 2);
+    Ti.API.warn("results stringified" + test);  
+
+    return;
+
+
 	var that = this;
 	var locationManager = require('locationManager');
 	var Helper = require('Helper');
-	var notify = require('bencoding.localnotify');
+
 	function errorCheck() {
 
 	}
@@ -170,28 +186,6 @@ function sendAlertData(e) {
 		// 
 		// Load up the tracked locations screen
 
-		notify.scheduleLocalNotification({
-			alertBody: "This is a test of benCoding.localNotify",
-			alertAction: "Just a test",
-			userInfo: {
-				"id": 1,
-				"hello": "world"
-			},
-			date: new Date(new Date().getTime() + 30000)
-		});
-
-		alert("LocalNotification Scheduled");
-
-		//Call this method to return a collection with information on your scheduled notifications
-    var results = notify.returnScheduledNotifications();
-    Ti.API.info("Let's how many local notifications we have scheduled'");
-    Ti.API.info("Scheduled LocalNotification = " + results.scheduledCount); 
-    alert("You have " +  results.scheduledCount + " Scheduled LocalNotification");
-    var test = JSON.stringify(results);
-    Ti.API.info("results stringified" + test);  
-    
-
-		var trackedLocations = Alloy.createController("tracked_locations");
 		trackedLocations.open();
 
 	}
@@ -200,6 +194,12 @@ function sendAlertData(e) {
 		Ti.API.error("Error in API Call");
 		Ti.API.error(JSON.stringify(e));
 	}
+}
+
+function newLocation(e){
+	Ti.API.info("New Location setup");
+	var addEvent = Alloy.createController("space_addEvent");
+	addEvent.open();
 }
 
 function settings(e) {

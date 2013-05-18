@@ -1,17 +1,25 @@
 <Alloy>
-	<Window id="spaceAddEvent" platform="ios" formFactor="tablet">
+	<Window id="spaceEditEvent" platform="ios" formFactor="tablet">
 		<!-- Maybe Add Buttons instead of background Graphic -->
 		<!-- <ImageView id="bb_containerBackground" /> -->
 		
-		<Label id="windowTitle" class="labelText">Add a location:</Label>
-		<TextField id="cityTextField" />
-		<ImageView image="/images/magnify.png" id="magnify" />
+		<Label id="windowTitle" class="labelText">Location:</Label>
+		<Label id="cityLabel" class="labelTextStrong"></Label>
+	<!-- 	<TextField id="cityTextField" visible="false"/>
+		<ImageView image="/images/magnify.png" id="magnify" /> -->
+
+		<View id="newLocationButtonView">
+				<Button onClick="newLocation" id="newLocation"/>
+				<Label class="timeButtonLabel">New Location</Label>
+		</View>
+
+
 		<View id="buttonView" timeOfDay="either">
 			<View class="timeButtonView leftButton">
 				<Button onClick="setTimeOfDay" class="timeButton" id="day"/>
 				<Label class="timeButtonLabel" id="dayLabel">Daytime</Label>
 			</View>
-			<View class="timeButtonView middleButton">
+			<View class="timeButtonView">
 				<Button onClick="setTimeOfDay" class="timeButton" id="night"/>
 				<Label class="timeButtonLabel" id="nightLabel">Nightime</Label>
 			</View>
@@ -34,8 +42,8 @@
 					<Label class="buttonLabel">Alarm Settings</Label>
 				</View>
 				<View id="rightAction">
-					<Button top="3" onClick="sendAlertData" class="actionButton" id="saveBtn"/>
-					<Label class="buttonLabel">Add Location</Label>
+					<Button top="3" onClick="saveData" class="actionButton" id="saveBtn"/>
+					<Label class="buttonLabel">Save</Label>
 				</View>
 		</View>	
 		

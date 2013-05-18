@@ -1,5 +1,18 @@
 var Alloy = require('alloy'),
 	_ = require("alloy/underscore")._;
+var notify = require('bencoding.localnotify');
+
+//This is our callback for our scheduled local notification query
+
+function localNotificationCallback(e) {
+	Ti.API.info("Let's how many local notifications we have scheduled'");
+	Ti.API.info("Scheduled LocalNotification = " + e.scheduledCount);
+	Ti.API.warn("You have " + e.scheduledCount + " Scheduled LocalNotification");
+
+	var test = JSON.stringify(e);
+	Ti.API.info("results stringified" + test);
+};
+
 /**
  * Retrieve and return all of the locations currently stored
  * @return {object} response object with a summary count and data Array of all the locations in memory
@@ -35,13 +48,13 @@ function getMergedLocations(count) {
 	var rawData = file.read();
 	var dataJSON = JSON.parse(rawData);
 	var returnArray = [];
-	var todayTimestamp = new Date().getTime()/ 1000;
+	var todayTimestamp = new Date().getTime() / 1000;
 	for (var i = 0; i < count; i++) {
-		if(dataJSON[i] === undefined){
+		if (dataJSON[i] === undefined) {
 			break;
 		}
 		Ti.API.warn("date checks: today:" + todayTimestamp + " -- and ISS: " + dataJSON[i].time);
-		if(todayTimestamp > dataJSON[i].time){
+		if (todayTimestamp > dataJSON[i].time) {
 			count++;
 			Ti.API.warn("** EVENT in PAST - MOVE to next record! **");
 			continue;
@@ -140,6 +153,14 @@ function deleteCity(e) {
 
 function createNextPassArray() {
 	Ti.API.info("createNextPassArray():");
+
+	//We are going to remove all of the LocalNotifications scheduled with a userInfo id value of 1
+	var canceledCount = notify.cancelLocalNotification(1);
+	Ti.API.warn("You have canceled " + canceledCount + " notifications");
+	//Now query the scheduled notifications to make sure our local notification was canceled
+	notify.activeScheduledNotifications(localNotificationCallback);
+
+
 	var locations = getAllLocations();
 	var mergeFilePath = 'cityData' + Ti.Filesystem.separator + 'MergedCities.json';
 	var mergeFile = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, mergeFilePath);
@@ -156,6 +177,32 @@ function createNextPassArray() {
 			var cLen = cityJSON.data.length;
 			for (var j = cLen - 1; j >= 0; j--) {
 				Ti.API.info(JSON.stringify(cityJSON.data[j], null, 2));
+
+				// only add entry if greater than current time
+				var todayTimestamp = new Date().getTime() / 1000;
+				Ti.API.warn("date checks: today:" + todayTimestamp + " -- and ISS: " + cityJSON.data[j].time);
+				if (todayTimestamp > ((cityJSON.data[j].time * 1000) - ((60 * 1000) * Alloy.CFG.weatherCheckTimeOffset))) {
+					Ti.API.warn("** EVENT in PAST - MOVE to next record! **");
+					continue;
+				}
+				
+
+
+				// Add local notify parameters here (cloud/country/city/starttime/lat/lng)
+
+				notify.scheduleLocalNotification({
+					alertBody: "An Weather check needs to be setup now.",
+					alertAction: "T-15",
+					userInfo: {
+						"id": 1,
+						"hello": "world",
+						"city": cityJSON.data[j].location.city,
+						"country": cityJSON.data[j].location.country,
+						"starttime": cityJSON.data[j].time
+					},
+					date: new Date((cityJSON.data[j].time * 1000) - ((60 * 1000) * Alloy.CFG.weatherCheckTimeOffset)) // time minus 15mins
+				});
+
 				merged.push(cityJSON.data[j]);
 			};
 
@@ -172,7 +219,7 @@ function createNextPassArray() {
 
 
 		Ti.API.info("_writeDataToFile(): " + mergeFilePath);
-		
+
 		var dataWrite = mergeFile.write(mergedCityJSON);
 		if (!dataWrite) {
 			Ti.API.error("Problems writing the data to the file: " + mergeFilePath);
@@ -180,7 +227,7 @@ function createNextPassArray() {
 			Ti.API.warn("Merged Data Written");
 		}
 	} else {
-		if(mergeFile.exists()){
+		if (mergeFile.exists()) {
 			Ti.API.warn("Deleting Merged File as there are no more cities stored");
 			mergeFile.deleteFile();
 		}
@@ -212,7 +259,8 @@ function checkCity(cityName, callback) {
 				if (locations.data[x].location.city === cityName) {
 					Ti.API.warn("Match Found - ignore");
 					callback({
-						exists: true
+						exists: true,
+						data: locations.data[x]
 					});
 					return true;
 					break;

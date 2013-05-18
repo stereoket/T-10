@@ -17,9 +17,17 @@ function open() {
 	
 }
 
+function close() {
+	Ti.API.info("Closing window");
+	$.trackedLocations.close();
+	
+}
+
+
 function addLocation(e) {
 	var addEvent = Alloy.createController("space_addEvent");
 	addEvent.open();
+	// Ti.API.warn("SAVE LOCATION CHANGES");
 }
 
 function home(e) {
@@ -31,3 +39,4 @@ function home(e) {
 
 
 exports.open = open;
+exports.close = close;
