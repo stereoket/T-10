@@ -176,32 +176,40 @@ function createNextPassArray() {
 			Ti.API.info("**** Reading DATA ****");
 			var cLen = cityJSON.data.length;
 			for (var j = cLen - 1; j >= 0; j--) {
-				Ti.API.info(JSON.stringify(cityJSON.data[j], null, 2));
+				// Ti.API.info(JSON.stringify(cityJSON.data[j], null, 2));
 
 				// only add entry if greater than current time
 				var todayTimestamp = new Date().getTime() / 1000;
-				Ti.API.warn("date checks: today:" + todayTimestamp + " -- and ISS: " + cityJSON.data[j].time);
-				if (todayTimestamp > ((cityJSON.data[j].time * 1000) - ((60 * 1000) * Alloy.CFG.weatherCheckTimeOffset))) {
+				// Ti.API.warn("date checks: today:" + todayTimestamp + " -- and ISS: " + cityJSON.data[j].time);
+				if (todayTimestamp > cityJSON.data[j].time) {
 					Ti.API.warn("** EVENT in PAST - MOVE to next record! **");
 					continue;
 				}
-				
 
 
-				// Add local notify parameters here (cloud/country/city/starttime/lat/lng)
 
-				notify.scheduleLocalNotification({
-					alertBody: "An Weather check needs to be setup now.",
-					alertAction: "T-15",
-					userInfo: {
-						"id": 1,
-						"hello": "world",
-						"city": cityJSON.data[j].location.city,
-						"country": cityJSON.data[j].location.country,
-						"starttime": cityJSON.data[j].time
-					},
-					date: new Date((cityJSON.data[j].time * 1000) - ((60 * 1000) * Alloy.CFG.weatherCheckTimeOffset)) // time minus 15mins
-				});
+				if ((todayTimestamp * 1000) + ((60 * 1000) * Alloy.CFG.weatherCheckTimeOffset) < (cityJSON.data[j].time * 1000)) {
+
+
+
+					// Add local notify parameters here (cloud/country/city/starttime/lat/lng)
+					notify.scheduleLocalNotification({
+						alertBody: "An Weather check needs to be setup now.",
+						alertAction: "T-15",
+						userInfo: {
+							"id": 1,
+							"hello": "world",
+							"city": cityJSON.data[j].location.city,
+							"country": cityJSON.data[j].location.country,
+							"starttime": cityJSON.data[j].time
+						},
+						date: new Date((cityJSON.data[j].time * 1000) - ((60 * 1000) * Alloy.CFG.weatherCheckTimeOffset)) // time minus 15mins
+					});
+					Ti.API.info("T10: **** Notification added");
+
+				} else {
+					Ti.API.info("T10: **** Notification NOT NEEDED");
+				}
 
 				merged.push(cityJSON.data[j]);
 			};

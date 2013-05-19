@@ -121,7 +121,7 @@ function sendAlertData(e) {
 		},
 		max_cloud_cover: (1 - $.cloudSlider.value),
 		time_of_day: $.buttonView.timeOfDay,
-		device_id: "foo"
+		device_id: Ti.App.Properties.getString('acsUserID') // TODO this should be the user ID - but he server is confused with deviceID - label to change
 	};
 
 

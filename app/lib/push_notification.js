@@ -28,7 +28,7 @@ function activatePush() {
 
 
 	function subscribeToChannel(e) {
-		log("WARN", "   subscribeToChannel() ");
+		log("WARN", "   subscribeToChannel() " + Ti.App.Properties.getString('appmode'));
 
 		if (!Ti.App.Properties.getBool('allowPush', false)) {
 			log("WARN", "   user prefers to not get push notices");
@@ -128,6 +128,7 @@ function activatePush() {
 	 * First checking to see if the user is logged into Appcelerator Cloud Services.
 	 */
 	try {
+		log("INFO", "attempting to login to enable push notification");
 		ACS.login({
 			success: getDeviceToken,
 			error: acsErrorManager

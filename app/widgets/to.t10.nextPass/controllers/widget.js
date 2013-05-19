@@ -44,23 +44,37 @@ function showData(data) {
 		var weatherIcon = passController.getView("weatherIcon");
 		var passItem = passController.getView("passItem");
 		var today = new Date();
-
+		Ti.API.warn("*********************");
+		Ti.API.warn("time being used: ----- " + data[i].time);
+		// Ti.API.warn("time being used: ----- " + JSON.stringify(data[i], null, 2));
 		var issDateTime = parseInt(data[i].time);
 		var issStartTime = new Date(issDateTime * 1000);
+		var offsetStartTime = new Date(issDateTime * 1000);
 		var issEndTime = new Date((issDateTime + data[i].duration) * 1000);
 
 		
-		var startDate = strftimeUTC("%d/%m/%Y", issStartTime);
+		var startDate = strftime("%d/%m/%Y", issStartTime);
+		
 
+		var startHour = strftime("%H", issStartTime);
 
-		var startHour = strftimeUTC("%H", issStartTime);
+		var startTime =  strftime("%R", issStartTime);
+		var sh = issStartTime.getUTCHours();
+		var startHr = (sh.length === 1)? "0"+sh:sh;
+		var sm = issStartTime.getUTCMinutes();
+		var startMin = (sm.length === 1)? "0"+sm:sm;
+		var startTimeUTC = startHr+":"+startMin ;
 
-		var startTime = strftimeUTC("%R", issStartTime);
-		var endTime = strftimeUTC("%R", issEndTime);
-
+		var endTime = strftime("%R", issEndTime);
+		var endTimeUTC = issEndTime.getUTCHours()+":"+ issEndTime.getUTCMinutes();
 		var timeZone = strftime("%z (%Z)", new Date());
+		// var offsetHour = offsetStartTime.setUTCHours( offsetStartTime.getUTCHours() + data[i].tzinfo.utc_offset );
 
-		var wIcon = _getWeatherIcon((startHour > 19)?'night':'day', data[i].cloudcover);
+		Ti.API.warn(timeZone + " device timezone: ----- " + startTime);
+		Ti.API.warn(data[i].tzinfo.timezone + " locale time: ----- " + issStartTime.getUTCHours()+":"+ issStartTime.getUTCMinutes());
+
+
+		var wIcon = _getWeatherIcon((offsetStartTime.getUTCHours() > 20 || offsetStartTime.getUTCHours() < 5)?'night':'day', data[i].cloudcover);
 		weatherIcon.image = '/images/weather/'+wIcon;
 
 		if (startDate !== currDate) {
@@ -82,8 +96,8 @@ function showData(data) {
 
 		locationData.text = data[i].location.city;
 		locationData.text += " (" + data[i].location.country + ") - ";
-		locationData.text += startTime + " UCT / ";
-		locationData.text += endTime + " UCT " + timeZone;
+		locationData.text += startTimeUTC + " UCT / ";
+		locationData.text += endTimeUTC + " UCT " + timeZone;
 		$.passListView.add(passItem);
 		topPointer += (passItem.height + Alloy.CFG.nextPassListPadding);
 		// Ti.API.warn("LOOP END - topPointer:" + topPointer);

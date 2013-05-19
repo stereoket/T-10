@@ -28,7 +28,7 @@ function log(level, message) {
 	"use strict";
 	var msg;
 	try {
-		msg = "\t\t***** " + message + ' ***** ';
+		msg = "\t\tT10: ***** " + message + ' ***** ';
 		// Add your own custom log levels to the switch
 		switch (logMode) {
 			case 'quiet':

@@ -39,7 +39,7 @@ if (ANDROID) {
      */
     CloudPush = require('ti.cloudpush');
 }
-var defaultChannelName = 'general';
+var defaultChannelName = 'space';
 
 
 /**
@@ -71,7 +71,7 @@ var ACSpush = function () {
 
     this.subscribedChannels = Ti.App.Properties.getList('subscribedChannels');
     if (this.subscribedChannels === null) {
-        Ti.API.warn('Setting a channel list property for a general channel set to false, as this is a first time');
+        log("warn", 'Setting a channel list property for a general channel set to false, as this is a first time');
         this.subscribedChannels = [{
             channel: 'general',
             state: false
@@ -114,6 +114,9 @@ ACSpush.prototype._checkCallbacks = function (args, name) {
             name: "ACS_PH Library Method Error",
             message: "originating method handlers (success or error) not set, cannot proceed. " + name
         }
+    } else {
+        log("INFO", "callbacks present");
+        return;
     }
 };
 
@@ -166,7 +169,7 @@ ACSpush.prototype.showLoggedInACSuser = function (params) {
         if (e.success) {
             that.loggedInToACS = true;
             var user = e.users[0];
-            log("warn", 'ACS User logged in: ' + that.loggedInToACS +
+            log("WARN", 'ACS User logged in: ' + that.loggedInToACS +
                 '\n id: ' + user.id + '\n' + 'first name: ' + user.first_name + '\n' + 'last name: ' + user.last_name);
             params.success();
         } else if (e.code === 401 /* Code that indicates a login is required*/ ) {
@@ -197,41 +200,6 @@ ACSpush.prototype.getDeviceToken = function (params) {
     this._checkCallbacks(params, "getDeviceToken()");
     log("warn", '  getDeviceToken  ');
 
-    // Device Registration calls for both platforms
-    if (!ANDROID) {
-        if (SIMULATOR) {
-            params.success();
-        } else {
-            try {
-                if (Ti.Network.remoteNotificationsEnabled) {
-                    log("debug", "Setting up Push listener, have to register with server for listener" + registered);
-                }
-            } catch (err) {
-                log("error", "error: " + err.message);
-            }
-
-            log("warn", "Device Token required. registering with Apple for new token");
-            Ti.Network.registerForPushNotifications({
-                types: [Ti.Network.NOTIFICATION_TYPE_BADGE,
-                Ti.Network.NOTIFICATION_TYPE_ALERT, Ti.Network.NOTIFICATION_TYPE_SOUND],
-                success: successCallback,
-                error: errorCallback,
-                callback: this.pushPayloadCallback
-            });
-
-        }
-    } else {
-        /**
-         * @requires CloudPush
-         * @desc Get the Android Device token
-         */
-        CloudPush.retrieveDeviceToken({
-            success: successCallback,
-            error: errorCallback
-        });
-        // Android Event Listener to trigger when payload is received
-        CloudPush.addEventListener('callback', this.pushPayloadCallback);
-    }
     /**
      * Successful callback from device token registration
      * @param  {object} e callback object, should contain device token
@@ -260,6 +228,43 @@ ACSpush.prototype.getDeviceToken = function (params) {
             message: "could not register for push notificaiton: " + JSON.stringify(e)
         }
     };
+
+    // Device Registration calls for both platforms
+    if (!ANDROID) {
+        if (SIMULATOR) {
+            params.success();
+        } else {
+            try {
+                if (Ti.Network.remoteNotificationsEnabled) {
+                    log("debug", "Setting up Push listener, have to register with server for listener: " + Ti.App.Properties.hasProperty('deviceToken'));
+                }
+            } catch (err) {
+                log("error", "error: " + err.message);
+            }
+
+            log("warn", "Device Token required. registering with Apple for new token");
+            Ti.Network.registerForPushNotifications({
+                types: [Ti.Network.NOTIFICATION_TYPE_BADGE,
+                Ti.Network.NOTIFICATION_TYPE_ALERT, Ti.Network.NOTIFICATION_TYPE_SOUND],
+                success: successCallback,
+                error: errorCallback,
+                callback: this.pushPayloadCallback
+            });
+
+        }
+    } else {
+        /**
+         * @requires CloudPush
+         * @desc Get the Android Device token
+         */
+        CloudPush.retrieveDeviceToken({
+            success: successCallback,
+            error: errorCallback
+        });
+        // Android Event Listener to trigger when payload is received
+        CloudPush.addEventListener('callback', this.pushPayloadCallback);
+    }
+    
 };
 
 /**
@@ -298,6 +303,7 @@ ACSpush.prototype.pushPayloadCallback = function (evt) {
 
 
     var showMessageAlert = function (msgParams) {
+        log("WARN", "Push Notice Payload Message routine");
         var pushAlert = Ti.UI.createAlertDialog({
             title: msgParams.title,
             message: msgParams.message,
@@ -519,10 +525,12 @@ ACSpush.prototype.subscribeToPush = function (params) {
         pnt = false;
     this._checkCallbacks(params, "subscribeToPush()");
 
-    if (params.channel === undefined) {
-        params.channel = defaultChannelName;
-    }
-
+    params.channel = params.channel || defaultChannelName;
+    // if (params.channel === undefined) {
+    //     params.channel = defaultChannelName;
+    // }
+    log("WARN", "channel:" + params.channel);
+    log("WARN", "deviceToken:" + that.deviceToken);
     // Android Devices need to enable with alternative module, this needs its own method
     if (ANDROID) {
         // TODO custom configuration for android required.
@@ -541,7 +549,7 @@ ACSpush.prototype.subscribeToPush = function (params) {
 
     Cloud.PushNotifications.subscribe({
         channel: params.channel,
-        device_token: this.deviceToken,
+        device_token: that.deviceToken,
         type: (ANDROID) ? 'android' : 'ios'
     }, pushSubscribeCallback);
 
