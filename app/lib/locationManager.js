@@ -9,7 +9,7 @@ function localNotificationCallback(e) {
 	Ti.API.info("Scheduled LocalNotification = " + e.scheduledCount);
 	Ti.API.warn("You have " + e.scheduledCount + " Scheduled LocalNotification");
 
-	var test = JSON.stringify(e);
+	var test = JSON.stringify(e, null, 2);
 	Ti.API.info("results stringified" + test);
 };
 

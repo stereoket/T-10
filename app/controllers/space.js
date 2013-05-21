@@ -11,6 +11,10 @@ var log = Helper.log;
  * @return {[type]} [description]
  */
 function open(){
+	$.space.addEventListener('blur', function (e) {
+		Ti.API.warn("space window closed");
+		$.space.close();
+	});
 	$.space.open();
 }
 

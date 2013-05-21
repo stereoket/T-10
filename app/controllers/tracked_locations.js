@@ -12,7 +12,11 @@ var log = Helper.log;
  */
 
 function open() {
-	Ti.API.info("Attempting to load new window");
+	$.trackedLocations.addEventListener('blur', function (e) {
+		Ti.API.warn("trackedLocations window closed");
+		$.trackedLocations.close();
+	});
+	
 	$.trackedLocations.open();
 	
 }

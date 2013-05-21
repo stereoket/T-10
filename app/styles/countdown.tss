@@ -1,0 +1,28 @@
+"#countdown": {
+	backgroundImage: Alloy.CFG.backgroundImage
+},
+"Label":{
+	font: {fontFamily: "OstrichSans-Medium"},
+	color: "#fff"
+},
+".labelText": {
+	font: {fontSize: 52, fontFamily: "OstrichSans-Medium"},
+},
+".largeText": {
+	font: {fontSize: 56, fontFamily: "OstrichSans-Medium"},
+	width: Ti.UI.SIZE,
+	textAlign: 'center',
+	color: "#fff",
+	shadowColor: '#000',
+  	shadowOffset: {x:2, y:1}
+},
+"#winTitle":{
+	font: {fontSize: 52, fontFamily: "OstrichSans-Black"}
+},
+"#countdownValue":{
+	font: {fontSize: 224, fontFamily: "OstrichSans-Black"}
+},
+".countdownImage":{
+	width: 150,
+	backgroundImage: "/images/countdown/blacks/0.png"
+}

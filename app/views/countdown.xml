@@ -1,0 +1,32 @@
+<Alloy>
+	<Window id="countdown" platform="ios" formFactor="tablet">
+		<!-- Maybe Add Buttons instead of background Graphic -->
+		<!-- <ImageView id="bb_containerBackground" /> -->
+		<Label id="winTitle" top="64"></Label>
+		<View id="countdownView" top="180" height="260">
+			<View layout="horizontal">
+				<ImageView class="countdownImage" id="min1" top="0" left="64">
+				<ImageView class="countdownImage" id="min2" top="0">
+				<Label id="countdownValue" width="20">:</Label>
+				<ImageView class="countdownImage" id="sec1" top="0">
+				<ImageView class="countdownImage" id="sec2" top="0">
+			</View>
+			
+		</View>
+		<View class="bigButton" id="waveLayer" top="454" height="160" opacity="0.7">
+			<View  backgroundColor="#fff" opacity="0.1" top="0" height="Ti.UI.FILL" width="Ti.UI.FILL"/>
+			<Label class="largeText" zIndex="1">People Ready to Wave</Label>
+		</View>
+		
+		<View class="bigButton" id="issPassData" layout="vertical" top="700">
+			<Label class="labelText" top="0" height="Ti.UI.SIZE">Flyover At: </Label>
+			<Label class="labelText" top="10">Station Time: </Label>
+			<Label class="labelText" top="10">Ground Time: </Label>
+			<Label class="labelText" top="10">Current Visibility: </Label>
+		</View>
+
+	</Window>
+
+
+
+</Alloy>

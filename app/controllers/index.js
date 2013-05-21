@@ -19,6 +19,15 @@ localNotice.tidyUpLocalNotifications();
 // check for alerts that are in ID:1 (pre-weather checked) that are less than 15 mins
 // (now - 15) > (starttime -15) - if true then delete this 
 
+function localNotificationCallback(e) {
+	Ti.API.info("Let's how many local notifications we have scheduled'");
+	Ti.API.info("Scheduled LocalNotification = " + e.scheduledCount);
+	Ti.API.warn("You have " + e.scheduledCount + " Scheduled LocalNotification");
+
+	var test = JSON.stringify(e, null, 2);
+	Ti.API.info("results stringified" + test);
+};
+
 function letsGo(params) {
 	Ti.API.warn("T10: **** ***** **** ***** ****");
 	Ti.API.warn("T10: **** ***** **** ***** ****");
@@ -29,6 +38,10 @@ function letsGo(params) {
 	Ti.API.warn("T10: **** ***** **** ***** ****");
 	Ti.API.warn("T10: **** ***** **** ***** ****");
 	Ti.API.warn("T10: Trigger the countdown screen option button");
+
+	var alertT10 = Alloy.createController('alertT10');
+	alertT10.open({city: params.city, starttime: params.starttime});
+
 }
 
 /**
@@ -57,7 +70,7 @@ Ti.App.iOS.addEventListener('notification', function (e) {
 		// monitor weather patterns for the cloud cover or better for chosen city/
 		var city = e.userInfo.city;
 		var country = e.userInfo.country;
-
+		var starttime = e.userInfo.starttime;
 		Ti.API.warn("**** **** ALARM CHECK **** ****");
 		Ti.API.warn("**** **** ----- ----- **** ****");
 		Ti.API.warn("**** **** ----- ----- **** ****");
@@ -75,13 +88,15 @@ Ti.App.iOS.addEventListener('notification', function (e) {
 
 		function onSuccessCallback(ev) {
 			Ti.API.warn("Successful API Call");
-			Ti.API.info(JSON.stringify(ev, null, 2));
+			// Ti.API.info(JSON.stringify(ev, null, 2));
 			var data = JSON.parse(ev.data);
 			// var response = data.response;
 
 			Ti.API.info("weather lookup info for: " + city + ", " + country);
 
 			var cityData = require('locationManager').checkCity(city, function (evt) {
+				Ti.API.warn("City Data returned locally: ");
+				Ti.API.warn(evt.data, null, 2);
 				if (evt.exists) {
 					Ti.API.info("Notificaion Trigger City Lookup:");
 					Ti.API.warn("stored cloud value: " + evt.data.alertParams.max_cloud_cover);
@@ -93,19 +108,19 @@ Ti.App.iOS.addEventListener('notification', function (e) {
 						Ti.API.warn("data: " + JSON.stringify(data, null, 2));
 						// Add local notify parameters here (cloud/country/city/starttime/lat/lng)
 						notify.scheduleLocalNotification({
-							alertBody: data.alertParams.location.city + " IN T-10!",
+							alertBody: evt.data.location.city + " IN T-10!",
 							alertAction: "Let's Go!",
 							userInfo: {
 								"id": 2,
-								"t10": true,
-								"city": data.alertParams.location.city,
-								"country": data.alertParams.location.country,
-								"starttime": data.alertParams.time
+								"city": evt.data.location.city,
+								"country": evt.data.location.country,
+								"starttime": starttime
 							},
-							date: new Date((data.alertParams.time * 1000) - ((60 * 1000) * 10)) // time minus 10mins 
+							date: new Date((starttime * 1000) - ((60 * 1000) * 10)) // time minus 10mins 
 						});
 						Ti.API.info("T10: **** Notification added");
-						Ti.API.warn("weather look up for : " + data.alertParams.location.city);
+						notify.searchLocalNotificationsByKey(2,"id",localNotificationCallback);
+						Ti.API.warn("weather look up for : " + evt.data.location.city);
 					}
 				}
 				// If weather lookup matches, schedule an alert on diff channel for T10
@@ -171,9 +186,15 @@ function launchEarthApp() {
 // Check index launch value, leave a small gap before launching the main window - so splash screen has some visibility
 setTimeout(function () {
 
+	// var alertT10 = Alloy.createController('alertT10');
+	// alertT10.open({city: "Reading", starttime: 1369095856.521});
 
 	$.index.open();
 
+	$.index.addEventListener('blur', function(e){
+		Ti.API.warn("index window closed");
+		$.index.close();
+	});
 
 	// if (Ti.App.Properties.getInt('appLaunchCount') > 3) {
 	// 	var firstWin;
