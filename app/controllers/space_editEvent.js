@@ -28,7 +28,10 @@ function setEditData(e) {
 function open() {
 
 	var trackedLocations = Alloy.createController('tracked_locations');
-
+	$.spaceEditEvent.addEventListener('blur', function (e) {
+		Ti.API.warn("spaceEditEvent window closed");
+		$.spaceEditEvent.close();
+	});
 	$.spaceEditEvent.open();
 	$.spaceEditEvent.addEventListener("swipe", function (e) {
 		// Ti.API.info(JSON.stringify(e, null, 2));
@@ -81,17 +84,17 @@ function setTimeOfDay(e) {
 
 
 	switch (e.source.id) {
-		case 'day':
-			$.day.backgroundImage = '/images/redButton.png';
-			break;
+	case 'day':
+		$.day.backgroundImage = '/images/redButton.png';
+		break;
 
-		case 'night':
-			$.night.backgroundImage = '/images/redButton.png';
-			break;
+	case 'night':
+		$.night.backgroundImage = '/images/redButton.png';
+		break;
 
-		case 'either':
-			$.either.backgroundImage = '/images/redButton.png';
-			break;
+	case 'either':
+		$.either.backgroundImage = '/images/redButton.png';
+		break;
 	}
 }
 
@@ -99,15 +102,15 @@ function saveData(e) {
 	Ti.API.warn("Update EVENT data only - post new settings to SERVER");
 	//TODO - new endpoint on server to update a location
 
-	 //Call this method to return a collection with information on your scheduled notifications
-    var results = notify.returnScheduledNotifications();
-    Ti.API.info("Let's how many local notifications we have scheduled'");
-    Ti.API.info("Scheduled LocalNotification = " + results.scheduledCount); 
-    alert("You have " +  results.scheduledCount + " Scheduled LocalNotification");
-    var test = JSON.stringify(results, null, 2);
-    Ti.API.warn("results stringified" + test);  
+	//Call this method to return a collection with information on your scheduled notifications
+	var results = notify.returnScheduledNotifications();
+	Ti.API.info("Let's how many local notifications we have scheduled'");
+	Ti.API.info("Scheduled LocalNotification = " + results.scheduledCount);
+	alert("You have " + results.scheduledCount + " Scheduled LocalNotification");
+	var test = JSON.stringify(results, null, 2);
+	Ti.API.warn("results stringified" + test);
 
-    return;
+	return;
 
 
 	var that = this;
@@ -196,7 +199,7 @@ function saveData(e) {
 	}
 }
 
-function newLocation(e){
+function newLocation(e) {
 	Ti.API.info("New Location setup");
 	var addEvent = Alloy.createController("space_addEvent");
 	addEvent.open();

@@ -1,0 +1,21 @@
+<Alloy>
+	<Window id="alertT10" platform="ios" formFactor="tablet">
+		<!-- Maybe Add Buttons instead of background Graphic -->
+		<!-- <ImageView id="bb_containerBackground" /> -->
+		<View id="titleView">
+			<!-- <ImageView class="tripleISS" image="/images/triple.png" opacity="0.06"> -->
+			<Label id="winTitle"></Label>
+		</View>
+		<View onClick="triggerCountdown" class="bigButton" id="triggerCountdown">
+			<Label class="largeText">Let's GO!</Label>
+		</View>
+		
+		<View onClick="ignore" class="bigButton" id="ignore">
+			<Label class="largeText">Not Now</Label>
+		</View>
+
+	</Window>
+
+
+
+</Alloy>

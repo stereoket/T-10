@@ -12,24 +12,23 @@ var log = Helper.log;
  */
 
 function open() {
-
 	var locationManager = require('locationManager');
-
 	var currentLocations = locationManager.getAllLocations();
 
 	var nextData = locationManager.getMergedLocations(20);
-	// Ti.API.warn(nextData);
 	var nextPassView = $.nextPassesList.init({
 		data: nextData
 	});
-	if(nextPassView){
+	if (nextPassView) {
+		$.nextPasses.addEventListener('blur', function (e) {
+			Ti.API.warn("new passes window closed");
+			$.nextPasses.close();
+		});
 		$.nextPasses.open();
 	} else {
 		var addEvent = Alloy.createController('space');
 		addEvent.open();
 	}
-
-	
 }
 
 function addEvent() {
@@ -40,19 +39,19 @@ function listEvents() {
 
 }
 
-function addLocation(e){
+function addLocation(e) {
 	var addEvent = Alloy.createController("space_addEvent");
 	addEvent.open();
 }
 
-function viewLocations(e){
+function viewLocations(e) {
 	var trackedLocations = Alloy.createController("tracked_locations");
 	trackedLocations.open();
 	// var addEvent = Alloy.createController("space_addEvent");
 	// addEvent.open();
 }
 
-function settings(e){
+function settings(e) {
 	var appPreferences = require('appPrefs');
 	appPreferences.open();
 }

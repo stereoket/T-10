@@ -59,28 +59,31 @@ function showData(data) {
 		var startHour = strftime("%H", issStartTime);
 
 		var startTime =  strftime("%R", issStartTime);
-		var sh = issStartTime.getUTCHours();
-		var startHr = (sh.length === 1)? "0"+sh:sh;
+		var sh = issStartTime.getUTCHours(); Ti.API.info("length of hour string: " + sh.toString().length);
+		var startHr = (sh.toString().length === 1)? "0"+sh:sh;
 		var sm = issStartTime.getUTCMinutes();
-		var startMin = (sm.length === 1)? "0"+sm:sm;
+		var startMin = (sm.toString().length === 1)? "0"+sm:sm;
 		var startTimeUTC = startHr+":"+startMin ;
 
 		var endTime = strftime("%R", issEndTime);
-		var endTimeUTC = issEndTime.getUTCHours()+":"+ issEndTime.getUTCMinutes();
+		var eh = issEndTime.getUTCHours();
+		var endHr = (eh.toString().length === 1)? "0"+eh:eh;
+		var em = issEndTime.getUTCMinutes();
+		var endMin = (em.toString().length === 1)? "0"+em:em;
+		var endTimeUTC = endHr+":"+endMin ;
+
 		var timeZone = strftime("%z (%Z)", new Date());
 		// var offsetHour = offsetStartTime.setUTCHours( offsetStartTime.getUTCHours() + data[i].tzinfo.utc_offset );
 
 		Ti.API.warn(timeZone + " device timezone: ----- " + startTime);
 		Ti.API.warn(data[i].tzinfo.timezone + " locale time: ----- " + issStartTime.getUTCHours()+":"+ issStartTime.getUTCMinutes());
 
-
+		// TODO this weather time check is manual and not accurate, it needs sunrise/sunset data on time / location.
 		var wIcon = _getWeatherIcon((offsetStartTime.getUTCHours() > 20 || offsetStartTime.getUTCHours() < 5)?'night':'day', data[i].cloudcover);
 		weatherIcon.image = '/images/weather/'+wIcon;
 
 		if (startDate !== currDate) {
 			topPointer += Alloy.CFG.nextPassListPadding;
-			// Ti.API.warn("NEW HEADER - topPointer:" + topPointer);
-			// create header
 			var header = passController.getView("headerView");
 			var headerLabel = passController.getView("headerLabel");
 			header.top = topPointer;

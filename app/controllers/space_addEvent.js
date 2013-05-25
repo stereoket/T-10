@@ -26,6 +26,11 @@ function setEditData(e) {
 }
 
 function open() {
+	$.spaceAddEvent.addEventListener('blur', function (e) {
+		Ti.API.warn("spaceAddEvent window closed");
+		$.spaceAddEvent.close();
+	});
+
 	$.spaceAddEvent.open();
 	$.spaceAddEvent.addEventListener("swipe", function (e) {
 		// Ti.API.info(JSON.stringify(e, null, 2));
@@ -79,17 +84,17 @@ function setTimeOfDay(e) {
 
 
 	switch (e.source.id) {
-		case 'day':
-			$.day.backgroundImage = '/images/redButton.png';
-			break;
+	case 'day':
+		$.day.backgroundImage = '/images/redButton.png';
+		break;
 
-		case 'night':
-			$.night.backgroundImage = '/images/redButton.png';
-			break;
+	case 'night':
+		$.night.backgroundImage = '/images/redButton.png';
+		break;
 
-		case 'either':
-			$.either.backgroundImage = '/images/redButton.png';
-			break;
+	case 'either':
+		$.either.backgroundImage = '/images/redButton.png';
+		break;
 	}
 }
 
@@ -98,6 +103,7 @@ function sendAlertData(e) {
 	var locationManager = require('locationManager');
 	var Helper = require('Helper');
 	var notify = require('bencoding.localnotify');
+
 	function errorCheck() {
 
 	}
@@ -170,26 +176,6 @@ function sendAlertData(e) {
 		// 
 		// Load up the tracked locations screen
 
-		notify.scheduleLocalNotification({
-			alertBody: "This is a test of benCoding.localNotify",
-			alertAction: "Just a test",
-			userInfo: {
-				"id": 1,
-				"hello": "world"
-			},
-			date: new Date(new Date().getTime() + 30000)
-		});
-
-		alert("LocalNotification Scheduled");
-
-		//Call this method to return a collection with information on your scheduled notifications
-    var results = notify.returnScheduledNotifications();
-    Ti.API.info("Let's how many local notifications we have scheduled'");
-    Ti.API.info("Scheduled LocalNotification = " + results.scheduledCount); 
-    alert("You have " +  results.scheduledCount + " Scheduled LocalNotification");
-    var test = JSON.stringify(results);
-    Ti.API.info("results stringified" + test);  
-    
 
 		var trackedLocations = Alloy.createController("tracked_locations");
 		trackedLocations.open();

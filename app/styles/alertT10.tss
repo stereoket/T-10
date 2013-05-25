@@ -1,0 +1,41 @@
+"#alertT10": {
+	backgroundImage: Alloy.CFG.backgroundImage
+},
+"Label":{
+	font: {fontFamily: "OstrichSans-Medium"},
+	color: "#fff"
+},
+"#triggerCountdown": {
+	top: 466,
+	//backgroundColor: Alloy.CFG.addButton,
+	color: "#fff",
+	backgroundImage: "/images/blueButton.png"
+},
+"#ignore": {
+	top: 656,
+	//backgroundColor: Alloy.CFG.addButton,
+	color: "#fff",
+	backgroundImage: "/images/redButton.png"
+},
+"#titleView": {
+	height: Ti.UI.SIZE,
+	width: Ti.UI.SIZE,
+	top: 140
+},
+".bigButton": {
+	width: Alloy.CFG.bigButtonWidth,
+	height: Alloy.CFG.bigButtonHeight,
+	borderRadius: 8
+},
+".largeText": {
+	font: {fontSize: 76, fontFamily: "OstrichSans-Black"},
+	width: Ti.UI.SIZE,
+	textAlign: 'center',
+	center: {x: '50%', y: '50%'},
+	color: "#fff",
+	shadowColor: '#000',
+  	shadowOffset: {x:2, y:1}
+},
+"#winTitle":{
+	font: {fontSize: 120, fontFamily: "OstrichSans-Medium"}
+}
