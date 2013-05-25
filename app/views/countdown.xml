@@ -3,13 +3,13 @@
 		<!-- Maybe Add Buttons instead of background Graphic -->
 		<!-- <ImageView id="bb_containerBackground" /> -->
 		<Label id="winTitle" top="64"></Label>
-		<View id="countdownView" top="180" height="260" left="90">
+		<View id="countdownView" top="180" height="260">
 			<View layout="horizontal">
-				<ImageView class="countdownImage" id="min1" top="0">
-				<ImageView class="countdownImage" id="min2" left="0">
-				<Label class="timerText">:</Label>
+				<ImageView class="countdownImage" id="min1" top="0" left="64">
+				<ImageView class="countdownImage" id="min2" top="0">
+				<Label id="countdownValue" width="20">:</Label>
 				<ImageView class="countdownImage" id="sec1" top="0">
-				<ImageView class="countdownImage" id="sec2" left="0">
+				<ImageView class="countdownImage" id="sec2" top="0">
 			</View>
 			
 		</View>
