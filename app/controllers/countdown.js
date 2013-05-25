@@ -83,7 +83,7 @@ function open(params) {
 	$.winTitle.text = params.city + " in T-10";
 	// read the starttime of the passover
 	var starttime = params.starttime;
-	var startTimeStamp = new Date(starttime).getTime();
+	var startTimeStamp = new Date(starttime).getTime()/1000;
 	Ti.API.info(startTimeStamp);
 	// Ti.API.info("duration of pass: " + params.duration);
 	// get the current timestamp
@@ -91,17 +91,17 @@ function open(params) {
 	Ti.API.info(nowtime);
 	// subtract difference of the two
 	// 
-	// var timeDifference = startTimeStamp - nowtime;
-	var timeDifference = (nowtime + (60 * 5)) - nowtime;
+	var timeDifference = startTimeStamp - nowtime;
+	// var timeDifference = (nowtime + (60 * 5)) - nowtime;
 	Ti.API.info(timeDifference + " in secs");
 	Ti.API.info(timeDifference / 60 + " in mins");
 	// convert the result value to minutes & seconds
-	var tenMin = 60 * 10;
+	// var tenMin = 60 * 10;
 
-	var startCounter = tenMin - timeDifference;
-	Ti.API.info(startCounter);
+	// var startCounter = tenMin - timeDifference;
+	// Ti.API.info(startCounter);
 	// run a counter with this value as the starting point that decrements
-	var niceStartCounter = niceTimeFromMilliseconds(startCounter * 1000);
+	var niceStartCounter = niceTimeFromMilliseconds(timeDifference * 1000);
 	Ti.API.info(niceStartCounter);
 	var intTimer;
 	mainTimer = setInterval(function () {

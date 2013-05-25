@@ -186,10 +186,10 @@ function launchEarthApp() {
 // Check index launch value, leave a small gap before launching the main window - so splash screen has some visibility
 setTimeout(function () {
 
-	var alertT10 = Alloy.createController('alertT10');
-	alertT10.open({city: "Reading", starttime: 1369095856.521});
+	// var alertT10 = Alloy.createController('alertT10');
+	// alertT10.open({city: "Reading", starttime: 1369095856.521});
 
-	// $.index.open();
+	$.index.open();
 
 	$.index.addEventListener('blur', function(e){
 		Ti.API.warn("index window closed");
