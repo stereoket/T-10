@@ -28,7 +28,7 @@ function setEditData(e) {
 function open() {
 	$.spaceAddEvent.addEventListener('blur', function (e) {
 		Ti.API.warn("spaceAddEvent window closed");
-		$.spaceAddEvent.close();
+		// $.spaceAddEvent.close();
 	});
 
 	$.spaceAddEvent.open();
