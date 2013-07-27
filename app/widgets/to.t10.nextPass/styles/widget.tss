@@ -2,7 +2,7 @@
 	top: 130,
 	left: 64,
 	right: 64,
-	height: 460,
+	height: 564,
 	backgroundColor: "none"
 },
 "Label":{

@@ -133,7 +133,8 @@
 	left: 72,
 	top: 0,
 	width: 172,
-	height: Ti.UI.SIZE
+	height: Ti.UI.SIZE,
+	zIndex: 100
 },
 "#rightAction":{
 	right: 72,

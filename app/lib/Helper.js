@@ -82,7 +82,7 @@ function checkNetwork(){
 	if(!Ti.Network.networkType){
 		online = false;
 	} else {
-		return Ti.Network.networkTypeName
+		online = true;
 	}
 	netInfo = {online: online, code: Ti.Network.networkType, type: Ti.Network.networkTypeName};
 	Ti.API.warn(JSON.stringify(netInfo, null, 2));

@@ -16,7 +16,7 @@
  *
  */
 
-var defaultTimeout = 9000;
+var defaultTimeout = 25000;
 
 /**
  *
@@ -41,9 +41,18 @@ var createMessageView = function (params) {
     $.messageView.visible = true;
     $.messageLabel.visible = true;
     $.messageLabel.text = params.message || '';
-    setIndicatorTimeout({
-        timeoutVal: params.timeoutVal
-    });
+    if (params.timeoutVal !== undefined) {
+        setIndicatorTimeout({
+            timeoutVal: params.timeoutVal
+        });
+    }
+    var disIn = params.disableIndicator || false;
+    if (disIn) {
+        disableIndicator();
+    }
+
+
+
     //return $.messageView;
 };
 
@@ -170,6 +179,13 @@ function updateMessage(params) {
 		*/
 
 }
+
+function disableIndicator() {
+    if ($.activityIndicator) {
+        $.activityIndicator.hide();
+    }
+}
+exports.disableIndicator = disableIndicator;
 exports.hideIndicator = hideIndicator;
 exports.setIndicatorTimeout = setIndicatorTimeout;
 exports.createIndicator = createIndicator;

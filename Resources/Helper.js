@@ -38,8 +38,7 @@ function isSimulator() {
 
 function checkNetwork() {
     var netInfo, online = true;
-    if (Ti.Network.networkType) return Ti.Network.networkTypeName;
-    online = false;
+    online = Ti.Network.networkType ? true : false;
     netInfo = {
         online: online,
         code: Ti.Network.networkType,

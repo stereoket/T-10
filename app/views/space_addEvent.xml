@@ -34,10 +34,10 @@
 					<Button  top="3" class="actionButton" onClick="settingsButton" id="alarmSettingsBtn"/>
 					<Label class="buttonLabel">Alarm Settings</Label>
 				</View>
-			<!-- 	<View id="middleAction">
+				<View id="middleAction">
 					<Button  top="3" class="actionButton" onClick="home" id="homeBtn"/>
 					<Label class="buttonLabel">Home</Label>
-				</View> -->
+				</View>
 				<View id="rightAction">
 					<Button top="3" onClick="sendAlertData" class="actionButton" id="saveBtn"/>
 					<Label class="buttonLabel">Add Location</Label>

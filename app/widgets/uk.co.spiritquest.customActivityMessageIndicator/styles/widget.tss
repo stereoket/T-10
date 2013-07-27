@@ -17,9 +17,9 @@
 }
 
 "#messageView":{
-	top:'100dp',
-	width:'254dp',
-	height:'141dp',
+	top:100,
+	width: 300,
+	height:150,
 	backgroundImage:'/images/uk.co.spiritquest.customActivityMessageIndicator/popUpWindow.png',
     zIndex : 200
 }

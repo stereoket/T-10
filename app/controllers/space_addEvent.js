@@ -31,7 +31,6 @@ function open() {
 
 	var network = require('/Helper').checkNetwork();
 	if (!network.online) {
-
 		$.messageViewWidget.createIndicator({
 			indicator: false,
 			message: 'There is no network connection, the app will not function',
@@ -67,10 +66,6 @@ function open() {
 		$.night.backgroundImage = '/images/redButton.png';
 	}
 
-	// if ($.either.selected) {
-	// 	$.either.backgroundImage = '/images/redButton.png';
-	// }
-
 	$.cloudSlider.value = 0.5;
 
 	if (editLocation !== null) {
@@ -89,13 +84,8 @@ function open() {
 
 function setTimeOfDay(e) {
 	Ti.API.warn(JSON.stringify(e, null, 2));
-
-
 	// First Toggle the value of the button
 	e.source.value = !e.source.value;
-
-
-
 	if ($.day.value === $.night.value) {
 		$.buttonView.timeOfDay = 'either';
 	} else {
@@ -112,10 +102,6 @@ function setTimeOfDay(e) {
 	case 'night':
 		$.night.backgroundImage = (e.source.value) ? '/images/redButton.png' : tbg;
 		break;
-
-		// case 'either':
-		// 	$.either.backgroundImage = '/images/redButton.png';
-		// 	break;
 	}
 }
 
@@ -126,20 +112,19 @@ function sendAlertData(e) {
 	var notify = require('bencoding.localnotify');
 
 	var network = require('/Helper').checkNetwork();
-	// if (!network.online) {
-	// 	$.messageViewWidget.createIndicator({
-	// 		indicator: false,
-	// 		message: 'There is no network connection, you can not add a city',
-	// 		timeoutVal: 2500
-	// 	});
-	// 	return;
-	// }
+	if (!network.online) {
+		$.messageViewWidget.createIndicator({
+			indicator: false,
+			message: 'There is no network connection, you can not add a city',
+			timeoutVal: 2500
+		});
+		return;
+	}
 
 
 	$.messageViewWidget.createIndicator({
 		indicator: true,
-		message: 'Searching for ISS passes',
-		timeoutVal: 3000
+		message: 'Searching for ISS passes'
 	});
 
 
@@ -153,9 +138,9 @@ function sendAlertData(e) {
 	if (!$.cityTextField.value) {
 		$.messageViewWidget.createMessageView({
 			message: "You must enter a City/Location",
-			timeoutVal: 700
+			timeoutVal: 1400,
+			disableIndicator: true
 		});
-
 		return false;
 	}
 
@@ -196,11 +181,17 @@ function sendAlertData(e) {
 
 	function onSuccessCallback(e) {
 		Ti.API.warn("Successful API Call");
+		$.messageViewWidget.createMessageView({
+			message: "Pass data found, storing in the app"
+		});
 		var data = JSON.parse(e.data);
 		var response = data.response;
-		$.messageViewWidget.hideIndicator();
 		if (response[0] === undefined) {
-			alert("No scheduled passes for your parameters");
+			$.messageViewWidget.createMessageView({
+				message: "No scheduled passes for your parameters, please change parameters",
+				timeoutVal: 1400,
+				disableIndicator: true
+			});
 			return;
 		}
 		Ti.API.warn(response);
@@ -208,30 +199,19 @@ function sendAlertData(e) {
 			data: response
 		}
 		var responseJSON = JSON.stringify(responseData);
-
-		Helper.writeToAppDataDirectory('cityData', response[0].location.city, responseJSON, bodyData, $.buttonView.timeOfDay);
-
-
-		// Ti.API.warn(JSON.stringify(response, null, 2));
-
-
-		// we Have city data - now store this on filesystem for call back later
-
 		// Merge this individual city data block into a master alllaerts object for the passes screen.
-		// 
-		// Load up the tracked locations screen
-
-
+		Helper.writeToAppDataDirectory('cityData', response[0].location.city, responseJSON, bodyData, $.buttonView.timeOfDay);
 		var trackedLocations = Alloy.createController("tracked_locations");
 		trackedLocations.open();
-
+		$.messageViewWidget.hideIndicator();
 	}
 
 	function onErrorCallback(e) {
 		Ti.API.error("Error in API Call");
 		$.messageViewWidget.createMessageView({
-			message: "Data Error Occurred.",
-			timeoutVal: 700
+			message: "Data Error reposnse from API, please contact support",
+			timeoutVal: 2000,
+			disableIndicator: true
 		});
 
 		Ti.API.error(JSON.stringify(e));
