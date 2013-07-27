@@ -48,7 +48,11 @@
 "#deleteBtn": {
 	right: 10,
 	backgroundImage: '/images/redBg.png'
-},
+}
+"#notifyBtn": {
+	right: 68,
+	backgroundImage: '/images/blueBg.png'
+}
 "#todIcon":{
 	height: 24
 }

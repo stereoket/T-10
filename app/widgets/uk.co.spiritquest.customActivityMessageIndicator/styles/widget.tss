@@ -1,0 +1,42 @@
+"#messageLabel": {
+	left : 0,
+            right : 0,
+            top : 30,
+            bottom : 0,
+            textAlign : 'center',
+            color : '#000',
+         //	backgroundColor : '#84926C',
+            font : {
+                fontSize : 18,
+                fontWeight : 'normal'
+            },
+            textAlign: 'center',
+            zIndex : 200,
+	height: Ti.UI.SIZE,
+	width: Ti.UI.FILL
+}
+
+"#messageView":{
+	top:'100dp',
+	width:'254dp',
+	height:'141dp',
+	backgroundImage:'/images/uk.co.spiritquest.customActivityMessageIndicator/popUpWindow.png',
+    zIndex : 200
+}
+
+"#activityIndicator": {
+	font : {
+            fontFamily : 'Helvetica Neue',
+            fontSize : 18
+            },
+            color : '#000',
+            zIndex : 800
+},
+"#backgroundView": {
+	top:0,
+	bottom:0,
+	left:0,
+	right:0,
+	backgroundImage:'/images/uk.co.spiritquest.customActivityMessageIndicator/tabBar.png',
+	zIndex:5000
+}

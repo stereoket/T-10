@@ -78,18 +78,14 @@ function open(){
 		value: "8000"
 	});
 
-	prefs.addSection();
-
-	prefs.addTextInput({
-		id: "USERNAME2",
-		caption: "username2",
-		value: "test1"
+	prefs.addSection({
+		title: "Simulated Notification Settings"
 	});
 
 	prefs.addTextInput({
-		id: "USERNAME23",
-		caption: "username3",
-		value: "test1"
+		id: "SIM_MIN_COUNTDOWN",
+		caption: "Simulated Notification Timer (minutes)",
+		value: 10
 	});
 
 	prefs.closeSection();

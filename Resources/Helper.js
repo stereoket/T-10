@@ -2,7 +2,7 @@ function log(level, message) {
     "use strict";
     var msg;
     try {
-        msg = "		***** " + message + " ***** ";
+        msg = "		T10: ***** " + message + " ***** ";
         switch (logMode) {
           case "quiet":
             if ("DEBUG" === level || "WARN" === level || "INFO" === level) return;
@@ -34,6 +34,19 @@ function isSimulator() {
         return true;
     }
     return false;
+}
+
+function checkNetwork() {
+    var netInfo, online = true;
+    if (Ti.Network.networkType) return Ti.Network.networkTypeName;
+    online = false;
+    netInfo = {
+        online: online,
+        code: Ti.Network.networkType,
+        type: Ti.Network.networkTypeName
+    };
+    Ti.API.warn(JSON.stringify(netInfo, null, 2));
+    return netInfo;
 }
 
 function writeToAppDataDirectory(folder, filename, data, alertParams) {
@@ -106,6 +119,8 @@ exports.log = log;
 exports.isSimulator = isSimulator;
 
 exports.device = device;
+
+exports.checkNetwork = checkNetwork;
 
 exports.ANDROID = ANDROID;
 

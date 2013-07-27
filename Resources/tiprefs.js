@@ -90,9 +90,13 @@ exports.addTextInput = function(opts) {
             height: 50
         });
         var text = Ti.UI.createTextField({
+            top: 0,
+            height: 50,
             left: 10,
             right: 10,
-            value: value.text
+            value: value.text,
+            autocorrect: false,
+            autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
         });
         var cancel = Ti.UI.createButton({
             title: "Cancel",
@@ -120,9 +124,10 @@ exports.addTextInput = function(opts) {
             Ti.App.Properties.setString(name + "_" + (opts.id || opts.caption), text.value);
             nav.close(editWin);
         });
-        "android" == Titanium.Platform.osname && editWin.addEventListener("android:back", function() {
+        "android" === Titanium.Platform.osname && editWin.addEventListener("android:back", function() {
             value.text = text.value;
             Ti.App.Properties.setString(name + "_" + (opts.id || opts.caption), text.value);
+            Ti.App.Properties.setBool("settingsFlag", false);
             editWin.close();
         });
         nav ? nav.open(editWin) : editWin.open({
@@ -178,7 +183,7 @@ exports.addChoice = function(opts) {
         table.setData(rows);
         table.addEventListener("click", function(e) {
             e.row.hasCheck = !e.row.hasCheck;
-            "android" == Titanium.Platform.osname && Ti.App.Properties.setBool(name + "_" + (opts.id || opts.caption) + "_" + e.row.value, e.row.hasCheck);
+            "android" === Titanium.Platform.osname && Ti.App.Properties.setBool(name + "_" + (opts.id || opts.caption) + "_" + e.row.value, e.row.hasCheck);
         });
         var cancel = Ti.UI.createButton({
             title: "Cancel",
@@ -255,7 +260,7 @@ exports.open = function(tabGroup) {
     if (tabGroup) {
         nav = tabGroup.activeTab;
         nav.open(prefsWin);
-    } else if ("android" == Titanium.Platform.osname) {
+    } else if ("android" === Titanium.Platform.osname) {
         prefsWin.backgroundColor = "#FFF";
         prefsWin.open({
             modal: true

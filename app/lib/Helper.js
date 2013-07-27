@@ -64,6 +64,10 @@ function log(level, message) {
 	return true;
 }
 
+/**
+ * Check for a simulator
+ * @return {Boolean} [description]
+ */
 function isSimulator() {
 	if (Ti.Platform.model === 'Simulator') {
 		log("warn", '  Simulator Detected  ');
@@ -73,8 +77,27 @@ function isSimulator() {
 	}
 }
 
+function checkNetwork(){
+	var online = true, netInfo;
+	if(!Ti.Network.networkType){
+		online = false;
+	} else {
+		return Ti.Network.networkTypeName
+	}
+	netInfo = {online: online, code: Ti.Network.networkType, type: Ti.Network.networkTypeName};
+	Ti.API.warn(JSON.stringify(netInfo, null, 2));
+	return netInfo;
+}
 
-
+/**
+ * [writeToAppDataDirectory description]
+ * @param  {[type]} folder      [description]
+ * @param  {[type]} filename    [description]
+ * @param  {[type]} data        [description]
+ * @param  {[type]} alertParams [description]
+ * @param  {[type]} timeOfDay   [description]
+ * @return {[type]}             [description]
+ */
 function writeToAppDataDirectory(folder, filename, data, alertParams, timeOfDay) {
 	// var data = data;
 	//check folder exists
@@ -145,6 +168,7 @@ function writeToAppDataDirectory(folder, filename, data, alertParams, timeOfDay)
 exports.log = log;
 exports.isSimulator = isSimulator;
 exports.device = device;
+exports.checkNetwork = checkNetwork;
 exports.ANDROID = ANDROID;
 exports.IPHONE = IPHONE;
 exports.IPAD = IPAD;

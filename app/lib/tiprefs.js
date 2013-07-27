@@ -9,10 +9,11 @@ var nav;
 
 // helper function to build a new row
 // takes .label and .value controls e.g. Ti.UI.Label and Ti.UI.TextField
+
 function addRow(controls) {
 
 	row = Ti.UI.createTableViewRow({
-		height : 40
+		height: 40
 	});
 
 	// position the label
@@ -27,10 +28,10 @@ function addRow(controls) {
 	// adjust the label to fit.
 	if (controls.icon) {
 		image = Ti.UI.createImageView({
-			image : controls.icon,
-			width : 26,
-			height : 26,
-			top : 6
+			image: controls.icon,
+			width: 26,
+			height: 26,
+			top: 6
 		});
 
 		image.left = 6;
@@ -57,87 +58,92 @@ function addRow(controls) {
 }
 
 // creates a default label for a row
+
 function createLabel(caption) {
 	var label = Ti.UI.createLabel({
-		font : {
-			fontSize : 17,
-			fontWeight : 'bold'
+		font: {
+			fontSize: 17,
+			fontWeight: 'bold'
 		},
-		text : caption
+		text: caption
 	});
 
 	return label;
 }
 
-exports.getBool = function(name, property) {
+exports.getBool = function (name, property) {
 	Ti.App.Properties.getBool(name + "_" + property);
 }
 
-exports.getString = function(name, property) {
+exports.getString = function (name, property) {
 	Ti.App.Properties.getString(name + "_" + property);
 }
 // initialise a new settings panel
-exports.init = function(title) {
+exports.init = function (title) {
 	sections = [];
 	section = null;
 	rows = [];
 	name = title || "Settings";
 }
 // add a textinput
-exports.addTextInput = function(opts) {
+exports.addTextInput = function (opts) {
 
 	var label = createLabel(opts.caption);
 
 	var value = Ti.UI.createLabel({
-		font : {
-			fontSize : 17,
-			fontWeight : 'normal'
+		font: {
+			fontSize: 17,
+			fontWeight: 'normal'
 
 		},
-		text : Ti.App.Properties.getString(name + "_" + opts.id || opts.name) || opts.value,
-		color : '#777'
+		text: Ti.App.Properties.getString(name + "_" + opts.id || opts.name) || opts.value,
+		color: '#777'
 	});
 
 	row = addRow({
-		label : label,
-		value : value,
+		label: label,
+		value: value,
 		section: true
 	});
 
-	row.addEventListener("click", function(e) {
+	row.addEventListener("click", function (e) {
 
 		var rows = [];
 
 		var editWin = Ti.UI.createWindow({
-			title : 'Edit',
-			Hidden : false,
-			backgroundColor : '#fff'
+			title: 'Edit',
+			Hidden: false,
+			backgroundColor: '#fff'
 		});
 
 		var table = Ti.UI.createTableView({
-			style : Ti.UI.iPhone.TableViewStyle.GROUPED
+			style: Ti.UI.iPhone.TableViewStyle.GROUPED
 		});
 
 		var row = Ti.UI.createTableViewRow({
-			height : 50
+			height: 50
 		});
 
 		var text = Ti.UI.createTextField({
-			left : 10,
-			right : 10,
-			value : value.text
+			top: 0,
+			height: 50,
+			left: 10,
+			right: 10,
+			value: value.text,
+			autocorrect: false,
+			autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
 		});
 
 		var cancel = Ti.UI.createButton({
-			title : 'Cancel',
-			width : 50,
-			height : 30
+			title: 'Cancel',
+			width: 50,
+			height: 30
 		});
 
 		var save = Ti.UI.createButton({
-			title : 'Save',
-			width : 50,
-			height : 30
+			title: 'Save',
+			width: 50,
+			height: 30
 		});
 
 		row.add(text);
@@ -153,22 +159,23 @@ exports.addTextInput = function(opts) {
 
 		editWin.add(table);
 
-		cancel.addEventListener('click', function() {
+		cancel.addEventListener('click', function () {
 
 			nav.close(editWin);
 		});
 
-		save.addEventListener('click', function() {
+		save.addEventListener('click', function () {
 			// save the value
 			value.text = text.value;
 			Ti.App.Properties.setString(name + "_" + (opts.id || opts.caption), text.value);
 			nav.close(editWin);
 		});
 
-		if (Titanium.Platform.osname == 'android') {
-			editWin.addEventListener('android:back', function(e) {
+		if (Titanium.Platform.osname === 'android') {
+			editWin.addEventListener('android:back', function (e) {
 				value.text = text.value;
 				Ti.App.Properties.setString(name + "_" + (opts.id || opts.caption), text.value);
+				Ti.App.Properties.setBool('settingsFlag', false);
 				editWin.close();
 			});
 		}
@@ -177,59 +184,59 @@ exports.addTextInput = function(opts) {
 			nav.open(editWin);
 		} else {
 			editWin.open({
-				modal : true
+				modal: true
 			});
 		}
 	});
 }
-exports.addChoice = function(opts) {
+exports.addChoice = function (opts) {
 
 	var label = createLabel(opts.caption);
 
 	var value = Ti.UI.createLabel({
-		font : {
-			fontSize : 17,
-			fontWeight : 'normal'
+		font: {
+			fontSize: 17,
+			fontWeight: 'normal'
 
 		},
-		text : Ti.App.Properties.getString(name + "_" + opts.id || opts.name) || opts.value,
-		color : '#777'
+		text: Ti.App.Properties.getString(name + "_" + opts.id || opts.name) || opts.value,
+		color: '#777'
 	});
 
 	row = addRow({
-		label : label,
-		value : value,
+		label: label,
+		value: value,
 		section: true
 	});
 
 	row.hasChild = true;
 
-	row.addEventListener("click", function(e) {
+	row.addEventListener("click", function (e) {
 
 		var rows = [];
 
 		var editWin = Ti.UI.createWindow({
-			title : 'select',
-			Hidden : false,
-			backgroundColor : '#fff'
+			title: 'select',
+			Hidden: false,
+			backgroundColor: '#fff'
 		});
 
 		var table = Ti.UI.createTableView({
-			style : Ti.UI.iPhone.TableViewStyle.GROUPED
+			style: Ti.UI.iPhone.TableViewStyle.GROUPED
 		});
 
-		for ( i = 0; i < opts.choices.length; i++) {
+		for (i = 0; i < opts.choices.length; i++) {
 			var row = Ti.UI.createTableViewRow({
-				height : 40
+				height: 40
 			});
 
 			var text = Ti.UI.createLabel({
-				left : 10,
-				right : 10,
-				text : opts.choices[i].title,
-				font : {
-					fontSize : 17,
-					fontWeight : 'bold'
+				left: 10,
+				right: 10,
+				text: opts.choices[i].title,
+				font: {
+					fontSize: 17,
+					fontWeight: 'bold'
 
 				}
 			});
@@ -246,25 +253,25 @@ exports.addChoice = function(opts) {
 
 		table.setData(rows);
 
-		table.addEventListener('click', function(e) {
+		table.addEventListener('click', function (e) {
 			e.row.hasCheck = !e.row.hasCheck;
 
-			if (Titanium.Platform.osname == 'android') {
+			if (Titanium.Platform.osname === 'android') {
 				Ti.App.Properties.setBool(name + "_" + (opts.id || opts.caption) + "_" + e.row.value, e.row.hasCheck)
 			}
 
 		});
 
 		var cancel = Ti.UI.createButton({
-			title : 'Cancel',
-			width : 50,
-			height : 30
+			title: 'Cancel',
+			width: 50,
+			height: 30
 		});
 
 		var save = Ti.UI.createButton({
-			title : 'Save',
-			width : 50,
-			height : 30
+			title: 'Save',
+			width: 50,
+			height: 30
 		});
 
 		if (Titanium.Platform.osname != 'android') {
@@ -274,15 +281,15 @@ exports.addChoice = function(opts) {
 
 		editWin.add(table);
 
-		cancel.addEventListener('click', function() {
+		cancel.addEventListener('click', function () {
 
 			nav.close(editWin);
 		});
 
-		save.addEventListener('click', function() {
+		save.addEventListener('click', function () {
 
 			if (Titanium.Platform.osname != 'android') {
-				for ( i = 0; i < table.data[0].rows.length; i++) {
+				for (i = 0; i < table.data[0].rows.length; i++) {
 					Ti.App.Properties.setBool(name + "_" + (opts.id || opts.caption) + "_" + table.data[0].rows[i].value, table.data[0].rows[i].hasCheck)
 				}
 			}
@@ -293,29 +300,29 @@ exports.addChoice = function(opts) {
 			nav.open(editWin);
 		} else {
 			editWin.open({
-				modal : true
+				modal: true
 			});
 		}
 
 	});
 }
 // add a switch row
-exports.addSwitch = function(opts) {
+exports.addSwitch = function (opts) {
 
 	var label = Ti.UI.createLabel({
-		font : {
-			fontSize : 17,
-			fontWeight : 'bold'
+		font: {
+			fontSize: 17,
+			fontWeight: 'bold'
 		},
-		text : opts.caption
+		text: opts.caption
 	});
 
 	var toggle = Ti.UI.createSwitch({
-		value : Ti.App.Properties.getBool(name + "_" + opts.id, false)
+		value: Ti.App.Properties.getBool(name + "_" + opts.id, false)
 	});
 
-	toggle.addEventListener("change", function(e) {
-		Ti.App.Properties.setBool(name + "_" + opts.id , e.value);
+	toggle.addEventListener("change", function (e) {
+		Ti.App.Properties.setBool(name + "_" + opts.id, e.value);
 
 		if (opts.onChange) {
 			opts.onChange(toggle.value);
@@ -323,8 +330,8 @@ exports.addSwitch = function(opts) {
 	});
 
 	addRow({
-		label : label,
-		value : toggle,
+		label: label,
+		value: toggle,
 		section: true
 	});
 }
@@ -334,7 +341,7 @@ exports.addSection = function (opts) {
 	if (section !== null) {
 		sections.push(section);
 	}
-	var title = (opts !== undefined && opts.title !== undefined)?opts.title:"Section " + (sections.length + 1);
+	var title = (opts !== undefined && opts.title !== undefined) ? opts.title : "Section " + (sections.length + 1);
 	section = Ti.UI.createTableViewSection({
 		headerTitle: title
 	});
@@ -342,20 +349,20 @@ exports.addSection = function (opts) {
 	return section;
 }
 
-exports.closeSection = function(){
+exports.closeSection = function () {
 	sections.push(section);
 }
 // open the prefs window
-exports.open = function(tabGroup) {
+exports.open = function (tabGroup) {
 
 	// create a window
 	var prefsWin = Ti.UI.createWindow({
-		title : name
+		title: name
 	});
 
 	// create a table
 	var table = Titanium.UI.createTableView({
-		style : Titanium.UI.iPhone.TableViewStyle.GROUPED
+		style: Titanium.UI.iPhone.TableViewStyle.GROUPED
 	});
 
 	// push the rows
@@ -367,17 +374,17 @@ exports.open = function(tabGroup) {
 	// if we have a tabGroup specified
 	if (!tabGroup) {
 
-		if (Titanium.Platform.osname == 'android') {
+		if (Titanium.Platform.osname === 'android') {
 			prefsWin.backgroundColor = '#FFF';
 			prefsWin.open({
-				modal : true
+				modal: true
 			});
 
 		} else {
 
 			// we need a nav
 			nav = Ti.UI.iPhone.createNavigationGroup({
-				window : prefsWin
+				window: prefsWin
 			});
 
 			// create a host window
@@ -396,6 +403,7 @@ exports.open = function(tabGroup) {
 				rootWin.remove(nav);
 				rootWin.close();
 				prefsWin.close();
+				// editWin.close();
 				rootWin = null;
 				prefsWin = null;
 			});

@@ -2,37 +2,42 @@
 	<Window id="spaceAddEvent" platform="ios" formFactor="tablet">
 		<!-- Maybe Add Buttons instead of background Graphic -->
 		<!-- <ImageView id="bb_containerBackground" /> -->
+		<Require type="widget" src="uk.co.spiritquest.customActivityMessageIndicator" id="messageViewWidget"></Require>
 		
 		<Label id="windowTitle" class="labelText">Add a location:</Label>
 		<TextField id="cityTextField" />
 		<ImageView image="/images/magnify.png" id="magnify" />
 		<View id="buttonView" timeOfDay="either">
 			<View class="timeButtonView leftButton">
-				<Button onClick="setTimeOfDay" class="timeButton" id="day"/>
+				<Button onClick="setTimeOfDay" class="timeButton" id="day"  />
 				<Label class="timeButtonLabel" id="dayLabel">Daytime</Label>
 			</View>
-			<View class="timeButtonView middleButton">
+			<View class="timeButtonView rightButton">
 				<Button onClick="setTimeOfDay" class="timeButton" id="night"/>
 				<Label class="timeButtonLabel" id="nightLabel">Nightime</Label>
 			</View>
-			<View class="timeButtonView rightButton">
+<!-- 			<View class="timeButtonView ">
 				<Button onClick="setTimeOfDay" class="timeButton" id="either" selected="true" />
 				<Label class="timeButtonLabel" id="eitherLabel">Either</Label>
-			</View>
+			</View> -->
 		</View>
 		<View id="sliderView">
-			<Label class="labelText" id="cloudSliderTitle" >Maximum Cloud Cover:</Label>
+			<Label class="labelText" id="cloudSliderTitle" >Visibility (Cloud Cover: )</Label>
 			<View id="cloudSliderView" >
-				<Label id="pickStartLabel" class="smalltext">50%</Label>
-				<Slider id="cloudSlider" max="1" min="0.5"  />
-				<Label id="pickEndLabel" class="smalltext">0%</Label>
+				<Label id="pickStartLabel" class="smalltext">Clear</Label>
+				<Slider id="cloudSlider" max="1" min="0"/>
+				<Label id="pickEndLabel" class="smalltext">Cloudy</Label>
 			</View>
 		</View>
 		<View id="actionButtonView">
 				<View id="leftAction">
-					<Button  top="3" class="actionButton" onClick="settings" id="alarmSettingsBtn"/>
+					<Button  top="3" class="actionButton" onClick="settingsButton" id="alarmSettingsBtn"/>
 					<Label class="buttonLabel">Alarm Settings</Label>
 				</View>
+			<!-- 	<View id="middleAction">
+					<Button  top="3" class="actionButton" onClick="home" id="homeBtn"/>
+					<Label class="buttonLabel">Home</Label>
+				</View> -->
 				<View id="rightAction">
 					<Button top="3" onClick="sendAlertData" class="actionButton" id="saveBtn"/>
 					<Label class="buttonLabel">Add Location</Label>

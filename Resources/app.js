@@ -74,4 +74,8 @@ Alloy.CFG.nextPassListPadding = 20;
 
 Alloy.CFG.locationsListPadding = 14;
 
+Alloy.CFG.cloudSliderTop = 40;
+
+Alloy.CFG.weatherCheckTimeOffset = 15;
+
 Alloy.createController("index");

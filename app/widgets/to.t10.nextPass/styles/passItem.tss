@@ -2,13 +2,13 @@
 	backgroundColor: Alloy.CFG.bgBlue,
 	opacity: 0.08,
 	zIndex: 0,	
-},
+}
 "#passItem": {
 	height: 60,
 	backgroundColor: "none",
 	left: 0,
 	zIndex: 1,
-},
+}
 "#locationData": {
 	left: 14,
 	font: {fontFamily: "OstrichSans-Medium", fontSize: 30},
@@ -16,19 +16,27 @@
 	width: Ti.UI.FILL,
 	color: "#fff",
 	zIndex: 1,
-},
+}
+"#timeZoneLabel":{
+	right: 88,
+	font: {fontFamily: "OstrichSans-Medium", fontSize: 30},
+	textAlign: 'left',
+	width: Ti.UI.SIZE,
+	color: "#fff",
+	zIndex: 1,
+}
 "#weatherIcon":{
 	right: 14,
 	top: 10,
 	bottom: 10,
 	width: 48,
 	zIndex: 1,
-},
+}
 "Label":{
 	font: {fontFamily: "OstrichSans-Medium", fontSize: 30},
 	textAlign: 'left',
 	color: "#fff"
-},
+}
 "#headerLabel": {
 	textAlign: 'left',
 	font: {fontFamily: "OstrichSans-Black", fontSize: 30},

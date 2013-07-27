@@ -1,5 +1,9 @@
 function Controller() {
     function open() {
+        $.space.addEventListener("blur", function() {
+            Ti.API.warn("space window closed");
+            $.space.close();
+        });
         $.space.open();
     }
     function addEvent() {
@@ -28,12 +32,12 @@ function Controller() {
             top: "80"
         });
         $.__views.space.add($.__views.titleView);
-        $.__views.__alloyId7 = Ti.UI.createImageView({
+        $.__views.__alloyId16 = Ti.UI.createImageView({
             image: "/images/triple.png",
             opacity: "0.06",
-            id: "__alloyId7"
+            id: "__alloyId16"
         });
-        $.__views.titleView.add($.__views.__alloyId7);
+        $.__views.titleView.add($.__views.__alloyId16);
         $.__views.winTitle = Ti.UI.createLabel({
             font: {
                 fontSize: 120,
@@ -55,7 +59,7 @@ function Controller() {
         });
         $.__views.space.add($.__views.addEvent);
         addEvent ? $.__views.addEvent.addEventListener("click", addEvent) : __defers["$.__views.addEvent!click!addEvent"] = true;
-        $.__views.__alloyId8 = Ti.UI.createLabel({
+        $.__views.__alloyId17 = Ti.UI.createLabel({
             font: {
                 fontSize: 76,
                 fontFamily: "OstrichSans-Black"
@@ -65,7 +69,7 @@ function Controller() {
             textAlign: "center",
             center: {
                 x: "50%",
-                y: "50%"
+                y: "56%"
             },
             shadowColor: "#000",
             shadowOffset: {
@@ -73,9 +77,9 @@ function Controller() {
                 y: 1
             },
             text: "Add Location",
-            id: "__alloyId8"
+            id: "__alloyId17"
         });
-        $.__views.addEvent.add($.__views.__alloyId8);
+        $.__views.addEvent.add($.__views.__alloyId17);
     }
     if (true && !Alloy.isTablet) {
         $.__views.space = Ti.UI.createWindow({
@@ -83,15 +87,15 @@ function Controller() {
             id: "space"
         });
         $.__views.space && $.addTopLevelView($.__views.space);
-        $.__views.__alloyId9 = Ti.UI.createLabel({
+        $.__views.__alloyId18 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Medium"
             },
             color: "#fff",
             text: "An iPhone",
-            id: "__alloyId9"
+            id: "__alloyId18"
         });
-        $.__views.space.add($.__views.__alloyId9);
+        $.__views.space.add($.__views.__alloyId18);
     }
     exports.destroy = function() {};
     _.extend($, $.__views);

@@ -10,14 +10,14 @@ var log = configs.log;
 
 ANDROID && (CloudPush = require("ti.cloudpush"));
 
-var defaultChannelName = "general";
+var defaultChannelName = "space";
 
 var ACSpush = function() {
     "use strict";
     this.callbackError = false;
     this.subscribedChannels = Ti.App.Properties.getList("subscribedChannels");
     if (null === this.subscribedChannels) {
-        Ti.API.warn("Setting a channel list property for a general channel set to false, as this is a first time");
+        log("warn", "Setting a channel list property for a general channel set to false, as this is a first time");
         this.subscribedChannels = [ {
             channel: "general",
             state: false
@@ -39,13 +39,15 @@ ACSpush.prototype._checkNetwork = function() {
 
 ACSpush.prototype._checkCallbacks = function(args, name) {
     log("info", "scanning for required callback methods");
-    if (!args.success || !args.error) {
-        this.callbackError = true;
-        throw {
-            name: "ACS_PH Library Method Error",
-            message: "originating method handlers (success or error) not set, cannot proceed. " + name
-        };
+    if (args.success && args.error) {
+        log("INFO", "callbacks present");
+        return;
     }
+    this.callbackError = true;
+    throw {
+        name: "ACS_PH Library Method Error",
+        message: "originating method handlers (success or error) not set, cannot proceed. " + name
+    };
 };
 
 ACSpush.prototype.login = function(params) {
@@ -70,7 +72,7 @@ ACSpush.prototype.showLoggedInACSuser = function(params) {
         if (e.success) {
             that.loggedInToACS = true;
             var user = e.users[0];
-            log("warn", "ACS User logged in: " + that.loggedInToACS + "\n id: " + user.id + "\n" + "first name: " + user.first_name + "\n" + "last name: " + user.last_name);
+            log("WARN", "ACS User logged in: " + that.loggedInToACS + "\n id: " + user.id + "\n" + "first name: " + user.first_name + "\n" + "last name: " + user.last_name);
             params.success();
         } else if (401 === e.code) {
             that.loggedInToACS = false;
@@ -117,7 +119,7 @@ ACSpush.prototype.getDeviceToken = function(params) {
         CloudPush.addEventListener("callback", this.pushPayloadCallback);
     } else if (SIMULATOR) params.success(); else {
         try {
-            Ti.Network.remoteNotificationsEnabled && log("debug", "Setting up Push listener, have to register with server for listener" + registered);
+            Ti.Network.remoteNotificationsEnabled && log("debug", "Setting up Push listener, have to register with server for listener: " + Ti.App.Properties.hasProperty("deviceToken"));
         } catch (err) {
             log("error", "error: " + err.message);
         }
@@ -149,6 +151,7 @@ ACSpush.prototype.pushPayloadCallback = function(evt) {
     Ti.API.info(that.payload);
     var pushTXT = "Default Title";
     var showMessageAlert = function(msgParams) {
+        log("WARN", "Push Notice Payload Message routine");
         var pushAlert = Ti.UI.createAlertDialog({
             title: msgParams.title,
             message: msgParams.message,
@@ -312,7 +315,9 @@ ACSpush.prototype.subscribeToPush = function(params) {
     }
     var that = this, pnt = false;
     this._checkCallbacks(params, "subscribeToPush()");
-    void 0 === params.channel && (params.channel = defaultChannelName);
+    params.channel = params.channel || defaultChannelName;
+    log("WARN", "channel:" + params.channel);
+    log("WARN", "deviceToken:" + that.deviceToken);
     if (ANDROID) {
         CloudPush.enabled = true;
         CloudPush.setShowTrayNotification = true;
@@ -326,7 +331,7 @@ ACSpush.prototype.subscribeToPush = function(params) {
     }
     Cloud.PushNotifications.subscribe({
         channel: params.channel,
-        device_token: this.deviceToken,
+        device_token: that.deviceToken,
         type: ANDROID ? "android" : "ios"
     }, pushSubscribeCallback);
 };

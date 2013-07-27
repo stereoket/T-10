@@ -3,6 +3,12 @@
 		<!-- Maybe Add Buttons instead of background Graphic -->
 		<!-- <ImageView id="bb_containerBackground" /> -->
 		<Label id="windowTitle" class="labelText">Tracked Locations:</Label>
+<!-- 		<Toolbar id="editToolbar">
+			<Items>
+				
+			</Items>
+		</Toolbar> -->
+		<Button id="editLocations" onClick="editLocation" action="edit" systemButton="Titanium.UI.iPhone.SystemButton.EDIT" />
 		<View id="locationsList">
 			<Require type="widget" src="to.t10.listLocations" id="listWidget"/>
 		</View>

@@ -4,7 +4,8 @@
 		</View>
 		<View id="passItem">
 			<View id="backgroundView" />
-			<Label id="locationData"></Label> 
+			<Label id="locationData"></Label>
+			<Label id="timeZoneLabel"></Label>
 			<ImageView id="weatherIcon"></ImageView>
 		</View>
 </Alloy>

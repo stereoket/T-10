@@ -30,7 +30,7 @@
 	font: {fontSize: 76, fontFamily: "OstrichSans-Black"},
 	width: Ti.UI.SIZE,
 	textAlign: 'center',
-	center: {x: '50%', y: '50%'},
+	center: {x: '50%', y: '56%'},
 	color: "#fff",
 	shadowColor: '#000',
   	shadowOffset: {x:2, y:1}

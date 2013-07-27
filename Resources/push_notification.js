@@ -17,7 +17,7 @@ function activatePush() {
         }
     }
     function subscribeToChannel() {
-        log("WARN", "   subscribeToChannel() ");
+        log("WARN", "   subscribeToChannel() " + Ti.App.Properties.getString("appmode"));
         if (!Ti.App.Properties.getBool("allowPush", false)) {
             log("WARN", "   user prefers to not get push notices");
             log("WARN", "   continue with app load");
@@ -91,6 +91,7 @@ function activatePush() {
     }
     Ti.App.Properties.setBool("acs-init", true);
     try {
+        log("INFO", "attempting to login to enable push notification");
         ACS.login({
             success: getDeviceToken,
             error: acsErrorManager

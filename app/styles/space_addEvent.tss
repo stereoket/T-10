@@ -60,7 +60,8 @@
 	height: 64,
 	borderRadius: 8,
 	backgroundImage: "/images/blueButton.png",
-	bubbleParent: false
+	bubbleParent: false,
+	value: false
 },
 ".timeButtonLabel":{
 	font: {fontFamily: "OstrichSans-Black", fontSize: 34},
@@ -113,7 +114,7 @@
 },
 "#pickEndLabel":{
 	top: Alloy.CFG.cloudSliderTop,
-	right: 70,
+	right: 68,
 	width: Ti.UI.SIZE,
 	height: Ti.UI.SIZE
 },
@@ -145,4 +146,7 @@
 },
 "#saveBtn":{
 	backgroundImage: "/images/buttons/add_location.png"
+}
+"#homeBtn":{
+	backgroundImage: "/images/buttons/home.png"
 }

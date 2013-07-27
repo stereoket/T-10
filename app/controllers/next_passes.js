@@ -22,7 +22,9 @@ function open() {
 	if (nextPassView) {
 		$.nextPasses.addEventListener('blur', function (e) {
 			Ti.API.warn("new passes window closed");
-			$.nextPasses.close();
+			if (!Ti.App.Properties.getBool('settingsFlag')) {
+				$.nextPasses.close();
+			}
 		});
 		$.nextPasses.open();
 	} else {
@@ -52,6 +54,7 @@ function viewLocations(e) {
 }
 
 function settings(e) {
+	Ti.App.Properties.setBool('settingsFlag', true);
 	var appPreferences = require('appPrefs');
 	appPreferences.open();
 }

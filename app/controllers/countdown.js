@@ -4,9 +4,11 @@ function niceTimeFromMilliseconds(ms) {
 	var total_seconds = ms / 1000,
 		minutes = Math.floor(total_seconds / 60),
 		seconds = total_seconds - (minutes * 60) - 0.499;
+
 	var col;
-	// Ti.API.info(total_seconds);
-	if (total_seconds < 121) {
+	Ti.API.info(minutes);
+	Ti.API.info(seconds);
+	if (total_seconds < 121 || minutes === 10) {
 		col = 'reds/';
 	} else {
 		col = 'blacks/';
@@ -22,13 +24,20 @@ function niceTimeFromMilliseconds(ms) {
 		return [digit1, digit2];
 	}
 
-
-
+	if (minutes === 10) {
+		var mins = splitTimeDigit(Math.round(minutes));
+		min1 = path + "1.png";
+		min2 = path + "0.png";
+		sec1 = path + "0.png";
+		sec2 = path + "0.png";
+		Ti.API.info(min1 + " - " + min2 + " - " + sec1 + " - " + sec2 );
+	}
 	if (minutes < 10 && seconds < 9) {
 		min1 = path + "0.png";
 		min2 = path + Math.round(minutes).toString() + ".png";
 		sec1 = path + "0.png";
 		sec2 = path + Math.round(seconds).toString() + ".png";
+		Ti.API.info(min1 + " - " + min2 + " - " + sec1 + " - " + sec2 );
 		// return "0" + minutes + ":" + "0" + Math.round(seconds);
 	}
 	if (minutes < 10 && seconds > 9) {
@@ -37,14 +46,16 @@ function niceTimeFromMilliseconds(ms) {
 		var sec = splitTimeDigit(Math.round(seconds));
 		sec1 = path + sec[0];
 		sec2 = path + sec[1];
+		Ti.API.info(min1 + " - " + min2 + " - " + sec1 + " - " + sec2 );
 		// return "0" + minutes + ":" + Math.round(seconds);
 	}
-	if (seconds < 9) {
+	if (seconds < 9 && minutes !== 10) {
 		var min = splitTimeDigit(Math.round(minutes));
 		min1 = path + "0.png";
 		min2 = path + Math.round(minutes).toString() + ".png";
 		sec1 = path + "0.png";
 		sec2 = path + Math.round(seconds).toString() + ".png";
+		Ti.API.info(min1 + " - " + min2 + " - " + sec1 + " - " + sec2 );
 		// return minutes + ":" + "0" + Math.round(seconds);
 	}
 
@@ -60,6 +71,7 @@ function niceTimeFromMilliseconds(ms) {
 
 function open(params) {
 	var mainTimer;
+	Ti.API.warn(JSON.stringify(params, null, 2));
 	$.countdown.addEventListener('blur', function (e) {
 		Ti.API.warn("countdown window closed");
 		clearInterval(mainTimer);
@@ -68,7 +80,6 @@ function open(params) {
 
 	$.countdown.addEventListener("swipe", function (e) {
 		// Ti.API.info(JSON.stringify(e, null, 2));
-
 		if (e.direction === "right" && e.source.id === "countdown" && e.y < 90) {
 			var nextPasses = Alloy.createController('next_passes');
 			setTimeout(function () {
@@ -81,34 +92,32 @@ function open(params) {
 	$.countdown.open();
 
 	$.winTitle.text = params.city + " in T-10";
-	// read the starttime of the passover
+
+	// Starttimestamp provided from the alert
 	var starttime = params.starttime;
 	var startTimeStamp = new Date(starttime).getTime()/1000;
-	Ti.API.info(startTimeStamp);
-	// Ti.API.info("duration of pass: " + params.duration);
-	// get the current timestamp
 	var nowtime = new Date().getTime() / 1000;
-	Ti.API.info(nowtime);
-	// subtract difference of the two
-	// 
-	var timeDifference = startTimeStamp - nowtime;
-	// var timeDifference = (nowtime + (60 * 5)) - nowtime;
-	Ti.API.info(timeDifference + " in secs");
-	Ti.API.info(timeDifference / 60 + " in mins");
-	// convert the result value to minutes & seconds
-	// var tenMin = 60 * 10;
+	var tenMin = 60 * 10;
+	if(!params.simulation){
+		var timeDifference = startTimeStamp - nowtime;
+		var startCounter = timeDifference;
+	} else {
+		startCounter = (nowtime + (60 * Number(Ti.App.Properties.getString('Settings_SIM_MIN_COUNTDOWN', "10")))) - nowtime;
+	}
+	
+	Ti.API.info(startCounter + " in secs");
+	Ti.API.info(startCounter / 60 + " in mins");
+	
 
-	// var startCounter = tenMin - timeDifference;
-	// Ti.API.info(startCounter);
-	// run a counter with this value as the starting point that decrements
-	var niceStartCounter = niceTimeFromMilliseconds(timeDifference * 1000);
+	var niceStartCounter = niceTimeFromMilliseconds(startCounter * 1000);
+
 	Ti.API.info(niceStartCounter);
 	var intTimer;
 	mainTimer = setInterval(function () {
 		intTimer++;
 		startCounter--;
 		// $.countdownValue.text = niceStartCounter;
-		niceStartCounter = niceTimeFromMilliseconds((startCounter) * 1000);
+		niceStartCounter = niceTimeFromMilliseconds(startCounter * 1000);
 		Ti.API.info(startCounter);
 
 		if (startCounter === 0) {

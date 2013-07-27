@@ -30,12 +30,14 @@ function open() {
 	var trackedLocations = Alloy.createController('tracked_locations');
 	$.spaceEditEvent.addEventListener('blur', function (e) {
 		Ti.API.warn("spaceEditEvent window closed");
-		$.spaceEditEvent.close();
+		if(!Ti.App.Properties.getBool('settingsFlag')){
+			$.spaceEditEvent.close();
+		}
+		
 	});
 	$.spaceEditEvent.open();
 	$.spaceEditEvent.addEventListener("swipe", function (e) {
 		// Ti.API.info(JSON.stringify(e, null, 2));
-
 		if (e.direction === "right" && e.source.id === "spaceEditEvent" && e.y < 90) {
 
 			setTimeout(function () {
@@ -138,7 +140,7 @@ function saveData(e) {
 		location: {
 			city: $.cityTextField.value
 		},
-		max_cloud_cover: (1 - $.cloudSlider.value),
+		max_cloud_cover: ($.cloudSlider.value),
 		time_of_day: $.buttonView.timeOfDay,
 		device_id: "foo"
 	};
@@ -206,8 +208,14 @@ function newLocation(e) {
 }
 
 function settings(e) {
+	Ti.App.Properties.setBool('settingsFlag', true);
 	var appPreferences = require('appPrefs');
 	appPreferences.open();
+}
+
+function home(e) {
+	var nextPasses = Alloy.createController("next_passes");
+	nextPasses.open();
 }
 exports.setEditData = setEditData;
 exports.open = open;

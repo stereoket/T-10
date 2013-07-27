@@ -41,10 +41,12 @@ function showData(data) {
 		// Ti.API.warn("LOOP START - topPointer:" + topPointer);
 		var passController = Widget.createController("passItem");
 		var locationData = passController.getView("locationData");
+		var timeZoneLabel = passController.getView("timeZoneLabel");
 		var weatherIcon = passController.getView("weatherIcon");
 		var passItem = passController.getView("passItem");
 		var today = new Date();
 		Ti.API.warn("*********************");
+		Ti.API.warn(JSON.stringify(data[i], null, 2));
 		Ti.API.warn("time being used: ----- " + data[i].time);
 		// Ti.API.warn("time being used: ----- " + JSON.stringify(data[i], null, 2));
 		var issDateTime = parseInt(data[i].time);
@@ -76,7 +78,7 @@ function showData(data) {
 		// var offsetHour = offsetStartTime.setUTCHours( offsetStartTime.getUTCHours() + data[i].tzinfo.utc_offset );
 
 		Ti.API.warn(timeZone + " device timezone: ----- " + startTime);
-		Ti.API.warn(data[i].tzinfo.timezone + " locale time: ----- " + issStartTime.getUTCHours()+":"+ issStartTime.getUTCMinutes());
+		// Ti.API.warn(data[i].tzinfo.timezone + " locale time: ----- " + issStartTime.getUTCHours()+":"+ issStartTime.getUTCMinutes());
 
 		// TODO this weather time check is manual and not accurate, it needs sunrise/sunset data on time / location.
 		var wIcon = _getWeatherIcon((offsetStartTime.getUTCHours() > 20 || offsetStartTime.getUTCHours() < 5)?'night':'day', data[i].cloudcover);
@@ -98,9 +100,9 @@ function showData(data) {
 		passItem.top = topPointer + Alloy.CFG.nextPassListPadding;
 
 		locationData.text = data[i].location.city;
-		locationData.text += " (" + data[i].location.country + ") - ";
-		locationData.text += startTimeUTC + " UCT / ";
-		locationData.text += endTimeUTC + " UCT " + timeZone;
+		locationData.text += " (" + data[i].location.country + ")";
+		timeZoneLabel.text = startTimeUTC + " - ";
+		timeZoneLabel.text += endTimeUTC + " (UCT)"
 		$.passListView.add(passItem);
 		topPointer += (passItem.height + Alloy.CFG.nextPassListPadding);
 		// Ti.API.warn("LOOP END - topPointer:" + topPointer);

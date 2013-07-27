@@ -37,10 +37,16 @@
 			</View>
 		</View>
 		<View id="actionButtonView">
-				<View id="leftAction">
-					<Button  top="3" class="actionButton" onClick="settings" id="alarmSettingsBtn"/>
-					<Label class="buttonLabel">Alarm Settings</Label>
+			<View id="leftAction">
+					<Button   class="actionButton" onClick="home" id="homeBtn"/>
+					<Label class="buttonLabel">Home</Label>
 				</View>
+
+				<View id="middleAction">
+					<Button  top="3" class="actionButton" onClick="home" id="homeBtn"/>
+					<Label class="buttonLabel">Home</Label>
+				</View>
+
 				<View id="rightAction">
 					<Button top="3" onClick="saveData" class="actionButton" id="saveBtn"/>
 					<Label class="buttonLabel">Save</Label>

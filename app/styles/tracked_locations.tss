@@ -57,3 +57,25 @@
 "#addLocationBtn":{
 	backgroundImage: "/images/buttons/add_location.png"
 }
+"#editLocations":{
+	right: 64,
+	title: 'Edit',
+	width: 52,
+	height: 29,
+	borderRadius: 6,
+	font:{fontSize: 14, fontWeight: 'Bold'},
+	textAlign: 'center',
+	top: 64,
+	backgroundImage: '/images/blueBg.png',
+	zIndex: 10
+}
+"#editToolbar":{
+	translucent: true,
+	barColor: "transparent",
+	backgroundImage: "transparent",
+    borderTop:false,
+    borderBottom:false,
+    top: 64,
+    width: 80,
+	right: 64
+}

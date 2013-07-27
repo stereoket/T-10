@@ -1,0 +1,8 @@
+<Alloy>
+	<View id="backgroundView" visible='false'>
+		<View id="messageView" visible="false">
+			<ActivityIndicator id="activityIndicator"/>
+			<Label id="messageLabel" text="Loading" />
+		</View>
+	</View>
+</Alloy>
