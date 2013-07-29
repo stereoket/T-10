@@ -1,6 +1,8 @@
 function open(){
 	var prefs = require("tiprefs");
-
+	var section = {
+		color: '#fff'
+	}
 	// open the view
 
 	prefs.init("Settings");
@@ -79,15 +81,43 @@ function open(){
 	});
 
 	prefs.addSection({
-		title: "Simulated Notification Settings"
+		title: "Simulated Notifications"
 	});
 
 	prefs.addTextInput({
 		id: "SIM_MIN_COUNTDOWN",
-		caption: "Simulated Notification Timer (minutes)",
+		caption: "Time (mins) for manually triggered countdown",
 		value: 10
 	});
 
+
+
+	prefs.addSection({
+		title: "Simulated Alarm Notifications"
+	});
+	prefs.addTextInput({
+		id: "SIM_ALARM_TRIGGER",
+		caption: "Simulated Time to trigger an automatic notifications (min)",
+		value: '2'
+	});
+
+	prefs.addTextInput({
+		id: "SIM_ALARM_CITY",
+		caption: "City Name",
+		value: 'London'
+	});
+
+	prefs.addTextInput({
+		id: "SIM_ALARM_COUNTRY",
+		caption: "Country Code (2 Letter)",
+		value: 'GB'
+	});
+
+	prefs.addTextInput({
+		id: "SIM_ALARM_CLOUD",
+		caption: "Visibility (% cloud cover)",
+		value: '50'
+	});
 	prefs.closeSection();
 
 	prefs.open();

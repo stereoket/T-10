@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib/localNotifications.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: lib/localNotifications.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/**
+ * Helper file ot manage all local notification responses and setting new notices. This will 
+ * perform lookups agains the weather API for specific cities
+ * @module LocalNotifications
+ * @type {CommonJS}
+ */
+var notify = require('bencoding.localnotify');
+
+function localNotificationCallback(e) {
+	Ti.API.info("Let's how many local notifications we have scheduled'");
+	Ti.API.info("Scheduled LocalNotification = " + e.scheduledCount);
+	Ti.API.warn("You have " + e.scheduledCount + " Scheduled LocalNotification");
+
+	var test = JSON.stringify(e, null, 2);
+	Ti.API.info("results stringified" + test);
+};
+
+/**
+ * Returns a value of  a timestamp with a variable minute offset (subtracts the offset against the timestamp),
+ * if no timestamp supplied it will produce a value of now
+ * @param  {number} timestamp timestamp in milisecs
+ * @param  {number} minOffset Integer of the offset in minutes
+ * @return {number}           timestamp
+ */
+function getTimeMinusMinutes(timestamp, minOffset) {
+	timestamp = (timestamp !== null) ? timestamp * 1000 : new Date().getTime();
+	Ti.API.warn(JSON.stringify(timestamp, null, 2));
+	//convert mins to milliseconds
+	var offset = (minOffset * 60) * 1000;
+	Ti.API.warn(JSON.stringify(offset, null, 2));
+	var localeOffset = new Date(timestamp).getTimezoneOffset(); //minutes
+	localeOffset = (localeOffset * 60) * 1000;
+	Ti.API.warn(JSON.stringify(localeOffset, null, 2));
+
+
+	var newTimestamp = (timestamp - offset - localeOffset) / 1000;
+	Ti.API.warn(JSON.stringify(newTimestamp, null, 2));
+	return newTimestamp;
+}
+
+function tidyUpLocalNotifications() {
+	Ti.API.warn("localNotifications.js > tidyUpLocalNotifications()");
+	// on app boot - alert notification initialisation
+	// check for alerts that are in ID:1 (pre-weather checked) that are less than 15 mins
+	// (now - 15) > (starttime -15) - if true then delete this 
+	// 
+	// For astro's this may need to all be UTC only, for demo we use local TImezone
+
+	var currentTimestamp = getTimeMinusMinutes(null, 15);
+
+	
+	Ti.API.warn("NOW:");
+	Ti.API.warn(currentTimestamp);
+
+	//Call this method to return a collection with information on your scheduled notifications
+	var results = notify.returnScheduledNotifications();
+	Ti.API.info("Let's how many local notifications we have scheduled'");
+	Ti.API.info("Scheduled LocalNotification = " + results.scheduledCount);
+	Ti.API.warn("You have " + results.scheduledCount + " Scheduled LocalNotification");
+
+	for (var i = results.scheduledCount - 1; i >= 0; i--) {
+		var alertTimestamp = getTimeMinusMinutes(results.notifications[i].userInfo.starttime, 15);
+		if (currentTimestamp > alertTimestamp) {
+			Ti.API.warn("this alert needs to be removed");
+
+			//We are going to remove all of the LocalNotifications scheduled with a userInfo id value of 1
+			var canceledCount = notify.cancelLocalNotificationByKey(results.notifications[i].userInfo.starttime, "starttime");
+			Ti.API.warn("You have canceled " + canceledCount + " notifications");
+			//Now query the scheduled notifications to make sure our local notification was canceled
+			notify.activeScheduledNotifications(localNotificationCallback);
+
+			continue;
+		}
+		Ti.API.warn(alertTimestamp);
+
+		Ti.API.info(JSON.stringify(results.notifications[i], ["userInfo"], 2));
+
+	};
+
+	var test = JSON.stringify(results);
+
+
+
+}
+
+exports.tidyUpLocalNotifications = tidyUpLocalNotifications</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Cloud.html">Cloud</a></li><li><a href="module-CloudPush.html">CloudPush</a></li><li><a href="module-Config.html">Config</a></li><li><a href="module-LocalNotifications.html">LocalNotifications</a></li><li><a href="module-space_addEvent.html">space_addEvent</a></li></ul><h3>Classes</h3><ul><li><a href="ACSpush.html">ACSpush</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_saveLocation">_saveLocation</a></li><li><a href="global.html#actionDeleteButtons">actionDeleteButtons</a></li><li><a href="global.html#addLocation">addLocation</a></li><li><a href="global.html#addNewLocation">addNewLocation</a></li><li><a href="global.html#ANDROID">ANDROID</a></li><li><a href="global.html#checkCity">checkCity</a></li><li><a href="global.html#checkNetwork">checkNetwork</a></li><li><a href="global.html#close">close</a></li><li><a href="global.html#createIndicator">createIndicator</a></li><li><a href="global.html#createMessageView">createMessageView</a></li><li><a href="global.html#createNextPassArray">createNextPassArray</a></li><li><a href="global.html#defaultTimeout">defaultTimeout</a></li><li><a href="global.html#editLocation">editLocation</a></li><li><a href="global.html#getAllLocations">getAllLocations</a></li><li><a href="global.html#Helper">Helper</a></li><li><a href="global.html#hideIndicator">hideIndicator</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#isSimulator">isSimulator</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#notify">notify</a></li><li><a href="global.html#notifyAstro">notifyAstro</a></li><li><a href="global.html#open">open</a></li><li><a href="global.html#setIndicatorTimeout">setIndicatorTimeout</a></li><li><a href="global.html#SIMULATOR">SIMULATOR</a></li><li><a href="global.html#triggerCountdown">triggerCountdown</a></li><li><a href="global.html#updateCityPasses">updateCityPasses</a></li><li><a href="global.html#writeToAppDataDirectory">writeToAppDataDirectory</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 28 2013 13:46:09 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

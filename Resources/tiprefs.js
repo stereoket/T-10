@@ -1,6 +1,7 @@
 function addRow(controls) {
     row = Ti.UI.createTableViewRow({
-        height: 40
+        height: 40,
+        backgroundColor: "#fff"
     });
     controls.label.top = 7;
     controls.label.left = 7;
@@ -81,13 +82,15 @@ exports.addTextInput = function(opts) {
         var editWin = Ti.UI.createWindow({
             title: "Edit",
             Hidden: false,
-            backgroundColor: "#fff"
+            backgroundImage: Alloy.CFG.backgroundImage
         });
         var table = Ti.UI.createTableView({
-            style: Ti.UI.iPhone.TableViewStyle.GROUPED
+            style: Ti.UI.iPhone.TableViewStyle.GROUPED,
+            backgroundColor: "transparent"
         });
         var row = Ti.UI.createTableViewRow({
-            height: 50
+            height: 50,
+            backgroundColor: "#fff"
         });
         var text = Ti.UI.createTextField({
             top: 0,
@@ -157,14 +160,16 @@ exports.addChoice = function(opts) {
         var editWin = Ti.UI.createWindow({
             title: "select",
             Hidden: false,
-            backgroundColor: "#fff"
+            backgroundImage: Alloy.CFG.backgroundImage
         });
         var table = Ti.UI.createTableView({
-            style: Ti.UI.iPhone.TableViewStyle.GROUPED
+            style: Ti.UI.iPhone.TableViewStyle.GROUPED,
+            backgroundColor: "transparent"
         });
         for (i = 0; opts.choices.length > i; i++) {
             var row = Ti.UI.createTableViewRow({
-                height: 40
+                height: 40,
+                backgroundColor: "#fff"
             });
             var text = Ti.UI.createLabel({
                 left: 10,
@@ -239,7 +244,8 @@ exports.addSection = function(opts) {
     null !== section && sections.push(section);
     var title = void 0 !== opts && void 0 !== opts.title ? opts.title : "Section " + (sections.length + 1);
     section = Ti.UI.createTableViewSection({
-        headerTitle: title
+        headerTitle: title,
+        color: "#fff"
     });
     return section;
 };
@@ -250,26 +256,27 @@ exports.closeSection = function() {
 
 exports.open = function(tabGroup) {
     var prefsWin = Ti.UI.createWindow({
-        title: name
+        title: name,
+        backgroundImage: Alloy.CFG.backgroundImage
     });
     var table = Titanium.UI.createTableView({
-        style: Titanium.UI.iPhone.TableViewStyle.GROUPED
+        style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
+        backgroundColor: "transparent"
     });
     table.data = sections;
     prefsWin.add(table);
     if (tabGroup) {
         nav = tabGroup.activeTab;
         nav.open(prefsWin);
-    } else if ("android" === Titanium.Platform.osname) {
-        prefsWin.backgroundColor = "#FFF";
-        prefsWin.open({
-            modal: true
-        });
     } else {
         nav = Ti.UI.iPhone.createNavigationGroup({
-            window: prefsWin
+            window: prefsWin,
+            backgroundImage: Alloy.CFG.backgroundImage
         });
-        var rootWin = Ti.UI.createWindow();
+        var rootWin = Ti.UI.createWindow({
+            backgroundImage: Alloy.CFG.backgroundImage,
+            translucent: true
+        });
         var closeButton = Ti.UI.createButton({
             title: "Close",
             width: 50,

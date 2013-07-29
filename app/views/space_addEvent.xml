@@ -9,11 +9,11 @@
 		<ImageView image="/images/magnify.png" id="magnify" />
 		<View id="buttonView" timeOfDay="either">
 			<View class="timeButtonView leftButton">
-				<Button onClick="setTimeOfDay" class="timeButton" id="day"  />
+				<Button onClick="setTimeOfDay" class="timeButton" id="day" value="false" />
 				<Label class="timeButtonLabel" id="dayLabel">Daytime</Label>
 			</View>
 			<View class="timeButtonView rightButton">
-				<Button onClick="setTimeOfDay" class="timeButton" id="night"/>
+				<Button onClick="setTimeOfDay" class="timeButton" id="night" value="false" />
 				<Label class="timeButtonLabel" id="nightLabel">Nightime</Label>
 			</View>
 <!-- 			<View class="timeButtonView ">

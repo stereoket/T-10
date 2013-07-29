@@ -13,7 +13,8 @@ var nav;
 function addRow(controls) {
 
 	row = Ti.UI.createTableViewRow({
-		height: 40
+		height: 40,
+		backgroundColor: '#fff'
 	});
 
 	// position the label
@@ -113,15 +114,17 @@ exports.addTextInput = function (opts) {
 		var editWin = Ti.UI.createWindow({
 			title: 'Edit',
 			Hidden: false,
-			backgroundColor: '#fff'
+			backgroundImage: Alloy.CFG.backgroundImage
 		});
 
 		var table = Ti.UI.createTableView({
-			style: Ti.UI.iPhone.TableViewStyle.GROUPED
+			style: Ti.UI.iPhone.TableViewStyle.GROUPED,
+			backgroundColor: 'transparent'
 		});
 
 		var row = Ti.UI.createTableViewRow({
-			height: 50
+			height: 50,
+			backgroundColor: '#fff'
 		});
 
 		var text = Ti.UI.createTextField({
@@ -218,16 +221,18 @@ exports.addChoice = function (opts) {
 		var editWin = Ti.UI.createWindow({
 			title: 'select',
 			Hidden: false,
-			backgroundColor: '#fff'
+			backgroundImage: Alloy.CFG.backgroundImage
 		});
 
 		var table = Ti.UI.createTableView({
-			style: Ti.UI.iPhone.TableViewStyle.GROUPED
+			style: Ti.UI.iPhone.TableViewStyle.GROUPED,
+			backgroundColor: 'transparent'
 		});
 
 		for (i = 0; i < opts.choices.length; i++) {
 			var row = Ti.UI.createTableViewRow({
-				height: 40
+				height: 40,
+				backgroundColor: '#fff'
 			});
 
 			var text = Ti.UI.createLabel({
@@ -342,8 +347,12 @@ exports.addSection = function (opts) {
 		sections.push(section);
 	}
 	var title = (opts !== undefined && opts.title !== undefined) ? opts.title : "Section " + (sections.length + 1);
+
+	
+
 	section = Ti.UI.createTableViewSection({
-		headerTitle: title
+		headerTitle: title,
+		color: '#fff'
 	});
 
 	return section;
@@ -357,12 +366,14 @@ exports.open = function (tabGroup) {
 
 	// create a window
 	var prefsWin = Ti.UI.createWindow({
-		title: name
+		title: name,
+		backgroundImage: Alloy.CFG.backgroundImage
 	});
 
 	// create a table
 	var table = Titanium.UI.createTableView({
-		style: Titanium.UI.iPhone.TableViewStyle.GROUPED
+		style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
+		backgroundColor: 'transparent'
 	});
 
 	// push the rows
@@ -374,7 +385,7 @@ exports.open = function (tabGroup) {
 	// if we have a tabGroup specified
 	if (!tabGroup) {
 
-		if (Titanium.Platform.osname === 'android') {
+		if (OS_ANDROID) {
 			prefsWin.backgroundColor = '#FFF';
 			prefsWin.open({
 				modal: true
@@ -384,11 +395,15 @@ exports.open = function (tabGroup) {
 
 			// we need a nav
 			nav = Ti.UI.iPhone.createNavigationGroup({
-				window: prefsWin
+				window: prefsWin,
+				backgroundImage: Alloy.CFG.backgroundImage
 			});
 
 			// create a host window
-			var rootWin = Ti.UI.createWindow();
+			var rootWin = Ti.UI.createWindow({
+				backgroundImage: Alloy.CFG.backgroundImage,
+				translucent: true
+			});
 
 			// add close button to navbar 
 			var closeButton = Ti.UI.createButton({
@@ -415,7 +430,6 @@ exports.open = function (tabGroup) {
 			rootWin.open();
 		}
 	} else {
-
 		nav = tabGroup.activeTab;
 		nav.open(prefsWin);
 	}

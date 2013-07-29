@@ -18,7 +18,10 @@
 					<Button   class="actionButton" onClick="home" id="homeBtn"/>
 					<Label class="buttonLabel">Home</Label>
 				</View>
-
+				<View id="middleAction">
+					<Button   class="actionButton" onClick="triggerNotification" id="triggerBtn"/>
+					<Label class="buttonLabel">Trigger Notification</Label>
+				</View>
 				<View id="rightAction">
 					<Button  onClick="addLocation" class="actionButton" id="addLocationBtn"/>
 					<Label  class="buttonLabel">Add Location</Label>

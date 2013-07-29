@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: LocalNotifications</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Module: LocalNotifications</h1>
+    
+    
+
+
+
+<section>
+    
+<header>
+    <h2>
+    LocalNotifications
+    </h2>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+            <div class="description">Helper file ot manage all local notification responses and setting new notices. This will 
+perform lookups agains the weather API for specific cities</div>
+        
+        
+        
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="localNotifications.js.html">lib/localNotifications.js</a>, <a href="localNotifications.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+        
+        
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="getTimeMinusMinutes"><span class="type-signature">&lt;inner> </span>getTimeMinusMinutes<span class="signature">(timestamp, minOffset)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Returns a value of  a timestamp with a variable minute offset (subtracts the offset against the timestamp),
+if no timestamp supplied it will produce a value of now
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>timestamp</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">timestamp in milisecs</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>minOffset</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">Integer of the offset in minutes</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="localNotifications.js.html">lib/localNotifications.js</a>, <a href="localNotifications.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    timestamp
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type">number</span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Cloud.html">Cloud</a></li><li><a href="module-CloudPush.html">CloudPush</a></li><li><a href="module-Config.html">Config</a></li><li><a href="module-LocalNotifications.html">LocalNotifications</a></li><li><a href="module-space_addEvent.html">space_addEvent</a></li></ul><h3>Classes</h3><ul><li><a href="ACSpush.html">ACSpush</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_saveLocation">_saveLocation</a></li><li><a href="global.html#actionDeleteButtons">actionDeleteButtons</a></li><li><a href="global.html#addLocation">addLocation</a></li><li><a href="global.html#addNewLocation">addNewLocation</a></li><li><a href="global.html#ANDROID">ANDROID</a></li><li><a href="global.html#checkCity">checkCity</a></li><li><a href="global.html#checkNetwork">checkNetwork</a></li><li><a href="global.html#close">close</a></li><li><a href="global.html#createIndicator">createIndicator</a></li><li><a href="global.html#createMessageView">createMessageView</a></li><li><a href="global.html#createNextPassArray">createNextPassArray</a></li><li><a href="global.html#defaultTimeout">defaultTimeout</a></li><li><a href="global.html#editLocation">editLocation</a></li><li><a href="global.html#getAllLocations">getAllLocations</a></li><li><a href="global.html#Helper">Helper</a></li><li><a href="global.html#hideIndicator">hideIndicator</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#isSimulator">isSimulator</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#notify">notify</a></li><li><a href="global.html#notifyAstro">notifyAstro</a></li><li><a href="global.html#open">open</a></li><li><a href="global.html#setIndicatorTimeout">setIndicatorTimeout</a></li><li><a href="global.html#SIMULATOR">SIMULATOR</a></li><li><a href="global.html#triggerCountdown">triggerCountdown</a></li><li><a href="global.html#updateCityPasses">updateCityPasses</a></li><li><a href="global.html#writeToAppDataDirectory">writeToAppDataDirectory</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 28 2013 13:46:09 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

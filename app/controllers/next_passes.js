@@ -8,10 +8,10 @@ var log = Helper.log;
 
 /**
  * Open the Next Pass window
- * @return {[type]} [description]
+ * @return {void} [description]
  */
 
-function open() {
+function open(callback) {
 	var locationManager = require('locationManager');
 	var currentLocations = locationManager.getAllLocations();
 
@@ -30,6 +30,9 @@ function open() {
 	} else {
 		var addEvent = Alloy.createController('space');
 		addEvent.open();
+	}
+	if(callback !== undefined){
+		callback();
 	}
 }
 

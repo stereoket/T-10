@@ -8,7 +8,7 @@ var sim = false;
 
 /**
  * Open the Space / Add Event windoe
- * @return {[type]} [description]
+ * @return {void} [description]
  */
 
 function open(params) {
@@ -44,10 +44,10 @@ function open(params) {
 
 /**
  * [triggerCountdown description]
- * @return {[type]} [description]
+ * @return {void} [description]
  */
 function triggerCountdown() {
-	log("WARN", "Add Event Clicked");
+	log("WARN", "alertT10.js > triggerCountdown()");
 	if(sim){
 		log("WARN", "Simulated Time");
 		var nowtime = new Date().getTime() / 1000;
@@ -56,12 +56,16 @@ function triggerCountdown() {
 		log("WARN", "REAL Time setting");
 		alertTime = $.alertT10.starttime;
 	}
-	var countdown = Alloy.createController('countdown');
-	countdown.open({
+	var countdownParams = {
 		city: $.alertT10.city,
+		country : $.alertT10.country,
+		clouds : 50,
 		starttime: alertTime,
 		simulation: sim?true:false
-	});
+	};
+	Ti.API.warn(JSON.stringify(countdownParams, null, 2));
+	var countdown = Alloy.createController('countdown');
+	countdown.open(countdownParams);
 	// $.space.close();
 }
 

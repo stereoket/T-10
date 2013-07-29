@@ -8,7 +8,7 @@ var log = Helper.log;
 
 /**
  * Open the Space / Add Event windoe
- * @return {[type]} [description]
+ * @return {void} [description]
  */
 function open(){
 	$.space.addEventListener('blur', function (e) {

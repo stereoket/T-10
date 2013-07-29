@@ -6,6 +6,6 @@
 			<Button id="notifyBtn" zIndex="3" class="locationButtons" visible="false">Notify</Button>
 
 			<Button id="deleteBtn" zIndex="3" class="locationButtons" visible="false">Delete</Button>
-			<ImageView id="todIcon" left="180" />
+			<ImageView id="todIcon" right="128" />
 		</View>
 </Alloy>

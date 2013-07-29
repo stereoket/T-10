@@ -43,7 +43,8 @@
 	left: 72,
 	top: 0,
 	width: 172,
-	height: Ti.UI.SIZE
+	height: Ti.UI.SIZE,
+	zIndex: 100
 },
 "#rightAction":{
 	right: 72,
@@ -56,6 +57,9 @@
 },
 "#addLocationBtn":{
 	backgroundImage: "/images/buttons/add_location.png"
+}
+"#triggerBtn":{
+	backgroundImage: "/images/buttons/alarm_settings.png"
 }
 "#editLocations":{
 	right: 64,

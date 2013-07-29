@@ -19,10 +19,10 @@
 		</View>
 		
 		<View class="bigButton" id="issPassData" layout="vertical" top="700">
-			<Label class="labelText" top="0" height="Ti.UI.SIZE">Flyover At: </Label>
-			<Label class="labelText" top="10">Station Time: </Label>
-			<Label class="labelText" top="10">Ground Time: </Label>
-			<Label class="labelText" top="10">Current Visibility: </Label>
+			<Label class="labelText" top="0" height="Ti.UI.SIZE" id="flyoverTime">Flyover At: </Label>
+			<Label class="labelText" top="10" id="stationTime">Station Time: </Label>
+			<Label class="labelText" top="10" id="groundTime">Ground Time: </Label>
+			<Label class="labelText" top="10" id="currentVisibility">Current Visibility: </Label>
 		</View>
 
 	</Window>

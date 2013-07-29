@@ -40,14 +40,19 @@ function letsGo(params) {
 	Ti.API.warn("T10: Trigger the countdown screen option button");
 
 	var alertT10 = Alloy.createController('alertT10');
-	alertT10.open({city: params.city, starttime: params.starttime});
+	alertT10.open({
+		city: params.city,
+		country: params.country,
+		starttime: params.starttime,
+		clouds: params.visibility
+	});
 
 }
 
 /**
  * Local notification Handler - for all city wide alerts - lookup or fire alert screen
- * @param  {[type]} e [description]
- * @return {[type]}   [description]
+ * @param  {Object} e
+ * @return {void}   [description]
  */
 Ti.App.iOS.addEventListener('notification', function (e) {
 	// Ti.API.info(JSON.stringify(e, null, 2));
@@ -68,6 +73,7 @@ Ti.App.iOS.addEventListener('notification', function (e) {
 
 	if (e.userInfo !== undefined && e.userInfo.city !== undefined && e.userInfo.country !== undefined && e.userInfo.starttime !== undefined) {
 		// monitor weather patterns for the cloud cover or better for chosen city/
+		Ti.API.warn(JSON.stringify(e, null, 2));
 		var city = e.userInfo.city;
 		var country = e.userInfo.country;
 		var starttime = e.userInfo.starttime;
@@ -84,11 +90,15 @@ Ti.App.iOS.addEventListener('notification', function (e) {
 
 		var XHR = require("xhr");
 		var xhr = new XHR();
-		xhr.get("http://api.openweathermap.org/data/2.5/weather?q=" + e.userInfo.city + ", " + e.userInfo.country, onSuccessCallback, onErrorCallback);
+		xhr.get(
+			"http://api.openweathermap.org/data/2.5/weather?q=" + e.userInfo.city + ", " + e.userInfo.country,
+			onSuccessCallback,
+			onErrorCallback
+		);
 
 		function onSuccessCallback(ev) {
 			Ti.API.warn("Successful API Call");
-			// Ti.API.info(JSON.stringify(ev, null, 2));
+			Ti.API.info(JSON.stringify(ev, null, 2));
 			var data = JSON.parse(ev.data);
 			// var response = data.response;
 
@@ -114,12 +124,13 @@ Ti.App.iOS.addEventListener('notification', function (e) {
 								"id": 2,
 								"city": evt.data.location.city,
 								"country": evt.data.location.country,
-								"starttime": starttime
+								"starttime": starttime,
+								"visibility" : curCloudCover
 							},
 							date: new Date((starttime * 1000) - ((60 * 1000) * 10)) // time minus 10mins 
 						});
 						Ti.API.info("T10: **** Notification added");
-						notify.searchLocalNotificationsByKey(2,"id",localNotificationCallback);
+						notify.searchLocalNotificationsByKey(2, "id", localNotificationCallback);
 						Ti.API.warn("weather look up for : " + evt.data.location.city);
 					}
 				}
@@ -144,7 +155,9 @@ if (!Ti.App.Properties.hasProperty('Settings_API_DOMAIN')) {
 	Ti.App.Properties.setString('Settings_API_DOMAIN', "api.teeminus10.com");
 	Ti.App.Properties.setString('Settings_API_PORT', "80");
 }
-Ti.API.warn("API server being used: " + Ti.App.Properties.getString('Settings_API_DOMAIN') + ":" + Ti.App.Properties.getString('Settings_API_PORT'));
+Ti.API.warn(
+	"API server being used: " + Ti.App.Properties.getString('Settings_API_DOMAIN') + ":" + Ti.App.Properties.getString('Settings_API_PORT')
+);
 
 function incrementAppLaunchCount() {
 	var spCount = Ti.App.Properties.getInt('appLaunchCount');
@@ -191,7 +204,7 @@ setTimeout(function () {
 
 	$.index.open();
 
-	$.index.addEventListener('blur', function(e){
+	$.index.addEventListener('blur', function (e) {
 		Ti.API.warn("index window closed");
 		$.index.close();
 	});

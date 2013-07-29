@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: alloy.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: alloy.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>// The contents of this file will be executed before any of
+// your view controllers are ever executed, including the index.
+// You have access to all functionality on the `Alloy` namespace.
+//
+// This is a great place to do any initialization for your app
+// or create any global variables/functions that you'd like to
+// make available throughout your app. You can easily make things
+// accessible globally by attaching them to the `Alloy.Globals`
+// object. For example:
+//
+// Alloy.Globals.someGlobalFunction = function(){};
+
+var Helper = require('Helper');
+var ANDROID = Helper.ANDROID;
+var IPHONE = Helper.IPHONE;
+var IPAD = Helper.IPAD;
+var BLACKBERRY = Helper.BLACKBERRY;
+Ti.API.warn(" Device: " + Helper.device);
+Ti.API.warn(" Device: " + Helper.ANDROID);
+Ti.API.warn(" Device: " + Helper.IPHONE);
+Ti.API.warn(" Device: " + Helper.IPAD);
+Ti.API.warn(" Device: " + Helper.BLACKBERRY);
+
+
+var splashBackgroundImage;
+var backgroundImage;
+var bigButtonHeight;
+var bigButtonWidth;
+
+if (ANDROID) {
+	splashBackgroundImage = 'earth_space_android.png';
+	backgroundImage = "background_android.png";
+	bigButtonHeight = 100;
+	bigButtonWidth = '80%';
+}
+
+if (IPHONE) {
+	splashBackgroundImage = 'earth_space_iphone.png';
+	backgroundImage = "background_iphone.png";
+	bigButtonHeight = 100;
+	bigButtonWidth = '80%';
+}
+
+if (Helper.IPAD === true) {
+
+	splashBackgroundImage = 'earth_space_ipad.png';
+	backgroundImage = "background_ipad.png";
+	bigButtonHeight = 130;
+	bigButtonWidth = 408
+
+
+}
+
+if (BLACKBERRY) {
+	splashBackgroundImage = 'earth_space_blackberry.png';
+	backgroundImage = "background_blackberry.png";
+}
+
+	Ti.API.warn("iPad images being selecgted chosen background image !!! " + splashBackgroundImage);
+
+
+Alloy.CFG.splashBackground = '/images/'+ splashBackgroundImage;
+Alloy.CFG.backgroundImage = '/images/'+ backgroundImage;
+
+Alloy.CFG.bigButtonHeight = bigButtonHeight;
+Alloy.CFG.bigButtonWidth = bigButtonWidth;
+
+Ti.API.warn(Alloy.CFG.splashBackground + " chosen background image");
+
+/**
+ * Colours
+ */
+Alloy.CFG.addButton = "#0060C0";
+Alloy.CFG.bgBlue = "#0060C0";
+
+Alloy.CFG.nextPassListPadding = 20;
+Alloy.CFG.locationsListPadding = 14;
+
+Alloy.CFG.cloudSliderTop = 40;
+
+Alloy.CFG.weatherCheckTimeOffset = 15; //minutes
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-Cloud.html">Cloud</a></li><li><a href="module-CloudPush.html">CloudPush</a></li><li><a href="module-Config.html">Config</a></li><li><a href="module-LocalNotifications.html">LocalNotifications</a></li><li><a href="module-space_addEvent.html">space_addEvent</a></li></ul><h3>Classes</h3><ul><li><a href="ACSpush.html">ACSpush</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_saveLocation">_saveLocation</a></li><li><a href="global.html#actionDeleteButtons">actionDeleteButtons</a></li><li><a href="global.html#addLocation">addLocation</a></li><li><a href="global.html#addNewLocation">addNewLocation</a></li><li><a href="global.html#ANDROID">ANDROID</a></li><li><a href="global.html#checkCity">checkCity</a></li><li><a href="global.html#checkNetwork">checkNetwork</a></li><li><a href="global.html#close">close</a></li><li><a href="global.html#createIndicator">createIndicator</a></li><li><a href="global.html#createMessageView">createMessageView</a></li><li><a href="global.html#createNextPassArray">createNextPassArray</a></li><li><a href="global.html#defaultTimeout">defaultTimeout</a></li><li><a href="global.html#editLocation">editLocation</a></li><li><a href="global.html#getAllLocations">getAllLocations</a></li><li><a href="global.html#Helper">Helper</a></li><li><a href="global.html#hideIndicator">hideIndicator</a></li><li><a href="global.html#home">home</a></li><li><a href="global.html#isSimulator">isSimulator</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#notify">notify</a></li><li><a href="global.html#notifyAstro">notifyAstro</a></li><li><a href="global.html#open">open</a></li><li><a href="global.html#setIndicatorTimeout">setIndicatorTimeout</a></li><li><a href="global.html#SIMULATOR">SIMULATOR</a></li><li><a href="global.html#triggerCountdown">triggerCountdown</a></li><li><a href="global.html#updateCityPasses">updateCityPasses</a></li><li><a href="global.html#writeToAppDataDirectory">writeToAppDataDirectory</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jul 28 2013 13:46:09 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

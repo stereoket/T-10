@@ -19,7 +19,9 @@ function Controller() {
         var alertT10 = Alloy.createController("alertT10");
         alertT10.open({
             city: params.city,
-            starttime: params.starttime
+            country: params.country,
+            starttime: params.starttime,
+            clouds: params.visibility
         });
     }
     function incrementAppLaunchCount() {
@@ -75,10 +77,10 @@ function Controller() {
         launchEarthApp ? $.__views.earth.addEventListener("click", launchEarthApp) : __defers["$.__views.earth!click!launchEarthApp"] = true;
     }
     if (true && !Alloy.isTablet) {
-        $.__views.__alloyId11 = Ti.UI.createWindow({
-            id: "__alloyId11"
+        $.__views.__alloyId7 = Ti.UI.createWindow({
+            id: "__alloyId7"
         });
-        $.__views.__alloyId11 && $.addTopLevelView($.__views.__alloyId11);
+        $.__views.__alloyId7 && $.addTopLevelView($.__views.__alloyId7);
     }
     exports.destroy = function() {};
     _.extend($, $.__views);
@@ -92,6 +94,7 @@ function Controller() {
     Ti.App.iOS.addEventListener("notification", function(e) {
         function onSuccessCallback(ev) {
             Ti.API.warn("Successful API Call");
+            Ti.API.info(JSON.stringify(ev, null, 2));
             var data = JSON.parse(ev.data);
             Ti.API.info("weather lookup info for: " + city + ", " + country);
             require("locationManager").checkCity(city, function(evt) {
@@ -113,7 +116,8 @@ function Controller() {
                                 id: 2,
                                 city: evt.data.location.city,
                                 country: evt.data.location.country,
-                                starttime: starttime
+                                starttime: starttime,
+                                visibility: curCloudCover
                             },
                             date: new Date(1e3 * starttime - 6e5)
                         });
@@ -132,6 +136,7 @@ function Controller() {
         }
         new Date().getTime() / 1e3;
         if (void 0 !== e.userInfo && void 0 !== e.userInfo.city && void 0 !== e.userInfo.country && void 0 !== e.userInfo.starttime) {
+            Ti.API.warn(JSON.stringify(e, null, 2));
             var city = e.userInfo.city;
             var country = e.userInfo.country;
             var starttime = e.userInfo.starttime;

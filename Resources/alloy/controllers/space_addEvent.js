@@ -51,10 +51,10 @@ function Controller() {
         }
     }
     function setTimeOfDay(e) {
-        Ti.API.warn(JSON.stringify(e, null, 2));
         e.source.value = !e.source.value;
-        $.buttonView.timeOfDay = $.day.value === $.night.value ? "either" : e.source.id;
-        Ti.API.warn("Setting Time of day for lookup to: " + $.buttonView.timeOfDay);
+        Ti.API.warn("Button clicked " + e.source.id + ": " + e.source.value);
+        $.buttonView.timeOfDay = $.day.value === $.night.value ? "either" : $.day.value ? "day" : "night";
+        Ti.API.warn(" >>> Setting Time of day for lookup to: " + $.buttonView.timeOfDay);
         var tbg = "/images/blueButton.png";
         switch (e.source.id) {
           case "day":
@@ -66,44 +66,11 @@ function Controller() {
         }
     }
     function sendAlertData() {
-        function onSuccessCallback(e) {
-            Ti.API.warn("Successful API Call");
-            $.messageViewWidget.createMessageView({
-                message: "Pass data found, storing in the app"
-            });
-            var data = JSON.parse(e.data);
-            var response = data.response;
-            if (void 0 === response[0]) {
-                $.messageViewWidget.createMessageView({
-                    message: "No scheduled passes for your parameters, please change parameters",
-                    timeoutVal: 1400,
-                    disableIndicator: true
-                });
-                return;
-            }
-            Ti.API.warn(response);
-            var responseData = {
-                data: response
-            };
-            var responseJSON = JSON.stringify(responseData);
-            Helper.writeToAppDataDirectory("cityData", response[0].location.city, responseJSON, bodyData, $.buttonView.timeOfDay);
-            var trackedLocations = Alloy.createController("tracked_locations");
-            trackedLocations.open();
-            $.messageViewWidget.hideIndicator();
-        }
-        function onErrorCallback(e) {
-            Ti.API.error("Error in API Call");
-            $.messageViewWidget.createMessageView({
-                message: "Data Error reposnse from API, please contact support",
-                timeoutVal: 2e3,
-                disableIndicator: true
-            });
-            Ti.API.error(JSON.stringify(e));
-        }
-        require("locationManager");
-        var Helper = require("Helper");
-        require("bencoding.localnotify");
+        require("Helper");
         var network = require("/Helper").checkNetwork();
+        require("bencoding.localnotify");
+        require("locationManager");
+        var XHR = require("xhr");
         if (!network.online) {
             $.messageViewWidget.createIndicator({
                 indicator: false,
@@ -124,11 +91,7 @@ function Controller() {
             });
             return false;
         }
-        if (void 0 === $.cloudSlider.value) {
-            alert("Error, missing cloud");
-            return false;
-        }
-        var bodyData = {
+        bodyData = {
             location: {
                 city: $.cityTextField.value
             },
@@ -136,18 +99,51 @@ function Controller() {
             time_of_day: $.buttonView.timeOfDay,
             device_id: Ti.App.Properties.getString("acsUserID")
         };
-        Ti.API.warn("JSON BODY DATA");
+        Ti.API.warn("*** JSON BODY DATA ***");
+        Ti.API.warn(JSON.stringify(bodyData, null, 2));
         var dataJSON = JSON.stringify(bodyData);
-        Ti.API.warn(dataJSON);
         var url = apiURL + "/alerts";
         Ti.API.warn(url);
         var options = {
             contentType: "application/json",
             ttl: 5
         };
-        var XHR = require("xhr");
         var xhr = new XHR();
-        xhr.put(apiURL + "/alerts", dataJSON, onSuccessCallback, onErrorCallback, options);
+        xhr.put(apiURL + "/alerts", dataJSON, alertsSuccessCallback, alertsErrorCallback, options);
+    }
+    function alertsSuccessCallback(e) {
+        Ti.API.warn("Successful API Call");
+        $.messageViewWidget.createMessageView({
+            message: "Pass data found, storing in the app"
+        });
+        var data = JSON.parse(e.data);
+        var response = data.response;
+        Ti.API.warn(JSON.stringify(response, null, 2));
+        if (void 0 === response[0]) {
+            $.messageViewWidget.createMessageView({
+                message: "No scheduled passes for your parameters, please change parameters",
+                timeoutVal: 1400,
+                disableIndicator: true
+            });
+            return;
+        }
+        var responseData = {
+            data: response
+        };
+        var responseJSON = JSON.stringify(responseData);
+        Helper.writeToAppDataDirectory("cityData", response[0].location.city, responseJSON, bodyData, $.buttonView.timeOfDay);
+        var trackedLocations = Alloy.createController("tracked_locations");
+        trackedLocations.open();
+        $.messageViewWidget.hideIndicator();
+    }
+    function alertsErrorCallback(e) {
+        Ti.API.error("Error in API Call");
+        $.messageViewWidget.createMessageView({
+            message: "Data Error reposnse from API, please contact support",
+            timeoutVal: 2e3,
+            disableIndicator: true
+        });
+        Ti.API.error(JSON.stringify(e));
     }
     function slideChange(e) {
         $.cloudSliderTitle.text = "Visibility (Cloud Cover: " + parseInt(100 * e.value) + "%)";
@@ -229,24 +225,24 @@ function Controller() {
             timeOfDay: "either"
         });
         $.__views.spaceAddEvent.add($.__views.buttonView);
-        $.__views.__alloyId21 = Ti.UI.createView({
+        $.__views.__alloyId17 = Ti.UI.createView({
             height: 100,
             width: 182,
             bubbleParent: false,
             left: 40,
-            id: "__alloyId21"
+            id: "__alloyId17"
         });
-        $.__views.buttonView.add($.__views.__alloyId21);
+        $.__views.buttonView.add($.__views.__alloyId17);
         $.__views.day = Ti.UI.createButton({
             width: 128,
             height: 64,
             borderRadius: 8,
             backgroundImage: "/images/blueButton.png",
             bubbleParent: false,
-            value: false,
+            value: "false",
             id: "day"
         });
-        $.__views.__alloyId21.add($.__views.day);
+        $.__views.__alloyId17.add($.__views.day);
         setTimeOfDay ? $.__views.day.addEventListener("click", setTimeOfDay) : __defers["$.__views.day!click!setTimeOfDay"] = true;
         $.__views.dayLabel = Ti.UI.createLabel({
             font: {
@@ -269,25 +265,25 @@ function Controller() {
             text: "Daytime",
             id: "dayLabel"
         });
-        $.__views.__alloyId21.add($.__views.dayLabel);
-        $.__views.__alloyId22 = Ti.UI.createView({
+        $.__views.__alloyId17.add($.__views.dayLabel);
+        $.__views.__alloyId18 = Ti.UI.createView({
             height: 100,
             width: 182,
             bubbleParent: false,
             right: 40,
-            id: "__alloyId22"
+            id: "__alloyId18"
         });
-        $.__views.buttonView.add($.__views.__alloyId22);
+        $.__views.buttonView.add($.__views.__alloyId18);
         $.__views.night = Ti.UI.createButton({
             width: 128,
             height: 64,
             borderRadius: 8,
             backgroundImage: "/images/blueButton.png",
             bubbleParent: false,
-            value: false,
+            value: "false",
             id: "night"
         });
-        $.__views.__alloyId22.add($.__views.night);
+        $.__views.__alloyId18.add($.__views.night);
         setTimeOfDay ? $.__views.night.addEventListener("click", setTimeOfDay) : __defers["$.__views.night!click!setTimeOfDay"] = true;
         $.__views.nightLabel = Ti.UI.createLabel({
             font: {
@@ -310,7 +306,7 @@ function Controller() {
             text: "Nightime",
             id: "nightLabel"
         });
-        $.__views.__alloyId22.add($.__views.nightLabel);
+        $.__views.__alloyId18.add($.__views.nightLabel);
         $.__views.sliderView = Ti.UI.createView({
             top: 340,
             width: "100%",
@@ -407,7 +403,7 @@ function Controller() {
         });
         $.__views.leftAction.add($.__views.alarmSettingsBtn);
         settingsButton ? $.__views.alarmSettingsBtn.addEventListener("click", settingsButton) : __defers["$.__views.alarmSettingsBtn!click!settingsButton"] = true;
-        $.__views.__alloyId23 = Ti.UI.createLabel({
+        $.__views.__alloyId19 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Black",
                 fontSize: 20
@@ -416,9 +412,9 @@ function Controller() {
             color: "#fff",
             top: 187,
             text: "Alarm Settings",
-            id: "__alloyId23"
+            id: "__alloyId19"
         });
-        $.__views.leftAction.add($.__views.__alloyId23);
+        $.__views.leftAction.add($.__views.__alloyId19);
         $.__views.middleAction = Ti.UI.createView({
             id: "middleAction"
         });
@@ -432,7 +428,7 @@ function Controller() {
         });
         $.__views.middleAction.add($.__views.homeBtn);
         home ? $.__views.homeBtn.addEventListener("click", home) : __defers["$.__views.homeBtn!click!home"] = true;
-        $.__views.__alloyId24 = Ti.UI.createLabel({
+        $.__views.__alloyId20 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Black",
                 fontSize: 20
@@ -441,9 +437,9 @@ function Controller() {
             color: "#fff",
             top: 187,
             text: "Home",
-            id: "__alloyId24"
+            id: "__alloyId20"
         });
-        $.__views.middleAction.add($.__views.__alloyId24);
+        $.__views.middleAction.add($.__views.__alloyId20);
         $.__views.rightAction = Ti.UI.createView({
             right: 72,
             top: 0,
@@ -461,7 +457,7 @@ function Controller() {
         });
         $.__views.rightAction.add($.__views.saveBtn);
         sendAlertData ? $.__views.saveBtn.addEventListener("click", sendAlertData) : __defers["$.__views.saveBtn!click!sendAlertData"] = true;
-        $.__views.__alloyId25 = Ti.UI.createLabel({
+        $.__views.__alloyId21 = Ti.UI.createLabel({
             font: {
                 fontFamily: "OstrichSans-Black",
                 fontSize: 20
@@ -470,9 +466,9 @@ function Controller() {
             color: "#fff",
             top: 187,
             text: "Add Location",
-            id: "__alloyId25"
+            id: "__alloyId21"
         });
-        $.__views.rightAction.add($.__views.__alloyId25);
+        $.__views.rightAction.add($.__views.__alloyId21);
     }
     if (!Alloy.isTablet) {
         $.__views.spaceAddEvent = Ti.UI.createWindow({
@@ -498,6 +494,7 @@ function Controller() {
     var apiURL = "http://" + Ti.App.Properties.getString("Settings_API_DOMAIN") + ":" + Ti.App.Properties.getString("Settings_API_PORT");
     var editLocation = null;
     var editIndex = null;
+    var bodyData;
     Ti.API.warn("*** URL API = " + apiURL);
     $.spaceAddEvent.addEventListener("blur", resetLocation);
     $.cloudSlider.addEventListener("change", slideChange);
